@@ -1,0 +1,7 @@
+{
+  "files.eol": "\n",
+  "editor.formatOnSave": true,
+  "autocorrect.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "explorer.fileNesting.enabled": true,
+}
