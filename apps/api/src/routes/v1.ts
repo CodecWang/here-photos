@@ -2,6 +2,7 @@ import router from 'koa-joi-router';
 
 import { photoController, photoValidator } from '../controllers/photo';
 import { scanController } from '../controllers/scan';
+import { settingController, settingValidator } from '../controllers/setting';
 
 const v1Router = router();
 
@@ -34,7 +35,16 @@ const scanRoutes = [
   },
 ];
 
+const settingRoutes = [
+  {
+    method: 'GET',
+    path: '/settings',
+    handler: settingController.read,
+    validate: settingValidator.read,
+  },
+];
+
 v1Router.prefix('/api/v1');
-v1Router.route([...photoRoutes, ...scanRoutes]);
+v1Router.route([...photoRoutes, ...scanRoutes, ...settingRoutes]);
 
 export default v1Router;

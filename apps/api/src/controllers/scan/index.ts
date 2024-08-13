@@ -128,14 +128,17 @@ async function generateThumbnails(
     .jpeg({ mozjpeg: true })
     .toFile(output);
 
+  // @ts-ignore
+  const d = outputImg.data;
+
   return [
     {
       variant: 2,
-      size: outputImg.size,
+      size: d.size,
       filePath: outputFilename,
-      width: outputImg.width,
-      height: outputImg.height,
-      format: outputImg.format,
+      width: d.width,
+      height: d.height,
+      format: d.format,
     },
   ];
 }

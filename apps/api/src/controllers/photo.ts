@@ -26,6 +26,8 @@ export const photoController = {
 
     const thumbnail = await db.Thumbnail.findOne({
       where: { photoId: id, variant },
+      attributes: ['filePath', 'format'],
+      include: [db.Photo],
     });
 
     if (!thumbnail) {
@@ -37,8 +39,13 @@ export const photoController = {
       thumbnail.filePath
     );
 
+    console.log('>>> read image');
+
     await fs.access(imagePath, fs.constants.F_OK);
     const data = await fs.readFile(imagePath);
+    ctx.set('Cache-Control', 'public, max-age=86400');
+    // @ts-ignore
+    ctx.set('ETag', thumbnail.Photo.checkSum);
     ctx.type = `image/${thumbnail.format}`;
     ctx.body = data;
   },
