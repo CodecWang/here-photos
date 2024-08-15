@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import PageHeader from '@/components/page-header';
 import { CACHE_KEY } from '@/config/constants';
 import CreateNewFolderIcon from '@/icons/create-new-folder-icon';
+import { GroupAlbumsBy } from '@/types/enums';
 
 import AlbumGroup from './album-group';
-import CreateAlbumModal from './create-album-modal';
+import CreateAlbumModal from './components/create-album-modal';
 import { GroupAlbumsDropdown } from './group-albums-dropdown';
-import { GroupAlbumsBy } from './type';
 import { groupAlbumsByYear } from './utils';
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
     (async () => {
       const response = await fetch(`/api/v1/albums`);
       const albums = await response.json();
-      setAlbums(albums);
+      setAlbums(albums.data);
     })();
 
     const cachedGroupBy = localStorage.getItem(CACHE_KEY.groupAlbumsBy);
@@ -36,12 +36,16 @@ export default function Page() {
         setAlbumGroups([{ title: '', count: albums.length, albums }]);
         break;
       case GroupAlbumsBy.Year:
-        const albumGroups = groupAlbumsByYear(albums);
-        setAlbumGroups(albumGroups);
+        {
+          const albumGroups = groupAlbumsByYear(albums);
+          setAlbumGroups(albumGroups);
+        }
         break;
       case GroupAlbumsBy.Owner:
         break;
     }
+
+    console.log('>>> groupBy', albumGroups.length);
   }, [albums, groupBy]);
 
   const handleGroupByChange = (groupBy: GroupAlbumsBy) => {
@@ -67,7 +71,7 @@ export default function Page() {
         <GroupAlbumsDropdown groupBy={groupBy} onChange={handleGroupByChange} />
       </PageHeader>
 
-      <div className="px-4 pt-2">
+      <div className="space-y-6 px-4 pt-2">
         {albumGroups.map((group, index) => (
           <AlbumGroup
             key={index}

@@ -1,61 +1,62 @@
-import DeleteIcon from "@/icons/delete-icon";
-import FavoriteIcon from "@/icons/favorite-icon";
-import ImageSearchIcon from "@/icons/image-search-icon";
-import MapIcon from "@/icons/map-icon";
-import PersonSearchIcon from "@/icons/person-search-icon";
-import PhotoAlbumIcon from "@/icons/photo-album-icon";
-import PhotoIcon from "@/icons/photo-icon";
-import ShareIcon from "@/icons/share-icon";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { clsx } from "clsx";
+import { clsx } from 'clsx';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-export default function SideNav(params) {
+import DeleteIcon from '@/icons/delete-icon';
+import FavoriteIcon from '@/icons/favorite-icon';
+import ImageSearchIcon from '@/icons/image-search-icon';
+import MapIcon from '@/icons/map-icon';
+import PersonSearchIcon from '@/icons/person-search-icon';
+import PhotoAlbumIcon from '@/icons/photo-album-icon';
+import PhotoIcon from '@/icons/photo-icon';
+import ShareIcon from '@/icons/share-icon';
+
+export default function SideNav() {
   const pathname = usePathname();
 
   const menu = [
     {
-      title: "Photos",
+      title: 'Photos',
       icon: PhotoIcon,
-      href: "/photos",
+      href: '/photos',
     },
     {
-      title: "Explorer",
+      title: 'Explorer',
       icon: ImageSearchIcon,
-      href: "/explorer",
+      href: '/explorer',
     },
     {
-      title: "Sharing",
+      title: 'Sharing',
       icon: ShareIcon,
-      href: "/my",
+      href: '/my',
     },
     {
       isDivider: true,
     },
     {
-      title: "Albums",
+      title: 'Albums',
       icon: PhotoAlbumIcon,
-      href: "/albums",
+      href: '/albums',
     },
     {
-      title: "People",
+      title: 'People',
       icon: PersonSearchIcon,
-      href: "/people",
+      href: '/people',
     },
     {
-      title: "Places",
+      title: 'Places',
       icon: MapIcon,
-      href: "/places",
+      href: '/places',
     },
     {
-      title: "Favorites",
+      title: 'Favorites',
       icon: FavoriteIcon,
-      href: "/favorites",
+      href: '/favorites',
     },
     {
-      title: "Trash",
+      title: 'Trash',
       icon: DeleteIcon,
-      href: "/trash",
+      href: '/trash',
     },
   ];
 
@@ -66,11 +67,11 @@ export default function SideNav(params) {
         aria-label="close sidebar"
         className="drawer-overlay"
       ></label>
-      <ul className="menu h-full w-64 bg-base-200 px-3">
+      <ul className="menu bg-base-200 h-full w-64 px-3">
         <ul
           className="menu menu-lg w-56"
           onClick={() => {
-            document.getElementById("side-nav-drawer").checked = false;
+            document.getElementById('side-nav-drawer').checked = false;
           }}
         >
           {menu.map((item, index) =>
@@ -82,8 +83,8 @@ export default function SideNav(params) {
               <li key={index}>
                 <Link
                   className={clsx(
-                    "rounded-full text-sm leading-6",
-                    pathname.startsWith(item.href) && "active",
+                    'rounded-full text-sm leading-6',
+                    pathname.startsWith(item.href) && 'active',
                   )}
                   href={item.href}
                 >

@@ -1,18 +1,24 @@
-export enum GroupBy {
+export const enum GroupBy {
   NoGroup = 1,
   Day,
   Month,
   Year,
 }
 
-export enum GalleryLayout {
+export const enum GalleryLayout {
   Grid,
   Grid1x1,
   Justified,
   Masonry,
 }
 
-export enum NavMode {
+export const enum NavMode {
   Modern,
   Traditional,
+}
+
+export const enum GroupAlbumsBy {
+  None = 'No grouping',
+  Year = 'Group by year',
+  Owner = 'Group by owner',
 }

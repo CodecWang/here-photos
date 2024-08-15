@@ -1,7 +1,8 @@
 import { MouseEventHandler } from 'react';
-import { GroupAlbumsBy } from './type';
-import AdGroupOffIcon from '@/icons/ad-group-off-icon';
+
 import AdGroupIcon from '@/icons/ad-group-icon';
+import AdGroupOffIcon from '@/icons/ad-group-off-icon';
+import { GroupAlbumsBy } from '@/types/enums';
 
 interface GroupAlbumsDropdownProps {
   groupBy: GroupAlbumsBy;
@@ -31,7 +32,7 @@ export function GroupAlbumsDropdown({
       </div>
       <ul
         tabIndex={0}
-        className="menu dropdown-content z-[1] w-52 rounded-box bg-base-200 p-2 shadow"
+        className="menu dropdown-content rounded-box bg-base-200 z-[1] w-52 p-2 shadow"
         onClick={handleGroupByChange}
       >
         {Object.values(GroupAlbumsBy).map((value) => (

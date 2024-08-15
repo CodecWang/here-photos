@@ -1,13 +1,8 @@
-export enum GroupAlbumsBy {
-  None = "No grouping",
-  Year = "Group by year",
-  Owner = "Group by owner",
-}
-
 interface Album {
   id: number;
   title: string;
   cover: Photo;
+  photoCount?: number;
   photos: Photo[];
   createdAt: Date;
 }

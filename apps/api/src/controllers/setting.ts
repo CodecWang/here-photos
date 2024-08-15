@@ -1,9 +1,8 @@
 import type { Context } from 'koa';
-import { Joi } from 'koa-joi-router';
 
 import db from '../models';
 
-export const settingController = {
+export const controller = {
   read: async (ctx: Context) => {
     const settings = await db.Setting.findAll();
     const ret = settings.reduce((acc, setting) => {
@@ -14,6 +13,6 @@ export const settingController = {
   },
 };
 
-export const settingValidator = {
+export const validator = {
   read: {},
 };

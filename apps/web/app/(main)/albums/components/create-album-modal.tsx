@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import CloseIcon from "@/icons/close-icon";
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+
+import CloseIcon from '@/icons/close-icon';
 
 enum AlbumType {
   Album,
@@ -17,13 +18,13 @@ export default function CreateAlbumModal() {
     if (!dialog) return;
 
     const handleClose = () => {
-      console.log("close -- need to reset value");
+      console.log('close -- need to reset value');
       // dialogRef.current?.reset();
     };
 
-    dialog.addEventListener("close", handleClose);
+    dialog.addEventListener('close', handleClose);
     return () => {
-      dialog.removeEventListener("close", handleClose);
+      dialog.removeEventListener('close', handleClose);
     };
   }, []);
 
@@ -36,12 +37,12 @@ export default function CreateAlbumModal() {
     // }
 
     const response = await fetch(`/api/v1/albums`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        title: formData.get("albumName"),
+        title: formData.get('albumName'),
       }),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const album = await response.json();
@@ -58,8 +59,12 @@ export default function CreateAlbumModal() {
         type="text"
         name="albumName"
         placeholder="Type here"
-        className="input input-bordered w-full max-w-xs"
+        required
+        className="input input-bordered peer w-full max-w-xs"
       />
+      <p className="invisible text-xs text-gray-500 transition-all peer-invalid:visible">
+        Album name is required
+      </p>
     </label>
   );
 

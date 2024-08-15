@@ -1,20 +1,26 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ChevronRightIcon from '@/icons/chevron-right-icon';
+
+import Album from './components/album';
 
 interface AlbumGroupProps {
   title: string;
   count: number;
   albums: Album[];
+  collapsed?: boolean;
 }
 
 export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+
+  useEffect(() => {
+    setIsCollapsed(false);
+  }, [albums]);
 
   return (
     <div>
@@ -40,34 +46,13 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
 
       {!isCollapsed && (
         <div
-          className="flex flex-wrap"
+          className="grid grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),1fr))] gap-4"
           style={{
             animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
           }}
         >
           {albums.map((album, index) => (
-            <Link href={`/albums/${album.id}`} key={index}>
-              <div className="card m-4 w-64 bg-base-100 shadow-xl">
-                <figure>
-                  <img
-                    style={{
-                      width: '100%',
-                      height: '200px',
-                      objectFit: 'cover',
-                    }}
-                    src={
-                      album.cover
-                        ? `/api/v1/photos/${album.cover.id}/thumbnail?variant=2`
-                        : ''
-                    }
-                  />
-                </figure>
-                <div className="card-body">
-                  <h2 className="card-title">{album.title}</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                </div>
-              </div>
-            </Link>
+            <Album key={index} album={album} />
           ))}
         </div>
       )}

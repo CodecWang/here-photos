@@ -3,9 +3,10 @@ import type { Context } from 'koa';
 import { Joi } from 'koa-joi-router';
 import path from 'path';
 
+import { NotFoundError } from '../errors/not-found-error';
 import db from '../models';
 
-export const photoController = {
+export const controller = {
   read: async (ctx: Context) => {
     const photos = await db.Photo.findAll({
       include: [db.photoExif, db.photoThumbnails],
@@ -30,13 +31,11 @@ export const photoController = {
       include: [db.Photo],
     });
 
-    if (!thumbnail) {
-      throw new Error('Thumbnail not exists');
-    }
+    if (!thumbnail) throw new NotFoundError('Thumbnail not found.');
 
     const imagePath = path.join(
       '/Users/arthur/coding/moments-in-time/photos/thumbnails',
-      thumbnail.filePath
+      thumbnail.filePath,
     );
 
     console.log('>>> read image');
@@ -51,7 +50,7 @@ export const photoController = {
   },
 };
 
-export const photoValidator = {
+export const validator = {
   read: {},
   delete: {
     type: 'json',

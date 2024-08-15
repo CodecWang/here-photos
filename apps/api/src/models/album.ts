@@ -10,7 +10,7 @@ export default (sequelize: Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.CHAR(64),
         allowNull: false,
         unique: true,
       },
@@ -23,6 +23,6 @@ export default (sequelize: Sequelize) => {
         defaultValue: DataTypes.NOW,
       },
     },
-    { underscored: true }
+    { underscored: true },
   );
 };

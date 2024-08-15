@@ -1,15 +1,22 @@
-import { useTheme } from "next-themes";
-import Upload from "./upload";
-import DarkModeIcon from "@/icons/dark-mode-icon";
-import LightModeIcon from "@/icons/light-mode-icon";
-import MenuIcon from "@/icons/menu-icon";
-import SearchIcon from "@/icons/search-icon";
+import { useTheme } from 'next-themes';
+import { useContext } from 'react';
+
+import DarkModeIcon from '@/icons/dark-mode-icon';
+import LightModeIcon from '@/icons/light-mode-icon';
+import MenuIcon from '@/icons/menu-icon';
+import SearchIcon from '@/icons/search-icon';
+import SelfImprovementIcon from '@/icons/self-improvement-icon';
+import { NavMode } from '@/types/enums';
+
+import { NavContext } from '../app/(main)/nav-provider';
+import Upload from './upload';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
+  const { setNavMode } = useContext(NavContext);
 
   return (
-    <header className="bg-base-200 text-base-content fixed top-0 z-20 flex h-16 w-full justify-center">
+    <header className="text-base-content bg-base-200 fixed top-0 z-20 flex h-16 w-full justify-center">
       <nav className="navbar w-full">
         <div className="flex-none">
           <label
@@ -30,7 +37,7 @@ export default function Header() {
               type="text"
               className="grow"
               placeholder="Try search with natural language"
-              onSelect={() => alert("hha")}
+              onSelect={() => alert('hha')}
             />
             <span className="opacity-50 rtl:flex-row-reverse">
               <kbd className="kbd kbd-sm">⌘</kbd>
@@ -45,21 +52,28 @@ export default function Header() {
           </button>
           <Upload />
 
+          <div>
+            <button
+              className="btn btn-circle btn-ghost"
+              onClick={() => setNavMode(NavMode.Modern)}
+            >
+              <SelfImprovementIcon className="size-6" />
+            </button>
+          </div>
+
           <div
             className="tooltip tooltip-bottom"
-            data-tip={theme === "dark" ? "Light" : "Dark"}
+            data-tip={theme === 'dark' ? 'Light' : 'Dark'}
           >
             <button className="btn btn-circle btn-ghost">
               <label className="swap swap-rotate">
                 <input
                   type="checkbox"
                   className="theme-controller"
-                  checked={theme !== "dark"}
-                  onChange={(e) => {
-                    console.log(e.target.checked, theme);
-
-                    setTheme(e.target.checked ? "light" : "dark");
-                  }}
+                  checked={theme !== 'dark'}
+                  onChange={(e) =>
+                    setTheme(e.target.checked ? 'light' : 'dark')
+                  }
                 />
                 <LightModeIcon className="swap-off size-6" />
                 <DarkModeIcon className="swap-on size-6" />

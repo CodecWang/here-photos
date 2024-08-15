@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import PhotosGroup from "./photos-group";
-import { FixedSizeList as List } from "react-window";
+import { useEffect, useRef, useState } from 'react';
+
+import PhotosGroup from './photos-group';
 
 export default function Photos({ data, layout }: PhotosProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ export default function Photos({ data, layout }: PhotosProps) {
     return <div ref={viewportRef}></div>;
   }
 
-  // TODO(arthur): 只加载视图内的PhotosGroup，这样只会计算视图内的布局
+  // TODO(arthur): 只加载视图内的 PhotosGroup，这样只会计算视图内的布局
   return (
     <div ref={viewportRef}>
       {data.map(({ title, photos }, index) => (

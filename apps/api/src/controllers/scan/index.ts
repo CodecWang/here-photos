@@ -12,7 +12,7 @@ import {
   scanDirectories,
 } from './utils';
 
-export const scanController = {
+export const controller = {
   scan: async (ctx: Context) => {
     const photoCreateOps = [];
     const photoUpdateOps = [];
@@ -28,7 +28,7 @@ export const scanController = {
       attributes: ['filePath', 'checkSum'],
     });
     const photosMap = new Map<string, { id: number; photoSum: string }>(
-      photos.map((p) => [p.filePath, { id: p.id, photoSum: p.checkSum }])
+      photos.map((p) => [p.filePath, { id: p.id, photoSum: p.checkSum }]),
     );
 
     for (const [filePath, localFile] of localFiles) {
@@ -82,7 +82,7 @@ export const scanController = {
     });
 
     await Promise.all(
-      photoUpdateOps.map((op) => db.Photo.update(op, { where: { id: op.id } }))
+      photoUpdateOps.map((op) => db.Photo.update(op, { where: { id: op.id } })),
     );
 
     const deleteOps = photos
@@ -113,14 +113,14 @@ async function generateThumbnails(
   img: Sharp,
   width: number,
   height: number,
-  filePath: string
+  filePath: string,
 ) {
   const filename = path.basename(filePath, path.extname(filePath));
   const smallerSize = Math.min(width < height ? width : height, 800);
   const outputFilename = `th_m_${filename}.jpg`;
   const output = path.join(
     '/Users/arthur/coding/moments-in-time/photos/thumbnails',
-    outputFilename
+    outputFilename,
   );
   // medium/highres/small/blur/large
   const outputImg = await img

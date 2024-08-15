@@ -1,35 +1,28 @@
 import justifiedLayout from 'justified-layout';
-import { useEffect } from 'react';
 import Image from 'next/image';
+
 import { GalleryLayout } from '@/types/enums';
-import { useMemo } from 'react';
+
 import Photo from '../photo';
 
 export default function PhotosGroup(props: PhotosGroupProps) {
   const { title, photos, layout, viewportWidth } = props;
 
-  useEffect(() => {
-    console.log('>>>>', viewportWidth);
-  }, [viewportWidth]);
-
-  const arrange = useMemo(() => {
-    console.log('>>>> calculating layout', viewportWidth);
-    return justifiedLayout(
-      photos.map((photo) => photo.thumbnails[0]),
-      {
-        containerWidth: viewportWidth,
-        containerPadding: 0,
-        boxSpacing: {
-          horizontal: layout.spacing,
-          vertical: layout.spacing,
-        },
-        targetRowHeight: layout.size,
-        // targetRowHeightTolerance: 0,
-        // forceAspectRatio: 1,
-        // fullWidthBreakoutRowCadence: 2
-      }
-    );
-  }, [viewportWidth, layout]);
+  const arrange = justifiedLayout(
+    photos.map((photo) => photo.thumbnails[0]),
+    {
+      containerWidth: viewportWidth,
+      containerPadding: 0,
+      boxSpacing: {
+        horizontal: layout.spacing,
+        vertical: layout.spacing,
+      },
+      targetRowHeight: layout.size,
+      // targetRowHeightTolerance: 0,
+      // forceAspectRatio: 1,
+      // fullWidthBreakoutRowCadence: 2
+    },
+  );
 
   console.log('>>>>', arrange);
 

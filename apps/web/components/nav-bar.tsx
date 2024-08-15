@@ -9,12 +9,12 @@ export default function NavBar() {
   return (
     <div className="absolute bottom-0 flex w-full flex-col items-center">
       <nav
-        className="mb-4 rounded-box bg-base-200 shadow-2xl"
+        className="rounded-box bg-base-200 mb-4 shadow-2xl"
         style={{
           animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
         }}
       >
-        <ul className="menu menu-horizontal flex items-center">
+        <ul className="menu menu-horizontal flex items-center space-x-2">
           <li>
             <Link
               className={clsx(pathname.startsWith('/photos') && 'active')}

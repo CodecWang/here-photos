@@ -24,10 +24,16 @@ const AlbumPhoto = createAlbumPhoto(sequelize);
 const Setting = createSetting(sequelize);
 
 // album.cover = photo
-Album.belongsTo(Photo, { as: 'cover', foreignKey: 'coverId' });
+const albumCover = Album.belongsTo(Photo, {
+  as: 'cover',
+  foreignKey: 'coverId',
+});
 
 // album.photos = photos
-Album.belongsToMany(Photo, { through: AlbumPhoto, as: 'photos' });
+const albumPhotos = Album.belongsToMany(Photo, {
+  through: AlbumPhoto,
+  as: 'photos',
+});
 // photo.albums = albums
 Photo.belongsToMany(Album, { through: AlbumPhoto, as: 'albums' });
 
@@ -53,4 +59,6 @@ export default {
   Thumbnail,
   photoExif,
   photoThumbnails,
+  albumCover,
+  albumPhotos,
 };
