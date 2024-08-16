@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 export default function App() {
   redirect('/photos');
+
   // const router = useRouter();
 
   // if not initialized, redirect to welcome page to setup the app

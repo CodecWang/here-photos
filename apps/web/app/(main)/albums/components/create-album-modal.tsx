@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import CloseIcon from '@/icons/close-icon';
+import { request } from '@/utils/request';
 
 enum AlbumType {
   Album,
@@ -36,7 +37,7 @@ export default function CreateAlbumModal() {
     //   console.log(key, value);
     // }
 
-    const response = await fetch(`/api/v1/albums`, {
+    const album = await request(`/api/v1/albums`, {
       method: 'POST',
       body: JSON.stringify({
         title: formData.get('albumName'),
@@ -45,7 +46,6 @@ export default function CreateAlbumModal() {
         'Content-Type': 'application/json',
       },
     });
-    const album = await response.json();
     router.push(`/albums/${album.id}`);
     dialogRef.current?.close();
   };

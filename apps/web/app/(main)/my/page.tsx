@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import { useContext, useEffect, useState } from 'react';
 
 import { NavContext } from '../nav-provider';
+import { request } from '@/utils/request';
 
 interface Settings {
   photoDirs: string[];
@@ -16,11 +17,8 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      console.log('fetching settings');
-
-      const res = await fetch('/api/v1/settings');
-      const data = await res.json();
-      setSettings(data);
+      const data = await request('/api/v1/settings');
+      data && setSettings(data);
     })();
   }, []);
 
@@ -53,9 +51,7 @@ export default function Page() {
           dark
         </button>
 
-        {settings.photoDirs?.map((dir) => (
-          <div key={dir}>{dir}</div>
-        ))}
+        {settings.photoDirs?.map((dir) => <div key={dir}>{dir}</div>)}
       </div>
     </div>
   );

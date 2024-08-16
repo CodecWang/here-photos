@@ -15,6 +15,7 @@ import { NavMode } from '@/types/enums';
 import PhotosView from '../../../components/photos-view';
 import { NavContext } from '../nav-provider';
 import { groupPhotoByDate } from './utils';
+import { request } from '@/utils/request';
 
 export default function Page() {
   const { navMode, setNavMode } = useContext(NavContext);
@@ -26,9 +27,8 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch('/api/v1/photos');
-      const rawPhotos = await response.json();
-      setPhotos(rawPhotos.data);
+      const rawPhotos = await request('/api/v1/photos');
+      rawPhotos && setPhotos(rawPhotos.data);
     })();
   }, []);
 

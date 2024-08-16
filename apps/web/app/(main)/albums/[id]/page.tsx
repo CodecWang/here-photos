@@ -8,6 +8,7 @@ import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
 import AddPhotoAlternateIcon from '@/icons/add-photo-alternate-icon';
 
 import { groupPhotoByDate } from '../../photos/utils';
+import { request } from '@/utils/request';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [album, setAlbum] = useState<Album>();
@@ -18,11 +19,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`/api/v1/albums/${params.id}/photos`);
-      const album = await response.json();
-      console.log(album);
-
-      setAlbum(album.data);
+      const album = await request(`/api/v1/albums/${params.id}/photos`);
+      album && setAlbum(album.data);
     })();
   }, [params.id]);
 

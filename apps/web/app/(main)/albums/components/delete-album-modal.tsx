@@ -1,3 +1,4 @@
+import { request } from '@/utils/request';
 import { useRouter } from 'next/navigation';
 
 interface DeleteAlbumModalProps {
@@ -8,18 +9,16 @@ export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
   const router = useRouter();
 
   const deleteAlbum = async () => {
-    const response = await fetch(`/api/v1/albums`, {
+    const response = await request(`/api/v1/albums`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ albumIds: [album.id] }),
     });
-    if (response.ok) {
-      // redirect to albums page
-      // window.location.href = '/albums';
-      router.replace('/albums');
-    }
+    // redirect to albums page
+    // window.location.href = '/albums';
+    response && router.replace('/albums');
   };
 
   return (

@@ -6,6 +6,7 @@ import PageHeader from '@/components/page-header';
 import { CACHE_KEY } from '@/config/constants';
 import CreateNewFolderIcon from '@/icons/create-new-folder-icon';
 import { GroupAlbumsBy } from '@/types/enums';
+import { request } from '@/utils/request';
 
 import AlbumGroup from './album-group';
 import CreateAlbumModal from './components/create-album-modal';
@@ -19,9 +20,8 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`/api/v1/albums`);
-      const albums = await response.json();
-      setAlbums(albums.data);
+      const albums = await request('/api/v1/albums');
+      albums && setAlbums(albums.data);
     })();
 
     const cachedGroupBy = localStorage.getItem(CACHE_KEY.groupAlbumsBy);
@@ -44,8 +44,6 @@ export default function Page() {
       case GroupAlbumsBy.Owner:
         break;
     }
-
-    console.log('>>> groupBy', albumGroups.length);
   }, [albums, groupBy]);
 
   const handleGroupByChange = (groupBy: GroupAlbumsBy) => {
@@ -59,9 +57,9 @@ export default function Page() {
         <div className="tooltip tooltip-bottom" data-tip="Create album">
           <button
             className="btn btn-ghost"
-            onClick={() =>
-              document.getElementById('create-album-modal').showModal()
-            }
+            onClick={() => {
+              document.getElementById('create-album-modal').showModal();
+            }}
           >
             <CreateNewFolderIcon className="size-6 md:size-5" />
             <span className="hidden md:inline">Create album</span>
