@@ -1,6 +1,6 @@
 import router from 'koa-joi-router';
 
-import { controller } from '../controllers/scan';
+import { controller } from '../controller/scan';
 
 const scanRouter = router();
 scanRouter.prefix('/api/v1/scan');

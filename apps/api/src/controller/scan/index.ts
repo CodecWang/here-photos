@@ -4,7 +4,7 @@ import type { Context } from 'koa';
 import path from 'path';
 import sharp, { type Sharp } from 'sharp';
 
-import db from '../../models';
+import db from '../../model';
 import { rgbaToThumbHash } from './thumb-hash';
 import {
   calCheckSum,

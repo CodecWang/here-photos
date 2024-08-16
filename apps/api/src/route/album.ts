@@ -1,6 +1,6 @@
 import router from 'koa-joi-router';
 
-import { controller, validator } from '../controllers/album';
+import { controller, validator } from '../controller/album';
 
 const albumRouter = router();
 albumRouter.prefix('/api/v1/albums');

@@ -3,8 +3,8 @@ import type { Context } from 'koa';
 import { Joi } from 'koa-joi-router';
 import path from 'path';
 
-import { NotFoundError } from '../errors/not-found-error';
-import db from '../models';
+import { NotFoundError } from '../error/not-found-error';
+import db from '../model';
 
 export const controller = {
   read: async (ctx: Context) => {

@@ -1,6 +1,6 @@
 import router from 'koa-joi-router';
 
-import { controller, validator } from '../controllers/setting';
+import { controller, validator } from '../controller/setting';
 
 const settingRouter = router();
 settingRouter.prefix('/api/v1/settings');

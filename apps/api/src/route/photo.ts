@@ -1,6 +1,6 @@
 import router from 'koa-joi-router';
 
-import { controller, validator } from '../controllers/photo';
+import { controller, validator } from '../controller/photo';
 
 const photoRouter = router();
 photoRouter.prefix('/api/v1/photos');

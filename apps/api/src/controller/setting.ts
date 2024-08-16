@@ -1,6 +1,6 @@
 import type { Context } from 'koa';
 
-import db from '../models';
+import db from '../model';
 
 export const controller = {
   read: async (ctx: Context) => {

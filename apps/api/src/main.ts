@@ -2,8 +2,8 @@ import koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 
 import { catchError } from './middleware/catch-error';
-import db from './models';
-import routes from './routes';
+import db from './model';
+import routes from './route';
 
 const app = new koa();
 
