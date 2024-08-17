@@ -10,7 +10,7 @@ export default function Album({ album }: AlbumProps) {
   return (
     <Link href={`/albums/${album.id}`}>
       <div className="shadow hover:shadow-2xl">
-        <div className="bg-base-200 aspect-square">
+        <div className="bg-base-200 aspect-[4/3]">
           {album.cover && (
             <Image
               src={`/api/v1/photos/${album.cover.id}/thumbnail?variant=2`}

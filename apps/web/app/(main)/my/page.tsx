@@ -17,8 +17,8 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      const data = await request('/api/v1/settings');
-      data && setSettings(data);
+      const settings = await request('/api/v1/settings');
+      settings && setSettings(settings.data);
     })();
   }, []);
 
@@ -27,10 +27,10 @@ export default function Page() {
   };
 
   return (
-    <div>
+    <div className="flex-grow overflow-auto">
       <h1>My Page</h1>
 
-      <div className="form-control w-56">
+      <div className="form-control w-80">
         <label className="label cursor-pointer">
           <span className="label-text">Modern Navigation</span>
           <input
@@ -51,7 +51,13 @@ export default function Page() {
           dark
         </button>
 
-        {settings.photoDirs?.map((dir) => <div key={dir}>{dir}</div>)}
+        {settings.photoDirs?.map((dir) => (
+          <ul key={dir}>
+            <li>
+              <span>{dir}</span> <button className="btn">Edit</button>
+            </li>
+          </ul>
+        ))}
       </div>
     </div>
   );

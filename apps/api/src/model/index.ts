@@ -7,6 +7,7 @@ import createPhoto from './photo';
 import createSetting from './setting';
 import createThumbnail from './thumbnail';
 
+// Database connection instance
 const sequelize = new Sequelize('echo', 'root', '123456', {
   host: 'localhost',
   port: 3306,
@@ -16,38 +17,34 @@ const sequelize = new Sequelize('echo', 'root', '123456', {
   // logging: false,
 });
 
+// Create database models
+const Exif = createExif(sequelize);
 const Album = createAlbum(sequelize);
 const Photo = createPhoto(sequelize);
-const Exif = createExif(sequelize);
+const Setting = createSetting(sequelize);
 const Thumbnail = createThumbnail(sequelize);
 const AlbumPhoto = createAlbumPhoto(sequelize);
-const Setting = createSetting(sequelize);
 
-// album.cover = photo
-const albumCover = Album.belongsTo(Photo, {
-  as: 'cover',
-  foreignKey: 'coverId',
-});
-
-// album.photos = photos
-const albumPhotos = Album.belongsToMany(Photo, {
-  through: AlbumPhoto,
-  as: 'photos',
-});
-// photo.albums = albums
+// [START] Define associations
 Photo.belongsToMany(Album, { through: AlbumPhoto, as: 'albums' });
-
-// photo.exif = exif
 const photoExif = Photo.hasOne(Exif, { foreignKey: 'photoId', as: 'exif' });
-// exif.photo = photo
 Exif.belongsTo(Photo, { foreignKey: 'photoId' });
-
-// photo.thumbnails = thumbnails
 const photoThumbnails = Photo.hasMany(Thumbnail, {
   foreignKey: 'photoId',
   as: 'thumbnails',
 });
+
+const albumCover = Album.belongsTo(Photo, {
+  as: 'cover',
+  foreignKey: 'coverId',
+});
+const albumPhotos = Album.belongsToMany(Photo, {
+  through: AlbumPhoto,
+  as: 'photos',
+});
+
 Thumbnail.belongsTo(Photo, { foreignKey: 'photoId' });
+// [END] Define associations
 
 export default {
   sequelize,

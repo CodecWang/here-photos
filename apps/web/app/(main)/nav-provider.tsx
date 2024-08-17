@@ -52,17 +52,13 @@ export const NavProvider = ({
     return (
       <div className="flex h-lvh flex-col bg-gradient-to-tr">
         <Header />
-        <main className="drawer h-full flex-grow overflow-hidden bg-base-100 pt-16 lg:drawer-open">
+        <main className="drawer bg-base-100 lg:drawer-open h-full flex-grow overflow-hidden pt-16">
           <input
             id="side-nav-drawer"
             type="checkbox"
             className="drawer-toggle"
           />
-          <section className="drawer-content relative">
-            <div className="absolute flex h-full w-full overflow-hidden">
-              {children}
-            </div>
-          </section>
+          <section className="drawer-content relative">{children}</section>
           <SideNav />
         </main>
       </div>

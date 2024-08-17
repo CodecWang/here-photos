@@ -1,4 +1,4 @@
-import { Context, Next } from 'koa';
+import type { Context, Next } from 'koa';
 import { UniqueConstraintError } from 'sequelize';
 
 export async function catchError(ctx: Context, next: Next) {
@@ -9,7 +9,7 @@ export async function catchError(ctx: Context, next: Next) {
       ctx.body = {
         code: 0,
         data: ctx.body,
-        message: ctx.message ?? '',
+        message: ctx.message,
       };
     }
   } catch (error) {

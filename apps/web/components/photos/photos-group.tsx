@@ -24,8 +24,6 @@ export default function PhotosGroup(props: PhotosGroupProps) {
     },
   );
 
-  console.log('>>>>', arrange);
-
   return (
     <div className=".item">
       {title && (

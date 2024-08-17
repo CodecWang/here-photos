@@ -1,8 +1,8 @@
-export const enum GroupBy {
-  NoGroup = 1,
-  Day,
-  Month,
-  Year,
+export enum GroupBy {
+  None = 'No grouping',
+  Day = 'Group by day',
+  Month = 'Group by month',
+  Year = 'Group by year',
 }
 
 export const enum GalleryLayout {

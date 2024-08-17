@@ -2,7 +2,7 @@ import { GroupBy } from '@/types/enums';
 import { Photo } from '@/type';
 
 export function groupPhotoByDate(photos: Photo[], groupBy?: GroupBy) {
-  if (!groupBy || groupBy === GroupBy.NoGroup) {
+  if (!groupBy || groupBy === GroupBy.None) {
     return [{ photos, title: '' }];
   }
 
@@ -22,14 +22,14 @@ export function groupPhotoByDate(photos: Photo[], groupBy?: GroupBy) {
     (acc: { [key: string]: Photo[] }, photo) => {
       const date = new Date(photo.shotTime).toLocaleDateString(
         'en-US',
-        options
+        options,
       );
 
       if (!acc[date]) acc[date] = [];
       acc[date].push(photo);
       return acc;
     },
-    {}
+    {},
   );
 
   return Object.entries(groupedPhotos)

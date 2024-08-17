@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 
@@ -11,13 +12,14 @@ import FilterAltIcon from '@/icons/filter-alt-icon';
 import SelfImprovementIcon from '@/icons/self-improvement-icon';
 import TuneIcon from '@/icons/tune-icon';
 import { NavMode } from '@/types/enums';
-
-import PhotosView from '../../../components/photos-view';
-import { NavContext } from '../nav-provider';
-import { groupPhotoByDate } from './utils';
 import { request } from '@/utils/request';
 
+import PhotosLayoutSetting from '../../../components/photos-layout-setting';
+import { NavContext } from '../nav-provider';
+import { groupPhotoByDate } from './utils';
+
 export default function Page() {
+  const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
   const { navMode, setNavMode } = useContext(NavContext);
   const [photos, setPhotos] = useState<any[]>([]);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
@@ -30,6 +32,8 @@ export default function Page() {
       const rawPhotos = await request('/api/v1/photos');
       rawPhotos && setPhotos(rawPhotos.data);
     })();
+    const sidebar = document.getElementById('sidebar');
+    sidebar?.style.display === 'none';
   }, []);
 
   useEffect(() => {
@@ -39,24 +43,28 @@ export default function Page() {
     setPhotoGroups(photoGroups);
   }, [photos, photosLayout]);
 
-  const handleViewChange = (newView: PhotosLayout) => {
+  const handleLayoutChange = (newView: PhotosLayout) => {
     setPhotosLayout((prev) => ({ ...prev, ...newView }));
   };
 
   return (
     <>
-      <div className="flex-grow overflow-auto">
+      <div
+        className={clsx(
+          'absolute bottom-0 left-0 right-0 top-0 overflow-auto overflow-x-hidden transition-all duration-500',
+          openLayoutSetting && 'sm:right-80',
+        )}
+      >
         <PageHeader title="Photos">
           {navMode === NavMode.Modern && <Upload />}
 
           <div className="tooltip tooltip-bottom" data-tip="Layout setting">
             <button
-              className="btn btn-circle btn-ghost"
-              onClick={() => {
-                const sidebar = document.getElementById('sidebar');
-
-                sidebar.classList.toggle('hidden');
-              }}
+              className={clsx(
+                'btn btn-circle btn-ghost',
+                openLayoutSetting && 'btn-active',
+              )}
+              onClick={() => setOpenLayoutSetting((prev) => !prev)}
             >
               <TuneIcon className="size-5" />
             </button>
@@ -76,11 +84,17 @@ export default function Page() {
           </div>
         </PageHeader>
 
-        <div className="flex-grow px-4 pt-2">
+        <div className="px-0 pt-2 sm:px-4">
           <Photos data={photoGroups} layout={photosLayout} />
         </div>
       </div>
-      <PhotosView view={photosLayout} onChange={handleViewChange} />
+
+      <PhotosLayoutSetting
+        open={openLayoutSetting}
+        setting={photosLayout}
+        onClose={() => setOpenLayoutSetting(false)}
+        onChange={handleLayoutChange}
+      />
     </>
   );
 }
