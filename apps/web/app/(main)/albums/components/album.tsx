@@ -1,21 +1,20 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface AlbumProps {
   album: Album;
 }
 
 export default function Album({ album }: AlbumProps) {
-  console.log(album);
-
   return (
     <Link href={`/albums/${album.id}`}>
       <div className="shadow hover:shadow-2xl">
-        <div className="bg-base-200 aspect-[4/3]">
+        <div className="bg-base-200 relative aspect-square">
           {album.cover && (
             <Image
               src={`/api/v1/photos/${album.cover.id}/thumbnail?variant=2`}
-              width={200}
-              height={200}
+              fill={true}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt=""
             />
           )}

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 
 import ChevronRightIcon from '@/icons/chevron-right-icon';
 
-import Album from './components/album';
+import Album from './album';
+import clsx from 'clsx';
 
 interface AlbumGroupProps {
   title: string;
@@ -16,14 +17,12 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
 
   const toggleCollapse = () => setIsCollapsed(!isCollapsed);
 
-  useEffect(() => {
-    setIsCollapsed(false);
-  }, [albums]);
+  useEffect(() => setIsCollapsed(false), [albums]);
 
   return (
     <div>
       {title && count && (
-        <div className="w-full border-b border-b-blue-100 p-2">
+        <div className="border-base-content/10 mb-4 w-full border-b py-2">
           <div
             className="flex items-center"
             style={{
@@ -32,12 +31,15 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
             onClick={toggleCollapse}
           >
             <ChevronRightIcon
-              className={`inline-block size-6 ${
-                isCollapsed ? 'rotate-0' : 'rotate-90'
-              } transition-all duration-[250ms]`}
+              className={clsx(
+                'inline-block size-6 transition-all duration-300',
+                isCollapsed ? 'rotate-0' : 'rotate-90',
+              )}
             />
-            <span className="text-3xl">{title}</span>
-            <span className="self-end">{count} albums</span>
+            <span className="mx-2 text-2xl font-medium">{title}</span>
+            <span className="text-base-content/50 mt-1 text-sm">
+              ({count} albums)
+            </span>
           </div>
         </div>
       )}

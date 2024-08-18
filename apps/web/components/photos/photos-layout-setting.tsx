@@ -1,7 +1,7 @@
 import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
 import { GalleryLayout, GroupBy } from '@/types/enums';
 import { useEffect, useRef } from 'react';
-import RangeWithButtons from './range-with-buttons';
+import RangeWithButtons from '../range-with-buttons';
 import CloseIcon from '@/icons/close-icon';
 
 interface PhotosLayoutSettingProps {
@@ -39,7 +39,7 @@ export default function PhotosLayoutSetting({
   return (
     <aside
       ref={sidebarRef}
-      className="bg-base-100 border-l-base-content/10 absolute inset-y-0 right-0 z-10 hidden w-full overflow-y-auto p-4 transition-all duration-500 sm:w-80 sm:border-l"
+      className="bg-base-100 sm:border-l-base-content/10 absolute inset-y-0 right-0 z-10 hidden w-full overflow-y-auto p-4 transition-all duration-500 sm:w-80 sm:border-l"
     >
       <div className="mb-4 flex items-center space-x-1 sm:hidden">
         <button className="btn btn-ghost btn-circle" onClick={onClose}>
@@ -91,9 +91,18 @@ export default function PhotosLayoutSetting({
           <span className="block">Spacing</span>
           <RangeWithButtons
             min={0}
-            max={48}
+            max={24}
             value={setting.spacing}
             onChange={(value) => onChange({ spacing: value })}
+          />
+        </div>
+        <div className="space-y-2">
+          <span className="block">Corner radius</span>
+          <RangeWithButtons
+            min={0}
+            max={8}
+            value={setting.cornerRadius}
+            onChange={(value) => onChange({ cornerRadius: value })}
           />
         </div>
         <div className="space-y-2">

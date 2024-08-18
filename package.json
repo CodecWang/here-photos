@@ -38,6 +38,7 @@
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
     "@types/jest": "^29.4.0",
+    "@types/justified-layout": "^4.1.4",
     "@types/koa": "~2.13.5",
     "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-joi-router": "^8.0.7",

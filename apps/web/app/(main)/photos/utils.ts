@@ -32,10 +32,8 @@ export function groupPhotoByDate(photos: Photo[], groupBy?: GroupBy) {
     {},
   );
 
-  return Object.entries(groupedPhotos)
-    .map(([date, photos]) => ({
-      photos,
-      title: date,
-    }))
-    .splice(0, 2);
+  return Object.entries(groupedPhotos).map(([date, photos]) => ({
+    photos,
+    title: date,
+  }));
 }

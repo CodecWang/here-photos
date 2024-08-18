@@ -1,38 +1,48 @@
 import justifiedLayout from 'justified-layout';
-import Image from 'next/image';
+import { useMemo } from 'react';
 
 import { GalleryLayout } from '@/types/enums';
 
-import Photo from '../photo';
+import Photo from './photo';
 
-export default function PhotosGroup(props: PhotosGroupProps) {
-  const { title, photos, layout, viewportWidth } = props;
+export default function PhotosGroup({
+  title,
+  photos,
+  layout,
+  viewportWidth,
+}: PhotosGroupProps) {
+  const arrange = useMemo(() => {
+    if (layout.layout !== GalleryLayout.Justified) return;
 
-  const arrange = justifiedLayout(
-    photos.map((photo) => photo.thumbnails[0]),
-    {
-      containerWidth: viewportWidth,
-      containerPadding: 0,
-      boxSpacing: {
-        horizontal: layout.spacing,
-        vertical: layout.spacing,
+    console.log('>>> re-calculating layout');
+
+    return justifiedLayout(
+      photos.map((photo) => photo.thumbnails[0]),
+      {
+        containerWidth: viewportWidth,
+        containerPadding: 0,
+        boxSpacing: {
+          horizontal: layout.spacing ?? 0,
+          vertical: layout.spacing ?? 0,
+        },
+        targetRowHeight: layout.size,
       },
-      targetRowHeight: layout.size,
-      // targetRowHeightTolerance: 0,
-      // forceAspectRatio: 1,
-      // fullWidthBreakoutRowCadence: 2
-    },
-  );
+    );
+  }, [photos, layout.spacing, layout.layout, layout.size, viewportWidth]);
 
   return (
-    <div className=".item">
+    <div>
       {title && (
-        <div className="flex h-12 items-center text-sm">
+        <div className="group flex h-12 items-center text-sm font-medium">
+          <input
+            type="checkbox"
+            className="checkbox mr-2 hidden rounded-full group-hover:block"
+          />
           <span>{title}</span>
         </div>
       )}
 
-      {layout.layout === GalleryLayout.Justified && (
+      {layout.layout === GalleryLayout.Justified ? (
         <div
           className="relative overflow-hidden"
           style={{ height: arrange.containerHeight }}
@@ -41,40 +51,18 @@ export default function PhotosGroup(props: PhotosGroupProps) {
             <Photo
               photo={photos[index]}
               key={photos[index].id}
-              width={width}
-              height={height}
-              top={top}
-              left={left}
-              // onClick={onClick}
-              // onSelect={onSelect}
+              layout={layout.layout}
+              position={{ width, height, top, left }}
             />
           ))}
         </div>
-      )}
-
-      {(layout.layout === GalleryLayout.Grid ||
-        layout.layout === GalleryLayout.Grid1x1) && (
-        <div className="grid grid-cols-4" style={{ gap: layout.spacing }}>
+      ) : (
+        <div
+          className="grid grid-cols-[repeat(auto-fill,minmax(min(14rem,100%),1fr))]"
+          style={{ gap: layout.spacing }}
+        >
           {photos.map((photo) => (
-            <div
-              key={photo.id}
-              style={{ width: viewportWidth / 4, height: viewportWidth / 4 }}
-            >
-              <Image
-                style={{
-                  width: viewportWidth / 4,
-                  height: viewportWidth / 4,
-                  objectFit:
-                    layout.layout === GalleryLayout.Grid1x1
-                      ? 'cover'
-                      : 'contain',
-                }}
-                src={`/api/v1/photos/${photo.id}/thumbnail?variant=2`}
-                width={viewportWidth / 4}
-                height={viewportWidth / 4}
-                alt=""
-              />
-            </div>
+            <Photo photo={photo} key={photo.id} layout={layout.layout} />
           ))}
         </div>
       )}

@@ -6,6 +6,7 @@ import { useContext } from 'react';
 
 import PageHeader from '@/components/page-header';
 import Photos from '@/components/photos';
+import PhotosLayoutSetting from '@/components/photos/photos-layout-setting';
 import Upload from '@/components/upload';
 import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
 import FilterAltIcon from '@/icons/filter-alt-icon';
@@ -14,18 +15,17 @@ import TuneIcon from '@/icons/tune-icon';
 import { NavMode } from '@/types/enums';
 import { request } from '@/utils/request';
 
-import PhotosLayoutSetting from '../../../components/photos-layout-setting';
 import { NavContext } from '../nav-provider';
 import { groupPhotoByDate } from './utils';
 
 export default function Page() {
-  const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
   const { navMode, setNavMode } = useContext(NavContext);
-  const [photos, setPhotos] = useState<any[]>([]);
-  const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
+  const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
   const [photosLayout, setPhotosLayout] = useState<PhotosLayout>(
     DEFAULT_PHOTOS_LAYOUT,
   );
+  const [photos, setPhotos] = useState<any[]>([]);
+  const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -34,24 +34,34 @@ export default function Page() {
     })();
     const sidebar = document.getElementById('sidebar');
     sidebar?.style.display === 'none';
+
+    const value = localStorage.getItem('photos-layout');
+    const cachedLayout = JSON.parse(value || '{}');
+    setPhotosLayout((prev) => ({ ...prev, ...cachedLayout }));
   }, []);
 
   useEffect(() => {
     if (!photos.length) return;
 
+    console.log('>>> regrouping photos');
+
     const photoGroups = groupPhotoByDate(photos, photosLayout.groupBy);
     setPhotoGroups(photoGroups);
-  }, [photos, photosLayout]);
+  }, [photos, photosLayout.groupBy]);
 
   const handleLayoutChange = (newView: PhotosLayout) => {
-    setPhotosLayout((prev) => ({ ...prev, ...newView }));
+    setPhotosLayout((prev) => {
+      const newLayout = { ...prev, ...newView };
+      localStorage.setItem('photos-layout', JSON.stringify(newLayout));
+      return newLayout;
+    });
   };
 
   return (
     <>
       <div
         className={clsx(
-          'absolute bottom-0 left-0 right-0 top-0 overflow-auto overflow-x-hidden transition-all duration-500',
+          'absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500',
           openLayoutSetting && 'sm:right-80',
         )}
       >

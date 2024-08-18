@@ -49,8 +49,8 @@ export const controller = {
       const img = sharp(buffer);
       const { width, height, exif } = await img.metadata();
       const exifInfo = await readExif(exif);
-      const thumbHash = await generateThumbHash(img);
       const thumbnails = await generateThumbnails(img, width, height, filePath);
+      const thumbHash = await generateThumbHash(img);
 
       const fileInfo = {
         checkSum,
@@ -129,7 +129,7 @@ async function generateThumbnails(
     .toFile(output);
 
   // @ts-ignore
-  const d = outputImg.data;
+  const d = outputImg;
 
   return [
     {

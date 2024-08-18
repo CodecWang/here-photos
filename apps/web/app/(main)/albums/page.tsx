@@ -8,9 +8,9 @@ import CreateNewFolderIcon from '@/icons/create-new-folder-icon';
 import { GroupAlbumsBy } from '@/types/enums';
 import { request } from '@/utils/request';
 
-import AlbumGroup from './album-group';
+import AlbumGroup from './components/album-group';
 import CreateAlbumModal from './components/create-album-modal';
-import { GroupAlbumsDropdown } from './group-albums-dropdown';
+import { GroupAlbumsDropdown } from './components/group-albums-dropdown';
 import { groupAlbumsByYear } from './utils';
 
 export default function Page() {
@@ -52,7 +52,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex-grow overflow-auto">
+    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
       <PageHeader title="Albums">
         <div className="tooltip tooltip-bottom" data-tip="Create album">
           <button
@@ -69,7 +69,7 @@ export default function Page() {
         <GroupAlbumsDropdown groupBy={groupBy} onChange={handleGroupByChange} />
       </PageHeader>
 
-      <div className="space-y-6 px-4 pt-2">
+      <div className="space-y-6 p-4">
         {albumGroups.map((group, index) => (
           <AlbumGroup
             key={index}
