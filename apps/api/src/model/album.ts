@@ -14,6 +14,10 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
         unique: true,
       },
+      pinned: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
