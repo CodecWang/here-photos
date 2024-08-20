@@ -42,7 +42,7 @@ export default function Photo({ photo, layout, position }: PhotoProps) {
   if (layout === GalleryLayout.Grid || layout === GalleryLayout.Grid1x1) {
     return (
       <div className="hover:border-base-content relative aspect-square cursor-pointer overflow-hidden hover:border">
-        <Image {...imageProps} />
+        <Image {...imageProps} style={{ objectFit: 'cover' }} />
       </div>
     );
   }

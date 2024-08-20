@@ -5,7 +5,7 @@ import { GalleryLayout } from '@/types/enums';
 
 import Photo from './photo';
 
-export default function PhotosGroup({
+export default function PhotoGroup({
   title,
   photos,
   layout,
@@ -33,10 +33,10 @@ export default function PhotosGroup({
   return (
     <div>
       {title && (
-        <div className="group flex h-12 items-center text-sm font-medium">
+        <div className="group flex h-12 items-center px-4 text-sm font-medium sm:px-0">
           <input
             type="checkbox"
-            className="checkbox mr-2 hidden rounded-full group-hover:block"
+            className="checkbox checkbox-sm mr-2 rounded-full sm:hidden sm:group-hover:block"
           />
           <span>{title}</span>
         </div>
@@ -45,9 +45,9 @@ export default function PhotosGroup({
       {layout.layout === GalleryLayout.Justified ? (
         <div
           className="relative overflow-hidden"
-          style={{ height: arrange.containerHeight }}
+          style={{ height: arrange?.containerHeight }}
         >
-          {arrange.boxes.map(({ width, height, top, left }, index) => (
+          {arrange?.boxes.map(({ width, height, top, left }, index) => (
             <Photo
               photo={photos[index]}
               key={photos[index].id}

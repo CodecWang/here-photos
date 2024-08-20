@@ -14,7 +14,6 @@ const defaultContext = {
     success: (content: string) => console.log(content),
   },
 };
-
 const MessageContext = createContext(defaultContext);
 
 export const MessageProvider = ({

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { GalleryLayout } from '@/types/enums';
 
-import PhotosGroup from './photos-group';
+import PhotoGroup from './photo-group';
 
 export default function Photos({ data, layout }: PhotosProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ export default function Photos({ data, layout }: PhotosProps) {
       {layout.layout === GalleryLayout.Justified && !viewportWidth
         ? null
         : data.map(({ title, photos }, index) => (
-            <PhotosGroup
+            <PhotoGroup
               key={index}
               title={title}
               photos={photos}

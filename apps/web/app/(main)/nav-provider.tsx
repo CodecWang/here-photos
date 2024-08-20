@@ -1,26 +1,24 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 import Header from '@/components/header';
 import NavBar from '@/components/nav-bar';
 import SideNav from '@/components/side-nav';
+import { CACHE_KEY, DEFAULT_NAV_MODE } from '@/config/constants';
 import { NavMode } from '@/types/enums';
 
-export const NavContext = createContext({
+const defaultContext = {
   navMode: NavMode.Modern,
-  setNavMode: (_mode: NavMode) => {},
-});
+  setNavMode: (_mode: NavMode) => undefined,
+};
+const NavContext = createContext(defaultContext);
 
 function getNavMode() {
   if (typeof window !== 'undefined') {
-    const mode = localStorage.getItem('nav-mode');
-    if (mode) {
-      return parseInt(mode);
-    }
+    const mode = localStorage.getItem(CACHE_KEY.navMode);
+    if (mode) return parseInt(mode);
   }
-  return NavMode.Modern;
+  return DEFAULT_NAV_MODE;
 }
-
-interface NavProviderProps {}
 
 export const NavProvider = ({
   children,
@@ -31,7 +29,7 @@ export const NavProvider = ({
 
   const setNavMode = (mode: NavMode) => {
     setNavModeState(mode);
-    localStorage.setItem('nav-mode', mode.toString());
+    localStorage.setItem(CACHE_KEY.navMode, mode.toString());
   };
 
   const providerValue = {
@@ -73,3 +71,5 @@ export const NavProvider = ({
     </NavContext.Provider>
   );
 };
+
+export const useNavMode = () => useContext(NavContext);

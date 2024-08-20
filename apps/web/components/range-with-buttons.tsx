@@ -1,6 +1,7 @@
+import { useRef } from 'react';
+
 import AddIcon from '@/icons/add-icon';
 import RemoveIcon from '@/icons/remove-icon';
-import { useRef, useState } from 'react';
 
 interface RangeWithButtonsProps {
   min: number;
@@ -39,31 +40,29 @@ export default function RangeWithButtons({
   };
 
   return (
-    <div>
-      <div className="flex items-center space-x-1">
-        <button
-          className="btn btn-sm btn-ghost btn-square"
-          onClick={() => handleChange(false)}
-        >
-          <RemoveIcon className="size-4" />
-        </button>
-        <input
-          ref={ref}
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          className="range range-sm"
-          onChange={(e) => onChange(Number(e.target.value))}
-        />
-        <button
-          className="btn btn-sm btn-ghost btn-square"
-          onClick={() => handleChange(true)}
-        >
-          <AddIcon className="size-4" />
-        </button>
-      </div>
+    <div className="flex items-center space-x-1">
+      <button
+        className="btn btn-sm btn-ghost btn-square"
+        onClick={() => handleChange(false)}
+      >
+        <RemoveIcon className="size-4" />
+      </button>
+      <input
+        ref={ref}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        className="range range-sm"
+        onChange={(e) => onChange(Number(e.target.value))}
+      />
+      <button
+        className="btn btn-sm btn-ghost btn-square"
+        onClick={() => handleChange(true)}
+      >
+        <AddIcon className="size-4" />
+      </button>
     </div>
   );
 }

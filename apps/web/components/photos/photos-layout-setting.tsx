@@ -1,23 +1,46 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
-import { GalleryLayout, GroupBy } from '@/types/enums';
-import { useEffect, useRef } from 'react';
-import RangeWithButtons from '../range-with-buttons';
 import CloseIcon from '@/icons/close-icon';
+import { GalleryLayout, GroupBy } from '@/types/enums';
+
+import RangeWithButtons from '../range-with-buttons';
 
 interface PhotosLayoutSettingProps {
   open: boolean;
-  setting: PhotosLayout;
   onClose: () => void;
   onChange: (newSettings: PhotosLayout) => void;
 }
 
+function getCachedLayout() {
+  const value = localStorage.getItem('photos-layout');
+  try {
+    const cachedLayout = JSON.parse(value || '{}');
+    return { ...DEFAULT_PHOTOS_LAYOUT, ...cachedLayout };
+  } catch (error) {
+    return DEFAULT_PHOTOS_LAYOUT;
+  }
+}
+
 export default function PhotosLayoutSetting({
   open,
-  setting,
   onClose,
   onChange,
 }: PhotosLayoutSettingProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const [layout, setLayout] = useState<PhotosLayout>(getCachedLayout());
+
+  useEffect(() => {
+    onChange(layout);
+  }, [layout, onChange]);
+
+  const handleLayoutChange = useCallback((newView: Partial<PhotosLayout>) => {
+    setLayout((prev) => {
+      const newLayout = { ...prev, ...newView };
+      localStorage.setItem('photos-layout', JSON.stringify(newLayout));
+      return newLayout;
+    });
+  }, []);
 
   useEffect(() => {
     if (!sidebarRef.current) return;
@@ -55,24 +78,30 @@ export default function PhotosLayoutSetting({
               className="btn btn-ghost btn-outline join-item"
               type="radio"
               name="options"
-              checked={setting.layout === GalleryLayout.Grid1x1}
-              onChange={() => onChange({ layout: GalleryLayout.Grid1x1 })}
+              checked={layout.layout === GalleryLayout.Grid1x1}
+              onChange={() =>
+                handleLayoutChange({ layout: GalleryLayout.Grid1x1 })
+              }
               aria-label="Grid"
             />
             <input
               className="btn btn-ghost btn-outline join-item"
               type="radio"
               name="options"
-              checked={setting.layout === GalleryLayout.Justified}
-              onChange={() => onChange({ layout: GalleryLayout.Justified })}
+              checked={layout.layout === GalleryLayout.Justified}
+              onChange={() =>
+                handleLayoutChange({ layout: GalleryLayout.Justified })
+              }
               aria-label="Justified"
             />
             <input
               className="btn btn-ghost btn-outline join-item"
               type="radio"
               name="options"
-              checked={setting.layout === GalleryLayout.Masonry}
-              onChange={() => onChange({ layout: GalleryLayout.Masonry })}
+              checked={layout.layout === GalleryLayout.Masonry}
+              onChange={() =>
+                handleLayoutChange({ layout: GalleryLayout.Masonry })
+              }
               aria-label="Masonry"
             />
           </div>
@@ -83,8 +112,8 @@ export default function PhotosLayoutSetting({
             min={100}
             max={500}
             step={100}
-            value={setting.size}
-            onChange={(value) => onChange({ size: value })}
+            value={layout.size}
+            onChange={(value) => handleLayoutChange({ size: value })}
           />
         </div>
         <div className="space-y-2">
@@ -92,8 +121,8 @@ export default function PhotosLayoutSetting({
           <RangeWithButtons
             min={0}
             max={24}
-            value={setting.spacing}
-            onChange={(value) => onChange({ spacing: value })}
+            value={layout.spacing}
+            onChange={(value) => handleLayoutChange({ spacing: value })}
           />
         </div>
         <div className="space-y-2">
@@ -101,22 +130,22 @@ export default function PhotosLayoutSetting({
           <RangeWithButtons
             min={0}
             max={8}
-            value={setting.cornerRadius}
-            onChange={(value) => onChange({ cornerRadius: value })}
+            value={layout.cornerRadius}
+            onChange={(value) => handleLayoutChange({ cornerRadius: value })}
           />
         </div>
         <div className="space-y-2">
           <span className="block">Group</span>
           <select
             className="select select-bordered w-full max-w-xs"
-            value={setting.groupBy}
-            onChange={(e) => onChange({ groupBy: e.target.value })}
+            value={layout.groupBy}
+            onChange={(e) => handleLayoutChange({ groupBy: e.target.value })}
           >
             {Object.values(GroupBy).map((value) => (
               <option
                 key={value}
                 value={value}
-                disabled={setting.groupBy === value}
+                disabled={layout.groupBy === value}
               >
                 {value}
               </option>
@@ -126,7 +155,10 @@ export default function PhotosLayoutSetting({
       </div>
 
       <div className="divider"></div>
-      <button className="btn" onClick={() => onChange(DEFAULT_PHOTOS_LAYOUT)}>
+      <button
+        className="btn"
+        onClick={() => handleLayoutChange(DEFAULT_PHOTOS_LAYOUT)}
+      >
         Reset to default
       </button>
     </aside>

@@ -1,7 +1,6 @@
 import { GroupBy } from '@/types/enums';
-import { Photo } from '@/type';
 
-export function groupPhotoByDate(photos: Photo[], groupBy?: GroupBy) {
+export function groupPhotosByDate(photos: Photo[], groupBy?: GroupBy) {
   if (!groupBy || groupBy === GroupBy.None) {
     return [{ photos, title: '' }];
   }

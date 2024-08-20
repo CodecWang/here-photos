@@ -1,10 +1,11 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { NavContext } from '../nav-provider';
 import { request } from '@/utils/request';
+
+import { useNavMode } from '../nav-provider';
 
 interface Settings {
   photoDirs: string[];
@@ -12,7 +13,7 @@ interface Settings {
 
 export default function Page() {
   const [settings, setSettings] = useState<Settings>({ photoDirs: [] });
-  const { navMode, setNavMode } = useContext(NavContext);
+  const { navMode, setNavMode } = useNavMode();
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function Page() {
         <button className="btn" onClick={() => setTheme('system')}>
           system
         </button>
-        <button className="btn" onClick={() => setTheme('dark')}>
+        <button className="btn" onClick={() => setTheme('black')}>
           dark
         </button>
 

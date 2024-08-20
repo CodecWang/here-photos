@@ -1,19 +1,19 @@
 import { useTheme } from 'next-themes';
-import { useContext } from 'react';
 
 import DarkModeIcon from '@/icons/dark-mode-icon';
 import LightModeIcon from '@/icons/light-mode-icon';
 import MenuIcon from '@/icons/menu-icon';
 import SearchIcon from '@/icons/search-icon';
-import SelfImprovementIcon from '@/icons/self-improvement-icon';
+// import SelfImprovementIcon from '@/icons/self-improvement-icon';
 import { NavMode } from '@/types/enums';
 
-import { NavContext } from '../app/(main)/nav-provider';
+import { useNavMode } from '../app/(main)/nav-provider';
+import IconButton from './ui/icon-button';
 import Upload from './upload';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
-  const { setNavMode } = useContext(NavContext);
+  const { setNavMode } = useNavMode();
 
   return (
     <header className="text-base-content bg-base-200 fixed top-0 z-20 flex h-16 w-full justify-center">
@@ -26,7 +26,7 @@ export default function Header() {
             <MenuIcon className="size-6" />
           </label>
         </div>
-        <div className="w-64 flex-none">
+        <div className="flex-none md:w-64">
           <a className="text-xl">Here Photos</a>
         </div>
 
@@ -47,25 +47,23 @@ export default function Header() {
         </div>
 
         <div className="flex-none">
-          <button className="btn btn-circle btn-ghost md:hidden">
-            <SearchIcon className="size-6" />
-          </button>
+          <IconButton
+            className="md:hidden"
+            tooltip="Search"
+            onClick={() => setNavMode(NavMode.Modern)}
+            icon={<SearchIcon className="size-6" />}
+          />
           <Upload />
 
-          <div>
-            <button
-              className="btn btn-circle btn-ghost"
-              onClick={() => setNavMode(NavMode.Modern)}
-            >
-              <SelfImprovementIcon className="size-6" />
-            </button>
-          </div>
+          {/* <IconButton
+            tooltip="Zen mode"
+            onClick={() => setNavMode(NavMode.Modern)}
+            icon={<SelfImprovementIcon className="size-6" />}
+          /> */}
 
-          <div
-            className="tooltip tooltip-bottom"
-            data-tip={theme === 'dark' ? 'Light' : 'Dark'}
-          >
-            <button className="btn btn-circle btn-ghost">
+          <IconButton
+            tooltip={theme === 'dark' ? 'Light' : 'Dark'}
+            icon={
               <label className="swap swap-rotate">
                 <input
                   type="checkbox"
@@ -78,9 +76,8 @@ export default function Header() {
                 <LightModeIcon className="swap-off size-6" />
                 <DarkModeIcon className="swap-on size-6" />
               </label>
-            </button>
-          </div>
-
+            }
+          />
           <button className="btn btn-circle">
             <div className="avatar">
               <div className="w-10 rounded-full">

@@ -67,7 +67,7 @@ export default function SideNav() {
         aria-label="close sidebar"
         className="drawer-overlay"
       ></label>
-      <ul className="menu bg-base-200 h-full w-64 px-3">
+      <ul className="menu bg-base-200 h-full w-64 overflow-auto px-3">
         <ul
           className="menu menu-lg w-56"
           onClick={() => {

@@ -7,7 +7,7 @@ import SearchIcon from '@/icons/search-icon';
 export default function NavBar() {
   const pathname = usePathname();
   return (
-    <div className="absolute bottom-0 flex w-full flex-col items-center">
+    <div className="absolute bottom-0 flex w-full flex-col items-center transition-all">
       <nav
         className="rounded-box bg-base-200 mb-4 shadow-2xl"
         style={{

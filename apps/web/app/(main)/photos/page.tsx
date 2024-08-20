@@ -2,11 +2,11 @@
 
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { useContext } from 'react';
 
 import PageHeader from '@/components/page-header';
 import Photos from '@/components/photos';
 import PhotosLayoutSetting from '@/components/photos/photos-layout-setting';
+import IconButton from '@/components/ui/icon-button';
 import Upload from '@/components/upload';
 import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
 import FilterAltIcon from '@/icons/filter-alt-icon';
@@ -15,29 +15,21 @@ import TuneIcon from '@/icons/tune-icon';
 import { NavMode } from '@/types/enums';
 import { request } from '@/utils/request';
 
-import { NavContext } from '../nav-provider';
-import { groupPhotoByDate } from './utils';
+import { useNavMode } from '../nav-provider';
+import { groupPhotosByDate } from './utils';
 
 export default function Page() {
-  const { navMode, setNavMode } = useContext(NavContext);
-  const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
-  const [photosLayout, setPhotosLayout] = useState<PhotosLayout>(
-    DEFAULT_PHOTOS_LAYOUT,
-  );
-  const [photos, setPhotos] = useState<any[]>([]);
+  const { navMode, setNavMode } = useNavMode();
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
+  const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
+  const [layout, setLayout] = useState<PhotosLayout>(DEFAULT_PHOTOS_LAYOUT);
 
   useEffect(() => {
     (async () => {
       const rawPhotos = await request('/api/v1/photos');
       rawPhotos && setPhotos(rawPhotos.data);
     })();
-    const sidebar = document.getElementById('sidebar');
-    sidebar?.style.display === 'none';
-
-    const value = localStorage.getItem('photos-layout');
-    const cachedLayout = JSON.parse(value || '{}');
-    setPhotosLayout((prev) => ({ ...prev, ...cachedLayout }));
   }, []);
 
   useEffect(() => {
@@ -45,17 +37,9 @@ export default function Page() {
 
     console.log('>>> regrouping photos');
 
-    const photoGroups = groupPhotoByDate(photos, photosLayout.groupBy);
-    setPhotoGroups(photoGroups);
-  }, [photos, photosLayout.groupBy]);
-
-  const handleLayoutChange = (newView: PhotosLayout) => {
-    setPhotosLayout((prev) => {
-      const newLayout = { ...prev, ...newView };
-      localStorage.setItem('photos-layout', JSON.stringify(newLayout));
-      return newLayout;
-    });
-  };
+    const groups = groupPhotosByDate(photos, layout.groupBy);
+    setPhotoGroups(groups);
+  }, [photos, layout.groupBy]);
 
   return (
     <>
@@ -67,43 +51,36 @@ export default function Page() {
       >
         <PageHeader title="Photos">
           {navMode === NavMode.Modern && <Upload />}
-
-          <div className="tooltip tooltip-bottom" data-tip="Layout setting">
-            <button
-              className={clsx(
-                'btn btn-circle btn-ghost',
-                openLayoutSetting && 'btn-active',
-              )}
-              onClick={() => setOpenLayoutSetting((prev) => !prev)}
-            >
-              <TuneIcon className="size-5" />
-            </button>
-          </div>
-          <div>
-            <button
-              className="btn btn-circle btn-ghost"
-              onClick={() => setNavMode(NavMode.Traditional)}
-            >
-              <SelfImprovementIcon className="size-6" />
-            </button>
-          </div>
-          <div className="tooltip tooltip-bottom" data-tip="Filter">
-            <button className="btn btn-circle btn-ghost">
-              <FilterAltIcon className="size-5" />
-            </button>
-          </div>
+          <IconButton
+            active={openLayoutSetting}
+            disabled={!photoGroups.length}
+            tooltip="Layout setting"
+            onClick={() => setOpenLayoutSetting((prev) => !prev)}
+            icon={<TuneIcon className="size-5" />}
+          />
+          <IconButton
+            tooltip="Zen mode"
+            disabled={!photoGroups.length}
+            onClick={() => setNavMode(NavMode.Traditional)}
+            icon={<SelfImprovementIcon className="size-5" />}
+          />
+          <IconButton
+            tooltip="Filter"
+            disabled={!photoGroups.length}
+            onClick={() => setNavMode(NavMode.Traditional)}
+            icon={<FilterAltIcon className="size-5" />}
+          />
         </PageHeader>
 
         <div className="px-0 pt-2 sm:px-4">
-          <Photos data={photoGroups} layout={photosLayout} />
+          <Photos data={photoGroups} layout={layout} />
         </div>
       </div>
 
       <PhotosLayoutSetting
         open={openLayoutSetting}
-        setting={photosLayout}
+        onChange={setLayout}
         onClose={() => setOpenLayoutSetting(false)}
-        onChange={handleLayoutChange}
       />
     </>
   );

@@ -1,9 +1,9 @@
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import ChevronRightIcon from '@/icons/chevron-right-icon';
 
 import Album from './album';
-import clsx from 'clsx';
 
 interface AlbumGroupProps {
   title: string;
