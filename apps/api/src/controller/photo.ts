@@ -5,6 +5,7 @@ import path from 'path';
 
 import { NotFoundError } from '../error/not-found-error';
 import db from '../model';
+import { getThumbnailsDir } from '../utils/thumbnail';
 
 export const controller = {
   read: async (ctx: Context) => {
@@ -33,12 +34,7 @@ export const controller = {
 
     if (!thumbnail) throw new NotFoundError('Thumbnail not found.');
 
-    const imagePath = path.join(
-      '/Users/arthur/coding/moments-in-time/photos/thumbnails',
-      thumbnail.filePath,
-    );
-
-    console.log('>>> read image');
+    const imagePath = path.join(await getThumbnailsDir(), thumbnail.filePath);
 
     await fs.access(imagePath, fs.constants.F_OK);
     const data = await fs.readFile(imagePath);

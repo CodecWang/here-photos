@@ -1,4 +1,32 @@
-# HerePhotosDemo
+# Here Photos
+
+[TOC]
+
+## Docker development env
+
+TODO
+
+## Local development env
+
+This project uses [Nx](https://nx.dev/getting-started/installation#installing-nx-globally)(a monorepo tool) and [pnpm](https://pnpm.io/installation)(package manager), so it's recommended to install them globally.
+
+If you are using [VSCode](https://code.visualstudio.com/), [here]() is a recommended profile you can directly use.
+
+The overall process is: Setup mysql env -> Start backend -> Start frontend.
+
+### Database
+
+### Backend
+
+```bash
+nx serve api
+```
+
+### Frontend
+
+```bash
+nx dev web
+```
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 

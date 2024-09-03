@@ -12,6 +12,12 @@ settingRouter.route([
     handler: controller.read,
     validate: validator.read,
   },
+  {
+    method: 'PUT',
+    path: '/',
+    handler: controller.update,
+    validate: validator.update,
+  },
 ]);
 
 export default settingRouter;

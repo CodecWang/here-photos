@@ -8,7 +8,7 @@ import createSetting from './setting';
 import createThumbnail from './thumbnail';
 
 // Database connection instance
-const sequelize = new Sequelize('echo', 'root', '123456', {
+const sequelize = new Sequelize('here', 'root', '123456', {
   host: 'localhost',
   port: 3306,
   dialect: 'mysql',

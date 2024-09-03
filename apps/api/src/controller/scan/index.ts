@@ -5,6 +5,7 @@ import path from 'path';
 import sharp, { type Sharp } from 'sharp';
 
 import db from '../../model';
+import { getThumbnailsDir } from '../../utils/thumbnail';
 import { rgbaToThumbHash } from './thumb-hash';
 import {
   calCheckSum,
@@ -18,8 +19,6 @@ export const controller = {
     const photoUpdateOps = [];
 
     const setting = await db.Setting.findOne({ where: { key: 'photoDirs' } });
-    console.log(JSON.parse(setting.value));
-
     const dirs = filterTopLevelDirectories(JSON.parse(setting.value));
 
     const localFiles = await scanDirectories(dirs);
@@ -118,10 +117,7 @@ async function generateThumbnails(
   const filename = path.basename(filePath, path.extname(filePath));
   const smallerSize = Math.min(width < height ? width : height, 800);
   const outputFilename = `th_m_${filename}.jpg`;
-  const output = path.join(
-    '/Users/arthur/coding/moments-in-time/photos/thumbnails',
-    outputFilename,
-  );
+  const output = path.join(await getThumbnailsDir(), outputFilename);
   // medium/highres/small/blur/large
   const outputImg = await img
     .resize(width < height ? { width: smallerSize } : { height: smallerSize })
