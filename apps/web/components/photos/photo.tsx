@@ -2,7 +2,7 @@ import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 import Image from 'next/image';
 import { useMemo } from 'react';
 
-import { GalleryLayout } from '@/types/enums';
+import { GalleryLayout } from '@/config/enums';
 import { thumbHashToDataURL } from '@/utils/thumb-hash';
 
 interface PhotoProps {

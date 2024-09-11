@@ -4,3 +4,51 @@ declare module '*.svg' {
   export const ReactComponent: any;
   export default content;
 }
+
+interface PhotosLayout {
+  groupBy?: GroupBy;
+  layout?: GalleryLayout;
+  spacing?: number;
+  size?: number;
+  cornerRadius?: number;
+}
+
+interface Photo {
+  id: number;
+  title: string;
+  shotTime: Date;
+  blurHash: string;
+  thumbnails: any[];
+}
+
+interface PhotoGroup {
+  title: string;
+  photos: Photo[];
+}
+
+interface Album {
+  id: number;
+  title: string;
+  cover: Photo;
+  photoCount?: number;
+  photos: Photo[];
+  createdAt: Date;
+}
+
+interface AlbumGroup {
+  title: string;
+  count: number;
+  albums: Album[];
+}
+
+interface PhotosGroupProps {
+  title?: string;
+  photos: Photo[];
+  layout: PhotosLayout;
+  viewportWidth: number;
+}
+
+interface PhotosProps {
+  data: PhotosGroup[];
+  layout: PhotosLayout;
+}

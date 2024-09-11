@@ -1,4 +1,4 @@
-import { GalleryLayout, GroupBy, NavMode } from '../types/enums';
+import { GalleryLayout, GroupBy, NavMode } from './enums';
 
 export const DEFAULT_PHOTOS_LAYOUT: PhotosLayout = {
   groupBy: GroupBy.Day,

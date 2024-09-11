@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .btn {
-  @apply font-normal;
+  @apply rounded-full font-normal;
 }

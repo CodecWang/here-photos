@@ -9,10 +9,10 @@ import PhotosLayoutSetting from '@/components/photos/photos-layout-setting';
 import IconButton from '@/components/ui/icon-button';
 import Upload from '@/components/upload';
 import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
+import { NavMode } from '@/config/enums';
 import FilterAltIcon from '@/icons/filter-alt-icon';
 import SelfImprovementIcon from '@/icons/self-improvement-icon';
 import TuneIcon from '@/icons/tune-icon';
-import { NavMode } from '@/types/enums';
 import { request } from '@/utils/request';
 
 import { useNavMode } from '../nav-provider';

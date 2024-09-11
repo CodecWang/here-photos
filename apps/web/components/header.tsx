@@ -5,7 +5,7 @@ import LightModeIcon from '@/icons/light-mode-icon';
 import MenuIcon from '@/icons/menu-icon';
 import SearchIcon from '@/icons/search-icon';
 // import SelfImprovementIcon from '@/icons/self-improvement-icon';
-import { NavMode } from '@/types/enums';
+import { NavMode } from '@/config/enums';
 
 import { useNavMode } from '../app/(main)/nav-provider';
 import IconButton from './ui/icon-button';

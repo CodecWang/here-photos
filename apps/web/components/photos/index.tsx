@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { GalleryLayout } from '@/types/enums';
+import { GalleryLayout } from '@/config/enums';
 
 import PhotoGroup from './photo-group';
+import PhotoViewer from './photo-viewer';
 
 export default function Photos({ data, layout }: PhotosProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,8 @@ export default function Photos({ data, layout }: PhotosProps) {
               viewportWidth={viewportWidth}
             />
           ))}
+
+      {/* <PhotoViewer /> */}
     </div>
   );
 }
