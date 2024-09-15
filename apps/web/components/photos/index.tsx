@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { GalleryLayout } from '@/config/enums';
 
+import { PhotosProvider } from './context';
 import PhotoGroup from './photo-group';
 import PhotoViewer from './photo-viewer';
 
@@ -37,20 +38,22 @@ export default function Photos({ data, layout }: PhotosProps) {
   }, [layout.layout, handleResize]);
 
   return (
-    <div ref={viewportRef}>
-      {layout.layout === GalleryLayout.Justified && !viewportWidth
-        ? null
-        : data.map(({ title, photos }, index) => (
-            <PhotoGroup
-              key={index}
-              title={title}
-              photos={photos}
-              layout={layout}
-              viewportWidth={viewportWidth}
-            />
-          ))}
+    <PhotosProvider>
+      <div ref={viewportRef}>
+        {layout.layout === GalleryLayout.Justified && !viewportWidth
+          ? null
+          : data.map(({ title, photos }, index) => (
+              <PhotoGroup
+                key={index}
+                title={title}
+                photos={photos}
+                layout={layout}
+                viewportWidth={viewportWidth}
+              />
+            ))}
 
-      {/* <PhotoViewer /> */}
-    </div>
+        <PhotoViewer />
+      </div>
+    </PhotosProvider>
   );
 }
