@@ -40,6 +40,19 @@ export const controller = {
     ctx.body = album;
   },
 
+  addPhotos: async (ctx: Context) => {
+    const id = ctx.params.id;
+
+    const { photoIds } = ctx.request.body as { photoIds: number[] };
+    const album = await db.Album.findByPk(id);
+
+    if (!album) throw new NotFoundError('Album not found.');
+
+    await album.addPhotos(photoIds);
+    if (!album.coverId) album.setCover(photoIds[0]);
+    ctx.body = album;
+  },
+
   readPhotos: async (ctx: Context) => {
     const { id } = ctx.params;
     const album = await db.Album.findByPk(id, {

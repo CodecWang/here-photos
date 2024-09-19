@@ -24,6 +24,11 @@ albumRouter.route([
     validate: validator.delete,
   },
   {
+    method: 'POST',
+    path: '/:id/photos',
+    handler: controller.addPhotos,
+  },
+  {
     method: 'GET',
     path: '/:id/photos',
     handler: controller.readPhotos,
