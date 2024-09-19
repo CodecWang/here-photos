@@ -16,7 +16,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3000/api/:path*',
+        destination: `${process.env.API_ENDPOINT || 'http://localhost:3001'}/api/:path*`,
       },
     ];
   },

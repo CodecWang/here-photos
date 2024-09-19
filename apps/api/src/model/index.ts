@@ -7,10 +7,15 @@ import createPhoto from './photo';
 import createSetting from './setting';
 import createThumbnail from './thumbnail';
 
+const database = process.env.DB_DATABASE || 'here';
+const username = process.env.DB_USERNAME || 'root';
+const password = process.env.DB_PASSWORD || '123456';
+const host = process.env.DB_HOST || 'localhost';
+const port = +(process.env.DB_PORT || 3306);
 // Database connection instance
-const sequelize = new Sequelize('here', 'root', '123456', {
-  host: 'localhost',
-  port: 3306,
+const sequelize = new Sequelize(database, username, password, {
+  host,
+  port,
   dialect: 'mysql',
   timezone: '+08:00',
   logQueryParameters: true,

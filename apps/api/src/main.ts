@@ -14,17 +14,19 @@ app.use(async (ctx) => {
   ctx.body = { message: 'Hi, welcome to visit Here APIs.' };
 });
 
-db.sequelize
-  .sync()
-  .then(() => {
-    console.log('Database synced');
-  })
-  .catch((error: Error) => {
-    console.error(`Error syncing database: ${error.message}`);
-  });
+if (process.env.DB_SYNC === '1') {
+  db.sequelize
+    .sync()
+    .then(() => {
+      console.log('Database synced');
+    })
+    .catch((error: Error) => {
+      console.error(`Error syncing database: ${error.message}`);
+    });
+}
 
 const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
 });
