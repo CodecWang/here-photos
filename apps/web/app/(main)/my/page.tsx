@@ -3,9 +3,11 @@
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
+import PageHeader from '@/components/page-header';
 import { request } from '@/utils/request';
 
-import { useNavMode } from '../nav-provider';
+import ScanDirectories from './components/scan-directories';
+import Apperence from './components/appearance';
 
 interface Settings {
   photoDirs: string[];
@@ -13,8 +15,6 @@ interface Settings {
 
 export default function Page() {
   const [settings, setSettings] = useState<Settings>({ photoDirs: [] });
-  const { navMode, setNavMode } = useNavMode();
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     (async () => {
@@ -23,42 +23,29 @@ export default function Page() {
     })();
   }, []);
 
-  const handleChange = (e) => {
-    setNavMode(e.target.checked ? 1 : 0);
+  const updateSettings = async ({ photoDirs }: Settings) => {
+    const newSettings = await request('/api/v1/settings', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ photoDirs }),
+    });
+
+    newSettings && setSettings(newSettings.data);
   };
 
   return (
-    <div className="flex-grow overflow-auto">
-      <h1>My Page</h1>
+    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
+      <PageHeader title="Settings"></PageHeader>
 
-      <div className="form-control w-80">
-        <label className="label cursor-pointer">
-          <span className="label-text">Modern Navigation</span>
-          <input
-            type="checkbox"
-            className="toggle"
-            checked={Boolean(navMode)}
-            onChange={handleChange}
-          />
-        </label>
+      <div className="flex flex-wrap space-x-2 px-4 pt-2">
+        <Apperence />
 
-        <button className="btn" onClick={() => setTheme('light')}>
-          light
-        </button>
-        <button className="btn" onClick={() => setTheme('system')}>
-          system
-        </button>
-        <button className="btn" onClick={() => setTheme('black')}>
-          dark
-        </button>
-
-        {settings.photoDirs?.map((dir) => (
-          <ul key={dir}>
-            <li>
-              <span>{dir}</span> <button className="btn">Edit</button>
-            </li>
-          </ul>
-        ))}
+        <ScanDirectories
+          photoDirs={settings.photoDirs}
+          onChange={(photoDirs) => updateSettings({ photoDirs })}
+        />
       </div>
     </div>
   );

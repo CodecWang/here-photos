@@ -39,7 +39,7 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
       blurHash: {
-        type: DataTypes.CHAR(28),
+        type: DataTypes.CHAR(32),
       },
       shotTime: {
         type: DataTypes.DATE,
@@ -50,6 +50,6 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
     },
-    { underscored: true }
+    { underscored: true },
   );
 };
