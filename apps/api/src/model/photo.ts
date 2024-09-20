@@ -43,7 +43,7 @@ export default (sequelize: Sequelize) => {
       },
       shotTime: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       modifiedTime: {
         type: DataTypes.DATE,
