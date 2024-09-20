@@ -14,7 +14,7 @@ CREATE TABLE photos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   file_path VARCHAR(255) NOT NULL UNIQUE,
   check_sum CHAR(32) NOT NULL,
-  blur_hash VARCHAR(28) NULL,
+  blur_hash VARCHAR(32) NULL,
   shot_time DATETIME NOT NULL,
   modified_time DATETIME NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

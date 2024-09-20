@@ -1,13 +1,12 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
 import PageHeader from '@/components/page-header';
 import { request } from '@/utils/request';
 
-import ScanDirectories from './components/scan-directories';
 import Apperence from './components/appearance';
+import ScanDirectories from './components/scan-directories';
 
 interface Settings {
   photoDirs: string[];
@@ -41,7 +40,6 @@ export default function Page() {
 
       <div className="flex flex-wrap space-x-2 px-4 pt-2">
         <Apperence />
-
         <ScanDirectories
           photoDirs={settings.photoDirs}
           onChange={(photoDirs) => updateSettings({ photoDirs })}

@@ -9,16 +9,13 @@ export default (sequelize: Sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      shotTime: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
+      shotTime: DataTypes.DATE,
       cameraMake: DataTypes.CHAR(50),
       cameraModel: DataTypes.CHAR(50),
       iso: DataTypes.SMALLINT,
       gpsLatitude: DataTypes.FLOAT,
       gpsLongitude: DataTypes.FLOAT,
     },
-    { underscored: true }
+    { underscored: true },
   );
 };

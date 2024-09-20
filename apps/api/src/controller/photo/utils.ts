@@ -3,8 +3,8 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 export async function scanDirectories(
-  directories: string[]
-): Promise<Map<string, LocalFile>> {
+  directories: string[],
+): Promise<string[]> {
   const imageExtensions = [
     '.jpg',
     '.jpeg',
@@ -14,7 +14,7 @@ export async function scanDirectories(
     '.tiff',
     '.svg',
   ];
-  const results = new Map<string, LocalFile>();
+  const results = [];
 
   const scan = async (dir: string) => {
     const files = await fs.readdir(dir);
@@ -27,13 +27,9 @@ export async function scanDirectories(
         if (stat.isDirectory()) {
           await scan(filePath);
         } else if (imageExtensions.includes(path.extname(file).toLowerCase())) {
-          results.set(filePath, {
-            filePath,
-            createdTime: stat.birthtime,
-            modifiedTime: stat.mtime,
-          });
+          results.push(filePath);
         }
-      })
+      }),
     );
   };
 
@@ -54,7 +50,7 @@ export function filterTopLevelDirectories(directories: string[]) {
   return uniqueDirectories.filter((dir, _, arr) => {
     // Check if the current directory is not a subdirectory of any other directory
     return !arr.some(
-      (otherDir) => dir !== otherDir && dir.startsWith(otherDir + path.sep)
+      (otherDir) => dir !== otherDir && dir.startsWith(otherDir + path.sep),
     );
   });
 }

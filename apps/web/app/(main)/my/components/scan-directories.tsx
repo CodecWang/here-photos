@@ -19,7 +19,7 @@ export default function ScanDirectories({
   const [showAdding, setShowAdding] = useState(false);
 
   const triggerScan = async () => {
-    await request('/api/v1/scan', {
+    await request('/api/v1/photos/scan', {
       method: 'POST',
     });
   };

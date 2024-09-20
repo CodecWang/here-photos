@@ -19,6 +19,16 @@ photoRouter.route([
     validate: validator.delete,
   },
   {
+    method: 'POST',
+    path: '/upload',
+    handler: controller.upload,
+  },
+  {
+    method: 'POST',
+    path: '/scan',
+    handler: controller.scan,
+  },
+  {
     method: 'GET',
     path: '/:id/thumbnail',
     handler: controller.readThumbnails,
