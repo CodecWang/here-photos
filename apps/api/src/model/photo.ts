@@ -41,10 +41,7 @@ export default (sequelize: Sequelize) => {
       blurHash: {
         type: DataTypes.CHAR(32),
       },
-      shotTime: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
+      shotTime: DataTypes.DATE,
       modifiedTime: {
         type: DataTypes.DATE,
         allowNull: false,
