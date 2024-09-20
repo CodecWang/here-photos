@@ -9,10 +9,7 @@ export default (sequelize: Sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      shotTime: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
+      shotTime: DataTypes.DATE,
       cameraMake: DataTypes.CHAR(50),
       cameraModel: DataTypes.CHAR(50),
       iso: DataTypes.SMALLINT,
