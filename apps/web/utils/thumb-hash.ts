@@ -235,7 +235,7 @@ export function rgbaToDataURL(w: number, h: number, rgba: ArrayLike<number>) {
     bytes[end++] = (c >> 8) & 255;
     bytes[end++] = c & 255;
   }
-  return "data:image/png;base64," + btoa(String.fromCharCode(...bytes));
+  return 'data:image/png;base64,' + btoa(String.fromCharCode(...bytes));
 }
 
 /**

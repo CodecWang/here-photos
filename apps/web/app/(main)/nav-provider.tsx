@@ -8,7 +8,7 @@ import { NavMode } from '@/config/enums';
 
 const defaultContext = {
   navMode: NavMode.Modern,
-  setNavMode: (_mode: NavMode) => undefined,
+  setNavMode: (_mode: NavMode) => {},
 };
 const NavContext = createContext(defaultContext);
 

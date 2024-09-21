@@ -1,5 +1,3 @@
-import { Album } from "@/type";
-
 export function groupAlbumsByYear(rawAlbums: Album[]) {
   const groupedAlbums = rawAlbums.reduce(
     (acc: { [key: string]: Album[] }, album) => {

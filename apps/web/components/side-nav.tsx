@@ -71,7 +71,9 @@ export default function SideNav() {
         <ul
           className="menu menu-lg w-56"
           onClick={() => {
-            document.getElementById('side-nav-drawer').checked = false;
+            const sideNavLabel = document.getElementById('side-nav-drawer');
+            sideNavLabel &&
+              ((sideNavLabel as HTMLInputElement).checked = false);
           }}
         >
           {menu.map((item, index) =>
@@ -84,11 +86,11 @@ export default function SideNav() {
                 <Link
                   className={clsx(
                     'rounded-full text-sm leading-6',
-                    pathname.startsWith(item.href) && 'active',
+                    pathname.startsWith(item.href ?? '') && 'active',
                   )}
-                  href={item.href}
+                  href={item.href ?? ''}
                 >
-                  <item.icon className="size-6" />
+                  {item.icon && <item.icon className="size-6" />}
                   <span className="pl-2">{item.title}</span>
                 </Link>
               </li>

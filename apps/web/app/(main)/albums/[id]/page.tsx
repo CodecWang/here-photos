@@ -68,7 +68,11 @@ export default function Page({ params }: { params: { id: string } }) {
           <button
             className="btn btn-ghost"
             onClick={() =>
-              document.getElementById('delete-album-modal').showModal()
+              (
+                document.getElementById(
+                  'delete-album-modal',
+                ) as HTMLDialogElement
+              )?.showModal()
             }
           >
             Delete

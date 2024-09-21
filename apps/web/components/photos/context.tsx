@@ -1,14 +1,9 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  useContext,
-  useState,
-} from 'react';
+import React from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 const PhotosContext = createContext({
   currentPhoto: null,
-  setCurrentPhoto: Dispatch<SetStateAction<null>>,
+  setCurrentPhoto: (_photo: Photo) => {},
 });
 
 export const PhotosProvider = ({
@@ -16,9 +11,10 @@ export const PhotosProvider = ({
 }: Readonly<{
   children: ReactNode;
 }>) => {
-  const [currentPhoto, setCurrentPhoto] = useState(null);
+  const [currentPhoto, setCurrentPhoto] = useState<Photo | null>(null);
 
   return (
+    // @ts-expect-error expected
     <PhotosContext.Provider value={{ currentPhoto, setCurrentPhoto }}>
       {children}
     </PhotosContext.Provider>

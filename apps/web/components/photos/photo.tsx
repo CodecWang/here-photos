@@ -26,7 +26,6 @@ export default function Photo({ photo, layout, position }: PhotoProps) {
   }, [photo.blurHash]);
 
   const setPhoto = () => {
-    console.log('>>> setCurrentPhoto', photo);
     setCurrentPhoto(photo);
   };
 

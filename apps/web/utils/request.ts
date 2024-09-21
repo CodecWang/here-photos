@@ -7,6 +7,6 @@ export const request = async (url: string, options: RequestInit = {}) => {
 
     return await response.json();
   } catch (error) {
-    eventBus.emit('request.error', error.message);
+    eventBus.emit('request.error', (error as Error).message);
   }
 };

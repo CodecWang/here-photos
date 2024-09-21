@@ -58,7 +58,11 @@ export default function Page() {
           <button
             className="btn btn-ghost"
             onClick={() => {
-              document.getElementById('create-album-modal').showModal();
+              (
+                document.getElementById(
+                  'create-album-modal',
+                ) as HTMLDialogElement
+              )?.showModal();
             }}
           >
             <CreateNewFolderIcon className="size-6 md:size-5" />

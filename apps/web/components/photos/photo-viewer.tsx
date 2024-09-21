@@ -22,7 +22,7 @@ export default function PhotoViewer() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ids: [currentPhoto.id] }),
+      body: JSON.stringify({ ids: [(currentPhoto as Photo).id] }),
     });
 
     setClose(true);
@@ -40,7 +40,7 @@ export default function PhotoViewer() {
       </button>
       <div className="flex h-full items-center justify-center">
         <img
-          src={`/api/v1/photos/${currentPhoto.id}/thumbnail?variant=2`}
+          src={`/api/v1/photos/${(currentPhoto as Photo).id}/thumbnail?variant=2`}
           alt=""
           className="max-h-full max-w-full"
         />

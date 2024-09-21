@@ -17,7 +17,7 @@ export const enum NavMode {
   Traditional,
 }
 
-export const enum GroupAlbumsBy {
+export enum GroupAlbumsBy {
   None = 'No grouping',
   Year = 'Group by year',
   Owner = 'Group by owner',
