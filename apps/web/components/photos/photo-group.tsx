@@ -5,6 +5,13 @@ import { GalleryLayout } from '@/config/enums';
 
 import Photo from './photo';
 
+interface PhotosGroupProps {
+  title?: string;
+  photos: Photo[];
+  layout: PhotosLayout;
+  viewportWidth: number;
+}
+
 export default function PhotoGroup({
   title,
   photos,

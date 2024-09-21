@@ -14,6 +14,7 @@ import TuneIcon from '@/icons/tune-icon';
 import { request } from '@/utils/request';
 
 import { groupPhotosByDate } from '../../photos/utils';
+import DeleteAlbumModal from '../components/delete-album-modal';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [album, setAlbum] = useState<Album>();
@@ -66,7 +67,9 @@ export default function Page({ params }: { params: { id: string } }) {
 
           <button
             className="btn btn-ghost"
-            onClick={() => document.getElementById('my_modal_1').showModal()}
+            onClick={() =>
+              document.getElementById('delete-album-modal').showModal()
+            }
           >
             Delete
           </button>
@@ -90,6 +93,8 @@ export default function Page({ params }: { params: { id: string } }) {
         onChange={setLayout}
         onClose={() => setOpenLayoutSetting(false)}
       />
+
+      <DeleteAlbumModal album={album} />
     </>
   );
 }

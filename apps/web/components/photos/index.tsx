@@ -6,6 +6,11 @@ import { PhotosProvider } from './context';
 import PhotoGroup from './photo-group';
 import PhotoViewer from './photo-viewer';
 
+interface PhotosProps {
+  data: PhotoGroup[];
+  layout: PhotosLayout;
+}
+
 export default function Photos({ data, layout }: PhotosProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = useState(0);
@@ -15,7 +20,6 @@ export default function Photos({ data, layout }: PhotosProps) {
       const newWidth = entry.contentRect.width;
       setViewportWidth((prevWidth) => {
         if (prevWidth !== newWidth) {
-          console.log('>>> resizing', entries);
           return newWidth;
         }
         return prevWidth;

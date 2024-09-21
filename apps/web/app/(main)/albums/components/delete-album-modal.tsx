@@ -1,5 +1,6 @@
-import { request } from '@/utils/request';
 import { useRouter } from 'next/navigation';
+
+import { request } from '@/utils/request';
 
 interface DeleteAlbumModalProps {
   album: Album;
@@ -14,7 +15,7 @@ export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ albumIds: [album.id] }),
+      body: JSON.stringify({ ids: [album.id] }),
     });
     // redirect to albums page
     // window.location.href = '/albums';
@@ -22,7 +23,7 @@ export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
   };
 
   return (
-    <dialog id="my_modal_1" className="modal">
+    <dialog id="delete-album-modal" className="modal">
       <div className="modal-box">
         <h3 className="text-lg font-bold">Delete album?</h3>
         <p className="py-4">
@@ -30,17 +31,12 @@ export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
           deleted album remain in Here Photos.
         </p>
         <div className="modal-action">
-          <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn">Close</button>
-            <button
-              className="btn"
-              onClick={async (e) => {
-                await deleteAlbum();
-              }}
-            >
+          <form method="dialog space-x-2">
+            <button className="btn" onClick={deleteAlbum}>
               Confirm
             </button>
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn">Close</button>
           </form>
         </div>
       </div>

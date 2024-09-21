@@ -37,7 +37,7 @@ export default function CreateAlbumModal() {
     //   console.log(key, value);
     // }
 
-    const album = await request(`/api/v1/albums`, {
+    const response = await request(`/api/v1/albums`, {
       method: 'POST',
       body: JSON.stringify({
         title: formData.get('albumName'),
@@ -46,7 +46,7 @@ export default function CreateAlbumModal() {
         'Content-Type': 'application/json',
       },
     });
-    router.push(`/albums/${album.id}`);
+    router.push(`/albums/${response.data.id}`);
     dialogRef.current?.close();
   };
 

@@ -1,11 +1,12 @@
 import { useTheme } from 'next-themes';
+
 import { useNavMode } from '../../nav-provider';
 
 export default function Apperence() {
   const { navMode, setNavMode } = useNavMode();
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
 
-  const handleChange = (e) => {
+  const toggleNavMode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNavMode(e.target.checked ? 1 : 0);
   };
 
@@ -20,7 +21,7 @@ export default function Apperence() {
           type="checkbox"
           className="toggle"
           checked={Boolean(navMode)}
-          onChange={handleChange}
+          onChange={toggleNavMode}
         />
       </label>
 
@@ -31,7 +32,7 @@ export default function Apperence() {
         <button className="btn" onClick={() => setTheme('system')}>
           system
         </button>
-        <button className="btn" onClick={() => setTheme('black')}>
+        <button className="btn" onClick={() => setTheme('dark')}>
           dark
         </button>
       </div>
