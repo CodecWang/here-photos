@@ -1,6 +1,6 @@
 import fs from 'fs';
 import koa from 'koa';
-import { koaBody } from 'koa-body';
+import { HttpMethodEnum, koaBody } from 'koa-body';
 import os from 'os';
 import path from 'path';
 
@@ -35,6 +35,12 @@ function initApp() {
   app.use(catchError);
   app.use(
     koaBody({
+      parsedMethods: [
+        HttpMethodEnum.POST,
+        HttpMethodEnum.PUT,
+        HttpMethodEnum.PATCH,
+        HttpMethodEnum.DELETE,
+      ],
       multipart: true,
       formidable: {
         uploadDir: path.join(os.homedir(), '.here-photos/uploads'),

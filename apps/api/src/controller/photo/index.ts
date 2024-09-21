@@ -104,7 +104,7 @@ export const controller = {
 export const validator = {
   read: {},
   delete: {
-    type: 'json',
+    type: 'json' as const,
     body: {
       ids: Joi.array().items(Joi.number().integer().min(0)).min(1).required(),
     },

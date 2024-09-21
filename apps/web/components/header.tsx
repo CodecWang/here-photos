@@ -1,19 +1,34 @@
+import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 
+// import SelfImprovementIcon from '@/icons/self-improvement-icon';
+import { NavMode } from '@/config/enums';
 import DarkModeIcon from '@/icons/dark-mode-icon';
 import LightModeIcon from '@/icons/light-mode-icon';
 import MenuIcon from '@/icons/menu-icon';
 import SearchIcon from '@/icons/search-icon';
-// import SelfImprovementIcon from '@/icons/self-improvement-icon';
-import { NavMode } from '@/config/enums';
 
 import { useNavMode } from '../app/(main)/nav-provider';
 import IconButton from './ui/icon-button';
 import Upload from './upload';
 
 export default function Header() {
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { setNavMode } = useNavMode();
+  const router = useRouter();
+
+  const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      if (pathname.startsWith('/search')) {
+        router.replace(`/search?q=${e.currentTarget.value}`);
+      } else {
+        router.push(`/search?q=${e.currentTarget.value}`);
+      }
+    }
+  };
 
   return (
     <header className="text-base-content bg-base-200 fixed top-0 z-20 flex h-16 w-full justify-center">
@@ -26,7 +41,7 @@ export default function Header() {
             <MenuIcon className="size-6" />
           </label>
         </div>
-        <div className="flex-none md:w-64">
+        <div className="flex-none md:w-60 lg:ml-4">
           <a className="text-xl">Here Photos</a>
         </div>
 
@@ -37,7 +52,7 @@ export default function Header() {
               type="text"
               className="grow"
               placeholder="Try search with natural language"
-              onSelect={() => alert('hha')}
+              onKeyDown={handleKeydown}
             />
             <span className="opacity-50 rtl:flex-row-reverse">
               <kbd className="kbd kbd-sm">⌘</kbd>

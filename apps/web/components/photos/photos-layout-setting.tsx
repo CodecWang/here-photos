@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
-import CloseIcon from '@/icons/close-icon';
 import { GalleryLayout, GroupBy } from '@/config/enums';
+import CloseIcon from '@/icons/close-icon';
 
 import RangeWithButtons from '../range-with-buttons';
 

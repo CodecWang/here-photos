@@ -1,7 +1,8 @@
 {
   "files.eol": "\n",
+  "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "autocorrect.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.enabled": true
 }
