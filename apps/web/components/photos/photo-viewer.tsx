@@ -38,12 +38,15 @@ export default function PhotoViewer() {
       >
         <CloseIcon className="size-5" />
       </button>
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center">
         <img
           src={`/api/v1/photos/${(currentPhoto as Photo).id}/thumbnail?variant=2`}
           alt=""
           className="max-h-full max-w-full"
         />
+        <div className="bg-base-200 rounded-box m-4 p-4">
+          {(currentPhoto as Photo).aiDesc}
+        </div>
       </div>
 
       <div className="absolute right-2 top-2">

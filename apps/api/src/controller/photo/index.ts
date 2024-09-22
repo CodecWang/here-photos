@@ -77,6 +77,20 @@ export const controller = {
     ctx.body = true;
   },
 
+  search: async (ctx: Context) => {
+    // search by aidesc field
+    const { q } = ctx.query;
+    const photos = await db.Photo.findAll({
+      where: {
+        aiDesc: {
+          [Op.like]: `%${q}%`,
+        },
+      },
+      include: [db.photoExif, db.photoThumbnails],
+    });
+    ctx.body = photos;
+  },
+
   readThumbnails: async (ctx: Context) => {
     const { id } = ctx.params;
     const { variant } = ctx.query;

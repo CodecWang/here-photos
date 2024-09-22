@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 
 export default function Welcome() {
   const { setTheme } = useTheme();
+
+  const router = useRouter();
 
   return (
     <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
@@ -12,7 +15,7 @@ export default function Welcome() {
         <div>
           <h1 className="text-2xl">Welcome to</h1>
           <h2 className="text-4xl font-extrabold">Here Photos</h2>
-          <h3 className="text-base-300 text-sm">
+          <h3 className="text-sm text-gray-500">
             Manage your photos with Microsoft AI
           </h3>
 
@@ -21,24 +24,26 @@ export default function Welcome() {
               className="btn btn-sm btn-neutral"
               onClick={() => setTheme('light')}
             >
-              light
+              Light
             </button>
             <button
               className="btn btn-sm btn-neutral"
               onClick={() => setTheme('dark')}
             >
-              dark
+              Dark
             </button>
             <button
               className="btn btn-sm btn-neutral"
               onClick={() => setTheme('system')}
             >
-              system
+              System
             </button>
           </div>
-
-          <button className="btn btn-primary mt-2 w-52 text-xl">
-            <Link href="/photos">START</Link>
+          <button
+            className="btn btn-primary mt-2 w-52 text-xl"
+            onClick={() => router.push('/photos')}
+          >
+            START
           </button>
         </div>
       </div>

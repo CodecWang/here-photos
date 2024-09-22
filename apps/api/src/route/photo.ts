@@ -30,6 +30,11 @@ photoRouter.route([
   },
   {
     method: 'GET',
+    path: '/search',
+    handler: controller.search,
+  },
+  {
+    method: 'GET',
     path: '/:id/thumbnail',
     handler: controller.readThumbnails,
     validate: validator.readThumbnails,

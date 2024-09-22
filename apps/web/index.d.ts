@@ -18,6 +18,7 @@ interface Photo {
   title: string;
   shotTime: Date;
   blurHash: string;
+  aiDesc?: string;
   thumbnails: any[];
 }
 

@@ -16,7 +16,7 @@ export default function Apperence() {
         <span className="text-xl">Apperence</span>
       </div>
       <label className="label cursor-pointer">
-        <span className="label-text">Modern Navigation</span>
+        <span className="label-text">Nav Mode</span>
         <input
           type="checkbox"
           className="toggle"

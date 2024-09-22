@@ -33,18 +33,18 @@ export default function NavBar() {
               Albums
             </Link>
           </li>
-          <li>
+          {/* <li>
             <button className="btn btn-circle btn-ghost btn-sm">
               <SearchIcon className="size-5" />
             </button>
-          </li>
+          </li> */}
           <li>
             <Link
-              className={clsx(pathname.startsWith('/explorer') && 'active')}
-              href="/explorer"
+              className={clsx(pathname.startsWith('/explore') && 'active')}
+              href="/explore"
             >
               {/* <GlobeAsiaAustraliaIcon className="size-4" /> */}
-              Explorer
+              Explore
             </Link>
           </li>
           <li>
