@@ -10,9 +10,16 @@ TODO
 
 This project uses [Nx](https://nx.dev/getting-started/installation#installing-nx-globally)(a monorepo tool) and [pnpm](https://pnpm.io/installation)(package manager), so it's recommended to install them globally.
 
+### VSCode
 If you are using [VSCode](https://code.visualstudio.com/), [here]() is a recommended profile you can directly use.
 
-The overall process is: Setup mysql env -> Start backend -> Start frontend.
+### Webstorm
+
+If you are using [Webstorm](https://www.jetbrains.com/webstorm/), [Nx Console plugin](https://plugins.jetbrains.com/plugin/21060-nx-console)  is recommended.
+
+The overall process is: 
+
+Setup mysql env -> Start backend -> Start frontend.
 
 ### Database
 
