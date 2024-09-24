@@ -40,11 +40,11 @@ export default function NavBar() {
           </li>
           <li>
             <Link
-              className={clsx(pathname.startsWith('/explorer') && 'active')}
-              href="/explorer"
+              className={clsx(pathname.startsWith('/explore') && 'active')}
+              href="/explore"
             >
               {/* <GlobeAsiaAustraliaIcon className="size-4" /> */}
-              Explorer
+              Explore
             </Link>
           </li>
           <li>
