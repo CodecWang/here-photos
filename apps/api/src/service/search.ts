@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export const client = axios.create({
 	baseURL: process.env.SEARCH_ENDPOINT || 'http://127.0.0.1:8000',
-	timeout: 3000,
 });
 
 export async function search(q: string): Promise<number[]> {
