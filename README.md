@@ -36,26 +36,28 @@ It's recommended to install [Nx](https://nx.dev/getting-started/installation#ins
 
 #### IDE
 
-If you are using [VSCode](https://code.visualstudio.com/), [here]() is a recommended profile you can directly use.
+- If you are using [VSCode](https://code.visualstudio.com/), [here]() is a recommended profile you can directly use.
 
-If you are using [Webstorm](https://www.jetbrains.com/webstorm/), [Nx Console plugin](https://plugins.jetbrains.com/plugin/21060-nx-console) is recommended.
+- If you are using [Webstorm](https://www.jetbrains.com/webstorm/), [Nx Console plugin](https://plugins.jetbrains.com/plugin/21060-nx-console) is recommended.
 
-The overall process is:
-
-Setup mysql env -> Start backend -> Start frontend.
+The overall process is: Setup mysql env -> Start backend -> Start frontend.
 
 #### Init project
 
 ```bash
+# Install npm dependencies
 pnpm install
 
-# start backend service
+# Start backend service
 nx serve api
 
-# start frontend UI/UX
+# Start frontend UI/UX
 nx dev web
+
+# Graph dependencies within workspace
+nx graph
 ```
 
 ## License
 
-[![License](https://img.shields.io/npm/l/nx.svg?style=flat-square)]()
+![License](https://img.shields.io/npm/l/nx.svg?style=flat-square)

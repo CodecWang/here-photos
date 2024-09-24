@@ -21,9 +21,9 @@ export default function SideNav() {
       href: '/photos',
     },
     {
-      title: 'Explorer',
+      title: 'Explore',
       icon: ImageSearchIcon,
-      href: '/explorer',
+      href: '/explore',
     },
     {
       title: 'Sharing',
