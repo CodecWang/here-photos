@@ -9,6 +9,7 @@ import sharp, { type Sharp } from 'sharp';
 import { DEFAULT_MEDIA_DIR, THUMBNAILS_DIR } from '../../config/constants';
 import { NotFoundError } from '../../error/not-found-error';
 import db from '../../model';
+import { search } from '../../service/search';
 import { rgbaToThumbHash } from './thumb-hash';
 import {
   calCheckSum,
@@ -78,13 +79,21 @@ export const controller = {
   },
 
   search: async (ctx: Context) => {
-    // search by aidesc field
     const { q } = ctx.query;
+    if (!q || typeof q !== 'string') {
+      ctx.body = [];
+      return;
+    }
+
+    const ids = await search(q);
+    if (!ids.length) {
+      ctx.body = [];
+      return;
+    }
+
     const photos = await db.Photo.findAll({
       where: {
-        aiDesc: {
-          [Op.like]: `%${q}%`,
-        },
+        id: ids,
       },
       include: [db.photoExif, db.photoThumbnails],
     });

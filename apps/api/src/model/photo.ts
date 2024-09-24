@@ -19,6 +19,7 @@ interface PhotoModel
   aiDesc?: string;
   shotTime: Date;
   modifiedTime: Date;
+  features?: Buffer;
 }
 
 export default (sequelize: Sequelize) => {
@@ -46,6 +47,7 @@ export default (sequelize: Sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      features: DataTypes.BLOB,
     },
     { underscored: true },
   );
