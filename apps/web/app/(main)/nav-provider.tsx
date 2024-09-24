@@ -7,7 +7,7 @@ import { CACHE_KEY, DEFAULT_NAV_MODE } from '@/config/constants';
 import { NavMode } from '@/config/enums';
 
 const defaultContext = {
-  navMode: NavMode.Modern,
+  navMode: NavMode.Traditional,
   setNavMode: (_mode: NavMode) => {},
 };
 const NavContext = createContext(defaultContext);
