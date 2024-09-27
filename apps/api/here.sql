@@ -15,6 +15,8 @@ CREATE TABLE photos (
   file_path VARCHAR(255) NOT NULL UNIQUE,
   check_sum CHAR(32) NOT NULL,
   blur_hash VARCHAR(32) NULL,
+  ai_desc TEXT NULL,
+  features BLOB NULL,
   shot_time DATETIME DEFAULT NULL,
   modified_time DATETIME NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

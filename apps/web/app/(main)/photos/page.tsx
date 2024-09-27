@@ -58,12 +58,12 @@ export default function Page() {
             onClick={() => setOpenLayoutSetting((prev) => !prev)}
             icon={<TuneIcon className="size-5" />}
           />
-          <IconButton
+          {/* <IconButton
             tooltip="Zen mode"
             disabled={!photoGroups.length}
             onClick={() => setNavMode(NavMode.Traditional)}
             icon={<SelfImprovementIcon className="size-5" />}
-          />
+          /> */}
           <IconButton
             tooltip="Filter"
             disabled={!photoGroups.length}
@@ -72,7 +72,12 @@ export default function Page() {
           />
         </PageHeader>
 
-        <div className="px-0 pt-2 sm:px-4">
+        <div
+          className="px-0 pt-2 sm:px-4"
+          style={{
+            animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
+          }}
+        >
           <Photos data={photoGroups} layout={layout} />
         </div>
       </div>

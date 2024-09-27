@@ -35,7 +35,12 @@ export default function Page() {
   };
 
   return (
-    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
+    <div
+      className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500"
+      style={{
+        animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
+      }}
+    >
       <PageHeader title="Settings"></PageHeader>
 
       <div className="flex flex-wrap space-x-2 px-4 pt-2">

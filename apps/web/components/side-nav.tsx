@@ -26,7 +26,7 @@ export default function SideNav() {
       href: '/explore',
     },
     {
-      title: 'Sharing',
+      title: 'My',
       icon: ShareIcon,
       href: '/my',
     },

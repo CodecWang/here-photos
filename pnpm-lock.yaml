@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      axios:
+        specifier: ^1.6.0
+        version: 1.7.3
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

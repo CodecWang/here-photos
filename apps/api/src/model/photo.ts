@@ -16,8 +16,10 @@ interface PhotoModel
   filePath: string;
   checkSum: string;
   blurHash?: string;
+  aiDesc?: string;
   shotTime: Date;
   modifiedTime: Date;
+  features?: Buffer;
 }
 
 export default (sequelize: Sequelize) => {
@@ -39,11 +41,13 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
       blurHash: DataTypes.CHAR(32),
+      aiDesc: DataTypes.STRING,
       shotTime: DataTypes.DATE,
       modifiedTime: {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      features: DataTypes.BLOB,
     },
     { underscored: true },
   );
