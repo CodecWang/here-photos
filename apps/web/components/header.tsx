@@ -1,12 +1,12 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 
-import { NavMode } from '@/config/enums';
-import DarkModeIcon from '@/icons/dark-mode-icon';
-import LightModeIcon from '@/icons/light-mode-icon';
-import MenuIcon from '@/icons/menu-icon';
-import SearchIcon from '@/icons/search-icon';
-import SelfImprovementIcon from '@/icons/self-improvement-icon';
+import { NavMode } from '~/config/enums';
+import DarkModeIcon from '~/icons/dark-mode-icon';
+import LightModeIcon from '~/icons/light-mode-icon';
+import MenuIcon from '~/icons/menu-icon';
+import SearchIcon from '~/icons/search-icon';
+import SelfImprovementIcon from '~/icons/self-improvement-icon';
 
 import { useNavMode } from '../app/(main)/nav-provider';
 import IconButton from './ui/icon-button';

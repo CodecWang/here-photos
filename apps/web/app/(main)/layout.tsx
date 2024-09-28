@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { eventBus } from '@/utils/event-bus';
+import { eventBus } from '~/utils/event-bus';
 
 import { MessageProvider, useMessage } from './message-provider';
 import { NavProvider } from './nav-provider';

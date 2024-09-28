@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import PageHeader from '@/components/page-header';
-import { request } from '@/utils/request';
+import PageHeader from '~/components/page-header';
+import { request } from '~/utils/request';
 
 import Apperence from './components/appearance';
 import ScanDirectories from './components/scan-directories';

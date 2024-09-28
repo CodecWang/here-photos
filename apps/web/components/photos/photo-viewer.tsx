@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import CloseIcon from '@/icons/close-icon';
-import DeleteIcon from '@/icons/delete-icon';
+import CloseIcon from '~/icons/close-icon';
+import DeleteIcon from '~/icons/delete-icon';
 
 import IconButton from '../ui/icon-button';
 import { usePhotos } from './context';

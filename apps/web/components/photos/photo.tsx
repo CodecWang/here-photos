@@ -1,9 +1,9 @@
+import { thumbHashToDataURL } from '@here-photos/thumb-hash';
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
-import Image from 'next/image';
+import Image, { ImageLoaderProps } from 'next/image';
 import { useMemo } from 'react';
 
-import { GalleryLayout } from '@/config/enums';
-import { thumbHashToDataURL } from '@/utils/thumb-hash';
+import { GalleryLayout } from '~/config/enums';
 
 import { usePhotos } from './context';
 
@@ -30,9 +30,10 @@ export default function Photo({ photo, layout, position }: PhotoProps) {
   };
 
   const imageProps = {
+    loader: ({ src }: ImageLoaderProps) => src,
     src: `/api/v1/photos/${photo.id}/thumbnail?variant=2`,
     fill: true,
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+    // sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
     alt: '',
     placeholder: 'blur' as PlaceholderValue,
     blurDataURL,

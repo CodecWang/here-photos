@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-import PageHeader from '@/components/page-header';
-import { CACHE_KEY } from '@/config/constants';
-import { GroupAlbumsBy } from '@/config/enums';
-import CreateNewFolderIcon from '@/icons/create-new-folder-icon';
-import { request } from '@/utils/request';
+import PageHeader from '~/components/page-header';
+import { CACHE_KEY } from '~/config/constants';
+import { GroupAlbumsBy } from '~/config/enums';
+import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
+import { request } from '~/utils/request';
 
 import AlbumGroup from './components/album-group';
 import CreateAlbumModal from './components/create-album-modal';

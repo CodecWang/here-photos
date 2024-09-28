@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import ChevronRightIcon from '@/icons/chevron-right-icon';
+import ChevronRightIcon from '~/icons/chevron-right-icon';
 
 import Album from './album';
 

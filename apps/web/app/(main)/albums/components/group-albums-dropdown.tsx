@@ -1,8 +1,8 @@
 import { MouseEventHandler } from 'react';
 
-import { GroupAlbumsBy } from '@/config/enums';
-import AdGroupIcon from '@/icons/ad-group-icon';
-import AdGroupOffIcon from '@/icons/ad-group-off-icon';
+import { GroupAlbumsBy } from '~/config/enums';
+import AdGroupIcon from '~/icons/ad-group-icon';
+import AdGroupOffIcon from '~/icons/ad-group-off-icon';
 
 interface GroupAlbumsDropdownProps {
   groupBy: GroupAlbumsBy;

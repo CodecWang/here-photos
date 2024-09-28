@@ -1,10 +1,10 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 
-import Header from '@/components/header';
-import NavBar from '@/components/nav-bar';
-import SideNav from '@/components/side-nav';
-import { CACHE_KEY, DEFAULT_NAV_MODE } from '@/config/constants';
-import { NavMode } from '@/config/enums';
+import Header from '~/components/header';
+import NavBar from '~/components/nav-bar';
+import SideNav from '~/components/side-nav';
+import { CACHE_KEY, DEFAULT_NAV_MODE } from '~/config/constants';
+import { NavMode } from '~/config/enums';
 
 const defaultContext = {
   navMode: NavMode.Traditional,

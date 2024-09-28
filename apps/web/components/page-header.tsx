@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 
-import ArrowBackIcon from '@/icons/arrow-back-icon';
+import ArrowBackIcon from '~/icons/arrow-back-icon';
 
 interface PageHeaderProps {
   title: string;

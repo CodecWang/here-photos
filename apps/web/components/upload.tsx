@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import UploadIcon from '@/icons/upload-icon';
+import UploadIcon from '~/icons/upload-icon';
 
 export default function Upload() {
   const fileInputRef = useRef<HTMLInputElement>(null);

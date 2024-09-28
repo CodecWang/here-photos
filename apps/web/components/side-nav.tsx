@@ -2,14 +2,14 @@ import { clsx } from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import DeleteIcon from '@/icons/delete-icon';
-import FavoriteIcon from '@/icons/favorite-icon';
-import ImageSearchIcon from '@/icons/image-search-icon';
-import MapIcon from '@/icons/map-icon';
-import PersonSearchIcon from '@/icons/person-search-icon';
-import PhotoAlbumIcon from '@/icons/photo-album-icon';
-import PhotoIcon from '@/icons/photo-icon';
-import ShareIcon from '@/icons/share-icon';
+import DeleteIcon from '~/icons/delete-icon';
+import FavoriteIcon from '~/icons/favorite-icon';
+import ImageSearchIcon from '~/icons/image-search-icon';
+import MapIcon from '~/icons/map-icon';
+import PersonSearchIcon from '~/icons/person-search-icon';
+import PhotoAlbumIcon from '~/icons/photo-album-icon';
+import PhotoIcon from '~/icons/photo-icon';
+import ShareIcon from '~/icons/share-icon';
 
 export default function SideNav() {
   const pathname = usePathname();

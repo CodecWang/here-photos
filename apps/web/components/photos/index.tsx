@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { GalleryLayout } from '@/config/enums';
+import { GalleryLayout } from '~/config/enums';
 
 import { PhotosProvider } from './context';
 import PhotoGroup from './photo-group';
