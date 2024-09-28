@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
-import AddIcon from '@/icons/add-icon';
-import RemoveIcon from '@/icons/remove-icon';
+import AddIcon from '~/icons/add-icon';
+import RemoveIcon from '~/icons/remove-icon';
 
 interface RangeWithButtonsProps {
   min: number;

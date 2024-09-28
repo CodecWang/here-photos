@@ -1,3 +1,4 @@
+import { rgbaToThumbHash } from '@here-photos/thumb-hash';
 import exifReader from 'exif-reader';
 import { promises as fs } from 'fs';
 import type { Context } from 'koa';
@@ -10,7 +11,6 @@ import { DEFAULT_MEDIA_DIR, THUMBNAILS_DIR } from '../../config/constants';
 import { NotFoundError } from '../../error/not-found-error';
 import db from '../../model';
 import { search } from '../../service/search';
-import { rgbaToThumbHash } from './thumb-hash';
 import {
   calCheckSum,
   filterTopLevelDirectories,

@@ -3,9 +3,9 @@
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import Photos from '@/components/photos';
-import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
-import { request } from '@/utils/request';
+import Photos from '~/components/photos';
+import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
+import { request } from '~/utils/request';
 
 export default function Search() {
   const [loading, setLoading] = useState(false);

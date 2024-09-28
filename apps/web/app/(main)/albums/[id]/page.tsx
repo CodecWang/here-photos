@@ -3,15 +3,15 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-// import AddPhotos from '@/components/add-photos';
-import PageHeader from '@/components/page-header';
-import Photos from '@/components/photos';
-import PhotosLayoutSetting from '@/components/photos/photos-layout-setting';
-import IconButton from '@/components/ui/icon-button';
-import { DEFAULT_PHOTOS_LAYOUT } from '@/config/constants';
-import AddPhotoAlternateIcon from '@/icons/add-photo-alternate-icon';
-import TuneIcon from '@/icons/tune-icon';
-import { request } from '@/utils/request';
+// import AddPhotos from '~/components/add-photos';
+import PageHeader from '~/components/page-header';
+import Photos from '~/components/photos';
+import PhotosLayoutSetting from '~/components/photos/photos-layout-setting';
+import IconButton from '~/components/ui/icon-button';
+import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
+import AddPhotoAlternateIcon from '~/icons/add-photo-alternate-icon';
+import TuneIcon from '~/icons/tune-icon';
+import { request } from '~/utils/request';
 
 import { groupPhotosByDate } from '../../photos/utils';
 import DeleteAlbumModal from '../components/delete-album-modal';

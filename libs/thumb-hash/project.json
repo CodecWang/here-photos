@@ -1,0 +1,9 @@
+{
+  "name": "thumb-hash",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/thumb-hash/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project thumb-hash --web",
+  "targets": {}
+}

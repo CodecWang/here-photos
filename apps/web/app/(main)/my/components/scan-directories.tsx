@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import IconButton from '@/components/ui/icon-button';
-import CheckIcon from '@/icons/check-icon';
-import DeleteIcon from '@/icons/delete-icon';
-import EditIcon from '@/icons/edit-icon';
-import { request } from '@/utils/request';
+import IconButton from '~/components/ui/icon-button';
+import CheckIcon from '~/icons/check-icon';
+import DeleteIcon from '~/icons/delete-icon';
+import EditIcon from '~/icons/edit-icon';
+import { request } from '~/utils/request';
 
 interface ScanDirectoriesProps {
   photoDirs: string[];

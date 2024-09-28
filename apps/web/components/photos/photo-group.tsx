@@ -1,7 +1,7 @@
 import justifiedLayout from 'justified-layout';
 import { useMemo } from 'react';
 
-import { GalleryLayout } from '@/config/enums';
+import { GalleryLayout } from '~/config/enums';
 
 import Photo from './photo';
 

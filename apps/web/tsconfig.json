@@ -18,7 +18,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "~/*": ["./*"],
+      // Manually inherit base paths due to override: https://www.typescriptlang.org/tsconfig/#extends
+      "@here-photos/thumb-hash": ["../../libs/thumb-hash/src/index.ts"]
     },
     "types": ["jest", "node"]
   },

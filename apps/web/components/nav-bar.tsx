@@ -2,8 +2,6 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import SearchIcon from '@/icons/search-icon';
-
 export default function NavBar() {
   const pathname = usePathname();
   return (

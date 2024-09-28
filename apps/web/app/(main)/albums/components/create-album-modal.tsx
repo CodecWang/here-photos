@@ -1,8 +1,8 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-import CloseIcon from '@/icons/close-icon';
-import { request } from '@/utils/request';
+import CloseIcon from '~/icons/close-icon';
+import { request } from '~/utils/request';
 
 enum AlbumType {
   Album,

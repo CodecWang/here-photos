@@ -1,4 +1,4 @@
-import { GroupBy } from '@/config/enums';
+import { GroupBy } from '~/config/enums';
 
 export function groupPhotosByDate(photos: Photo[], groupBy?: GroupBy) {
   if (!groupBy || groupBy === GroupBy.None) {
