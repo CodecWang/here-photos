@@ -31,6 +31,7 @@ interface Album {
   id: number;
   title: string;
   cover: Photo;
+  pinned: boolean;
   photoCount?: number;
   photos: Photo[];
   createdAt: Date;
