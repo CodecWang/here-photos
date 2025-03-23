@@ -1,11 +1,15 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import PageHeader from '~/components/page-header';
 
 export default function Page() {
+  const t = useTranslations();
+
   return (
     <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
-      <PageHeader title="Explore"></PageHeader>
+      <PageHeader title={t('nav.explore')}></PageHeader>
 
       <div className="flex items-center space-x-2 p-4">
         <span className="text-gray-600">Building</span>

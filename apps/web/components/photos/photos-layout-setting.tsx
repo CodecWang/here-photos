@@ -98,6 +98,7 @@ export default function PhotosLayoutSetting({
               className="btn btn-ghost btn-outline join-item"
               type="radio"
               name="options"
+              disabled
               checked={layout.layout === GalleryLayout.Masonry}
               onChange={() =>
                 handleLayoutChange({ layout: GalleryLayout.Masonry })

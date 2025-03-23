@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import PageHeader from '~/components/page-header';
@@ -8,13 +9,16 @@ import { GroupAlbumsBy } from '~/config/enums';
 import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
 
+import Album from './components/album';
 import AlbumGroup from './components/album-group';
 import CreateAlbumModal from './components/create-album-modal';
 import { GroupAlbumsDropdown } from './components/group-albums-dropdown';
 import { groupAlbumsByYear } from './utils';
 
 export default function Page() {
+  const t = useTranslations();
   const [albums, setAlbums] = useState<Album[]>([]);
+  const [pinnedAlbums, setPinnedAlbums] = useState<Album[]>([]);
   const [albumGroups, setAlbumGroups] = useState<AlbumGroup[]>([]);
   const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.None);
 
@@ -30,6 +34,11 @@ export default function Page() {
 
   useEffect(() => {
     if (!albums.length) return;
+
+    const pinned = albums.filter((album) => album.pinned);
+    console.log('>>>', pinned);
+
+    setPinnedAlbums(pinned);
 
     switch (groupBy) {
       case GroupAlbumsBy.None:
@@ -53,7 +62,7 @@ export default function Page() {
 
   return (
     <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
-      <PageHeader title="Albums">
+      <PageHeader title={t('nav.albums')}>
         <div className="tooltip tooltip-bottom" data-tip="Create album">
           <button
             className="btn btn-ghost"
@@ -74,6 +83,14 @@ export default function Page() {
       </PageHeader>
 
       <div className="space-y-6 p-4">
+        {pinnedAlbums.length > 0 && (
+          <div className="bg-base-300 rounded-box flex space-x-2 overflow-hidden overflow-x-scroll p-4">
+            {pinnedAlbums.map((album) => (
+              <Album key={album.id} album={album} />
+            ))}
+          </div>
+        )}
+
         {albumGroups.map((group, index) => (
           <AlbumGroup
             key={index}

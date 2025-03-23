@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import PageHeader from '~/components/page-header';
@@ -18,6 +19,7 @@ import { useNavMode } from '../nav-provider';
 import { groupPhotosByDate } from './utils';
 
 export default function Page() {
+  const t = useTranslations();
   const { navMode, setNavMode } = useNavMode();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
@@ -48,7 +50,7 @@ export default function Page() {
           openLayoutSetting && 'sm:right-80',
         )}
       >
-        <PageHeader title="Photos">
+        <PageHeader title={t('nav.photos')}>
           {navMode === NavMode.Modern && <Upload />}
           <IconButton
             active={openLayoutSetting}

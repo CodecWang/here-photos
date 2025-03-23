@@ -44,9 +44,6 @@ export default function PhotoViewer() {
           alt=""
           className="max-h-full max-w-full"
         />
-        <div className="bg-base-200 rounded-box m-4 p-4">
-          {(currentPhoto as Photo).aiDesc}
-        </div>
       </div>
 
       <div className="absolute right-2 top-2">

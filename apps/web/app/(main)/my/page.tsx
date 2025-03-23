@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import PageHeader from '~/components/page-header';
@@ -13,6 +14,7 @@ interface Settings {
 }
 
 export default function Page() {
+  const t = useTranslations();
   const [settings, setSettings] = useState<Settings>({ photoDirs: [] });
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function Page() {
         animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
       }}
     >
-      <PageHeader title="Settings"></PageHeader>
+      <PageHeader title={t('setting.title')}></PageHeader>
 
       <div className="flex flex-wrap space-x-2 px-4 pt-2">
         <Apperence />

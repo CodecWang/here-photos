@@ -1,0 +1,22 @@
+{
+  "setting": {
+    "title": "Settings"
+  },
+  "apperence": {
+    "title": "Appearance",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "Auto"
+  },
+  "language": {
+    "title": "Language",
+    "en": "English",
+    "zh": "Chinese(Simplified)"
+  },
+  "nav": {
+    "photos": "Photos",
+    "albums": "Albums",
+    "explore": "Explore",
+    "my": "My"
+  }
+}
