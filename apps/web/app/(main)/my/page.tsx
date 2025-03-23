@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import PageHeader from '~/components/page-header';
 import { request } from '~/utils/request';
 
-import Apperence from './components/appearance';
+import Apperence from './components/apperence';
 import ScanDirectories from './components/scan-directories';
 
 interface Settings {
