@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import IconButton from '~/components/ui/icon-button';
@@ -15,6 +16,7 @@ export default function ScanDirectories({
   photoDirs,
   onChange,
 }: ScanDirectoriesProps) {
+  const t = useTranslations();
   const [newDir, setNewDir] = useState('');
   const [showAdding, setShowAdding] = useState(false);
 
@@ -46,14 +48,14 @@ export default function ScanDirectories({
   return (
     <div className="bg-base-200 rounded-box flex-[2] p-4 hover:shadow-2xl">
       <div className="flex items-center">
-        <span className="text-xl">Directories</span>
+        <span className="text-xl">{t('setting.photoDirectories')}</span>
 
         <div className="flex flex-1 justify-end">
           <button className="btn" onClick={() => setShowAdding(true)}>
-            Add
+            {t('action.add')}
           </button>
           <button className="btn btn-primary" onClick={triggerScan}>
-            Scan
+            {t('action.scan')}
           </button>
         </div>
       </div>
@@ -67,12 +69,12 @@ export default function ScanDirectories({
               onChange={(e) => setNewDir(e.target.value)}
             />
             <IconButton
-              tooltip="Confirm"
+              tooltip={t('action.confirm')}
               onClick={addNewDirectory}
               icon={<CheckIcon className="size-5" />}
             />
             <IconButton
-              tooltip="Delete"
+              tooltip={t('action.delete')}
               onClick={hideAdding}
               icon={<DeleteIcon className="size-5" />}
             />
@@ -87,12 +89,12 @@ export default function ScanDirectories({
               disabled
             />
             <IconButton
-              tooltip="Edit"
+              tooltip={t('action.edit')}
               icon={<EditIcon className="size-5" />}
               disabled
             />
             <IconButton
-              tooltip="Delete"
+              tooltip={t('action.delete')}
               icon={<DeleteIcon className="size-5" />}
               onClick={() => deleteDirectory(dir)}
             />

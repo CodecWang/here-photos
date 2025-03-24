@@ -11,8 +11,10 @@ import SelfImprovementIcon from '~/icons/self-improvement-icon';
 import { useNavMode } from '../app/(main)/nav-provider';
 import IconButton from './ui/icon-button';
 import Upload from './upload';
+import { useTranslations } from 'next-intl';
 
 export default function Header() {
+  const t = useTranslations();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { navMode, setNavMode } = useNavMode();
@@ -64,19 +66,23 @@ export default function Header() {
         <div className="flex-none">
           <IconButton
             className="md:hidden"
-            tooltip="Search"
+            tooltip={t('action.search')}
             icon={<SearchIcon className="size-6" />}
           />
           <Upload />
 
           <IconButton
-            tooltip={navMode === NavMode.Modern ? 'Nav Mode' : 'Zen mode'}
+            tooltip={
+              navMode === NavMode.Modern ? t('nav.classic') : t('nav.modern')
+            }
             onClick={() => setNavMode(NavMode.Modern)}
             icon={<SelfImprovementIcon className="size-6" />}
           />
 
           <IconButton
-            tooltip={theme === 'dark' ? 'Light' : 'Dark'}
+            tooltip={
+              theme === 'dark' ? t('apperence.light') : t('apperence.dark')
+            }
             icon={
               <label className="swap swap-rotate">
                 <input

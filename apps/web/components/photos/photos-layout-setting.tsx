@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
@@ -27,6 +28,7 @@ export default function PhotosLayoutSetting({
   onClose,
   onChange,
 }: PhotosLayoutSettingProps) {
+  const t = useTranslations();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<PhotosLayout>(getCachedLayout());
 
@@ -59,6 +61,17 @@ export default function PhotosLayoutSetting({
     }
   }, [open]);
 
+  const localeMapping = {
+    // [GalleryLayout.Grid]: t('photos.grid'),
+    [GalleryLayout.Grid1x1]: t('photos.grid1x1'),
+    [GalleryLayout.Justified]: t('photos.justified'),
+    [GalleryLayout.Masonry]: t('photos.masonry'),
+    [GroupBy.None]: t('photos.noGrouping'),
+    [GroupBy.Day]: t('photos.groupByDay'),
+    [GroupBy.Month]: t('photos.groupByMonth'),
+    [GroupBy.Year]: t('photos.groupByYear'),
+  };
+
   return (
     <aside
       ref={sidebarRef}
@@ -68,47 +81,27 @@ export default function PhotosLayoutSetting({
         <button className="btn btn-ghost btn-circle" onClick={onClose}>
           <CloseIcon className="size-5" />
         </button>
-        <span className="text-lg">Layout settings</span>
+        <span className="text-lg">{t('photos.layoutTip')}</span>
       </div>
       <div className="space-y-4">
         <div className="space-y-2">
-          <span className="block">Layout</span>
           <div className="join m-auto mt-2">
-            <input
-              className="btn btn-ghost btn-outline join-item"
-              type="radio"
-              name="options"
-              checked={layout.layout === GalleryLayout.Grid1x1}
-              onChange={() =>
-                handleLayoutChange({ layout: GalleryLayout.Grid1x1 })
-              }
-              aria-label="Grid"
-            />
-            <input
-              className="btn btn-ghost btn-outline join-item"
-              type="radio"
-              name="options"
-              checked={layout.layout === GalleryLayout.Justified}
-              onChange={() =>
-                handleLayoutChange({ layout: GalleryLayout.Justified })
-              }
-              aria-label="Justified"
-            />
-            <input
-              className="btn btn-ghost btn-outline join-item"
-              type="radio"
-              name="options"
-              disabled
-              checked={layout.layout === GalleryLayout.Masonry}
-              onChange={() =>
-                handleLayoutChange({ layout: GalleryLayout.Masonry })
-              }
-              aria-label="Masonry"
-            />
+            {Object.values(GalleryLayout).map((layoutType) => (
+              <input
+                key={layoutType}
+                className="btn btn-ghost btn-outline join-item"
+                type="radio"
+                name="options"
+                checked={layout.layout === layoutType}
+                disabled={layoutType === GalleryLayout.Masonry}
+                onChange={() => handleLayoutChange({ layout: layoutType })}
+                aria-label={localeMapping[layoutType]}
+              />
+            ))}
           </div>
         </div>
         <div className="space-y-2">
-          <span className="block">Size</span>
+          <span className="block">{t('photos.size')}</span>
           <RangeWithButtons
             min={100}
             max={500}
@@ -118,7 +111,7 @@ export default function PhotosLayoutSetting({
           />
         </div>
         <div className="space-y-2">
-          <span className="block">Spacing</span>
+          <span className="block">{t('photos.spacing')}</span>
           <RangeWithButtons
             min={0}
             max={24}
@@ -127,7 +120,7 @@ export default function PhotosLayoutSetting({
           />
         </div>
         <div className="space-y-2">
-          <span className="block">Corner radius</span>
+          <span className="block">{t('photos.cornerRadius')}</span>
           <RangeWithButtons
             min={0}
             max={8}
@@ -136,7 +129,7 @@ export default function PhotosLayoutSetting({
           />
         </div>
         <div className="space-y-2">
-          <span className="block">Group</span>
+          <span className="block">{t('photos.group')}</span>
           <select
             className="select select-bordered w-full max-w-xs"
             value={layout.groupBy}
@@ -148,7 +141,7 @@ export default function PhotosLayoutSetting({
                 value={value}
                 disabled={layout.groupBy === value}
               >
-                {value}
+                {localeMapping[value]}
               </option>
             ))}
           </select>
@@ -160,7 +153,7 @@ export default function PhotosLayoutSetting({
         className="btn"
         onClick={() => handleLayoutChange(DEFAULT_PHOTOS_LAYOUT)}
       >
-        Reset to default
+        {t('photos.resetToDefault')}
       </button>
     </aside>
   );

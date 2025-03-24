@@ -1,6 +1,7 @@
 {
   "setting": {
-    "title": "Settings"
+    "title": "Settings",
+    "photoDirectories": "Photo directories"
   },
   "apperence": {
     "title": "Appearance",
@@ -11,12 +12,57 @@
   "language": {
     "title": "Language",
     "en": "English",
-    "zh": "Chinese(Simplified)"
+    "zh": "Simplified Chinese"
   },
   "nav": {
+    "title": "Navbar",
+    "modern": "Modern",
+    "classic": "Classic",
     "photos": "Photos",
     "albums": "Albums",
     "explore": "Explore",
-    "my": "My"
+    "my": "My",
+    "people": "People",
+    "places": "Places",
+    "favorites": "Favorites",
+    "trash": "Trash"
+  },
+  "action": {
+    "add": "Add",
+    "edit": "Edit",
+    "scan": "Scan",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "close": "Close",
+    "search": "Search"
+  },
+  "photos": {
+    "upload": "Upload",
+    "uploadTip": "Upload photos",
+    "layoutTip": "Layout settings",
+    "filterTip": "Filter",
+    "grid": "Grid",
+    "grid1x1": "Grid(1:1)",
+    "justified": "Justified",
+    "masonry": "Masonry",
+    "size": "Size",
+    "spacing": "Spacing",
+    "cornerRadius": "Corner radius",
+    "group": "Group",
+    "noGrouping": "No grouping",
+    "groupByDay": "Group by day",
+    "groupByMonth": "Group by month",
+    "groupByYear": "Group by year",
+    "resetToDefault": "Reset to default"
+  },
+  "albums": {
+    "createAlbum": "Create Album",
+    "addPhotos": "Add photos",
+    "noGrouping": "No Grouping",
+    "groupByYear": "Group by year",
+    "groupByOwner": "Group by owner",
+    "album": "Album",
+    "smartAlbum": "Smart Album",
+    "albumName": "Album name"
   }
 }

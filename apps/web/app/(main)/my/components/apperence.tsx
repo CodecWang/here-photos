@@ -21,7 +21,7 @@ export default function Apperence() {
         <span className="text-xl">{t('apperence.title')}</span>
       </div>
       <label className="label cursor-pointer">
-        <span className="label-text">Nav Mode</span>
+        <span className="label-text">{t('nav.title')}</span>
         <input
           type="checkbox"
           className="toggle"

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import CloseIcon from '~/icons/close-icon';
@@ -7,6 +8,7 @@ import IconButton from '../ui/icon-button';
 import { usePhotos } from './context';
 
 export default function PhotoViewer() {
+  const t = useTranslations();
   const { currentPhoto } = usePhotos();
   const [close, setClose] = useState(false);
 
@@ -48,7 +50,7 @@ export default function PhotoViewer() {
 
       <div className="absolute right-2 top-2">
         <IconButton
-          tooltip="Delete"
+          tooltip={t('action.delete')}
           onClick={deletePhoto}
           icon={<DeleteIcon className="size-5" />}
         />

@@ -1,4 +1,5 @@
 import { clsx } from 'clsx';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -12,21 +13,22 @@ import PhotoIcon from '~/icons/photo-icon';
 import ShareIcon from '~/icons/share-icon';
 
 export default function SideNav() {
+  const t = useTranslations();
   const pathname = usePathname();
 
   const menu = [
     {
-      title: 'Photos',
+      title: t('nav.photos'),
       icon: PhotoIcon,
       href: '/photos',
     },
     {
-      title: 'Explore',
+      title: t('nav.explore'),
       icon: ImageSearchIcon,
       href: '/explore',
     },
     {
-      title: 'My',
+      title: t('nav.my'),
       icon: ShareIcon,
       href: '/my',
     },
@@ -34,27 +36,27 @@ export default function SideNav() {
       isDivider: true,
     },
     {
-      title: 'Albums',
+      title: t('nav.albums'),
       icon: PhotoAlbumIcon,
       href: '/albums',
     },
     {
-      title: 'People',
+      title: t('nav.people'),
       icon: PersonSearchIcon,
       href: '/people',
     },
     {
-      title: 'Places',
+      title: t('nav.places'),
       icon: MapIcon,
       href: '/places',
     },
     {
-      title: 'Favorites',
+      title: t('nav.favorites'),
       icon: FavoriteIcon,
       href: '/favorites',
     },
     {
-      title: 'Trash',
+      title: t('nav.trash'),
       icon: DeleteIcon,
       href: '/trash',
     },

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -10,6 +11,7 @@ enum AlbumType {
 }
 
 export default function CreateAlbumModal() {
+  const t = useTranslations();
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [albumType, setAlbumType] = useState<AlbumType>(AlbumType.Album);
@@ -53,7 +55,7 @@ export default function CreateAlbumModal() {
   const Album = () => (
     <label className="form-control w-full max-w-xs">
       <div className="label">
-        <span className="label-text">Album name</span>
+        <span className="label-text">{t('albums.albumName')}</span>
       </div>
       <input
         type="text"
@@ -70,7 +72,6 @@ export default function CreateAlbumModal() {
 
   const SmartAlbum = () => (
     <div>
-      Create smart album
       <label className="form-control w-full max-w-xs">
         <div className="label">
           <span className="label-text">Album name</span>
@@ -140,7 +141,7 @@ export default function CreateAlbumModal() {
               className="btn join-item"
               type="radio"
               name="options"
-              aria-label="Album"
+              aria-label={t('albums.album')}
               checked={albumType === AlbumType.Album}
               onChange={() => setAlbumType(AlbumType.Album)}
             />
@@ -148,7 +149,8 @@ export default function CreateAlbumModal() {
               className="btn join-item"
               type="radio"
               name="options"
-              aria-label="Smart Album"
+              disabled
+              aria-label={t('albums.smartAlbum')}
               checked={albumType === AlbumType.SmartAlbum}
               onChange={() => setAlbumType(AlbumType.SmartAlbum)}
             />
@@ -164,10 +166,10 @@ export default function CreateAlbumModal() {
                 dialogRef.current?.close();
               }}
             >
-              Close
+              {t('action.close')}
             </button>
             <button className="btn btn-primary" type="submit">
-              Confirm
+              {t('action.confirm')}
             </button>
           </div>
         </form>

@@ -1,8 +1,10 @@
+import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 
 import UploadIcon from '~/icons/upload-icon';
 
 export default function Upload() {
+  const t = useTranslations();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFilesChange = async (
@@ -23,13 +25,13 @@ export default function Upload() {
   };
 
   return (
-    <div className="tooltip tooltip-bottom" data-tip="Upload photos">
+    <div className="tooltip tooltip-bottom" data-tip={t('photos.uploadTip')}>
       <button
         className="btn btn-ghost"
         onClick={() => fileInputRef.current?.click()}
       >
         <UploadIcon className="size-6 md:size-5" />
-        <span className="hidden md:inline">Upload</span>
+        <span className="hidden md:inline">{t('photos.upload')}</span>
       </button>
 
       <input
