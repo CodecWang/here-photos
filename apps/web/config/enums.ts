@@ -5,16 +5,16 @@ export enum GroupBy {
   Year = 'Group by year',
 }
 
-export const enum GalleryLayout {
-  Grid,
-  Grid1x1,
-  Justified,
-  Masonry,
+export enum GalleryLayout {
+  // Grid = 'Grid',
+  Grid1x1 = 'Grid 1:1',
+  Justified = 'Justified',
+  Masonry = 'Masonry',
 }
 
 export const enum NavMode {
   Modern,
-  Traditional,
+  Classic,
 }
 
 export enum GroupAlbumsBy {

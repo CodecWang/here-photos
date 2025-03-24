@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import Image, { ImageLoaderProps } from 'next/image';
 import Link from 'next/link';
 
@@ -10,6 +11,7 @@ interface AlbumProps {
 }
 
 export default function Album({ album }: AlbumProps) {
+  const t = useTranslations();
   return (
     <Link href={`/albums/${album.id}`}>
       <div className="rounded-box relative overflow-hidden shadow hover:shadow-2xl">
@@ -33,7 +35,7 @@ export default function Album({ album }: AlbumProps) {
         </div>
 
         <IconButton
-          tooltip="Confirm"
+          tooltip={t('action.confirm')}
           className="absolute right-2 top-2"
           // onClick={addNewDirectory}
           icon={<CheckIcon className="size-5" />}

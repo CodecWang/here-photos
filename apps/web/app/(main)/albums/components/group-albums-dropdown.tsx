@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { MouseEventHandler } from 'react';
 
 import { GroupAlbumsBy } from '~/config/enums';
@@ -13,10 +14,17 @@ export function GroupAlbumsDropdown({
   groupBy,
   onChange,
 }: GroupAlbumsDropdownProps) {
+  const t = useTranslations();
   const handleGroupByChange: MouseEventHandler<HTMLUListElement> = (e) => {
     const value = (e.target as HTMLAnchorElement).getAttribute('data-value');
     value && onChange(value as GroupAlbumsBy);
     e.currentTarget.blur();
+  };
+
+  const localeMapping = {
+    [GroupAlbumsBy.None]: t('albums.noGrouping'),
+    [GroupAlbumsBy.Year]: t('albums.groupByYear'),
+    [GroupAlbumsBy.Owner]: t('albums.groupByOwner'),
   };
 
   return (
@@ -28,7 +36,7 @@ export function GroupAlbumsDropdown({
           <AdGroupIcon className="size-6 md:size-5" />
         )}
 
-        {groupBy}
+        {localeMapping[groupBy]}
       </div>
       <ul
         tabIndex={0}
@@ -38,7 +46,7 @@ export function GroupAlbumsDropdown({
         {Object.values(GroupAlbumsBy).map((value) => (
           <li key={value}>
             <a className={groupBy === value ? 'active' : ''} data-value={value}>
-              {value}
+              {localeMapping[value]}
             </a>
           </li>
         ))}

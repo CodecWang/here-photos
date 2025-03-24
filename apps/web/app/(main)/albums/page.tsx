@@ -20,7 +20,7 @@ export default function Page() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [pinnedAlbums, setPinnedAlbums] = useState<Album[]>([]);
   const [albumGroups, setAlbumGroups] = useState<AlbumGroup[]>([]);
-  const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.None);
+  const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.Year);
 
   useEffect(() => {
     (async () => {
@@ -63,7 +63,10 @@ export default function Page() {
   return (
     <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
       <PageHeader title={t('nav.albums')}>
-        <div className="tooltip tooltip-bottom" data-tip="Create album">
+        <div
+          className="tooltip tooltip-bottom"
+          data-tip={t('albums.createAlbum')}
+        >
           <button
             className="btn btn-ghost"
             onClick={() => {
@@ -75,7 +78,7 @@ export default function Page() {
             }}
           >
             <CreateNewFolderIcon className="size-6 md:size-5" />
-            <span className="hidden md:inline">Create album</span>
+            <span className="hidden md:inline">{t('albums.createAlbum')}</span>
           </button>
         </div>
 

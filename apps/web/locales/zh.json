@@ -1,6 +1,7 @@
 {
   "setting": {
-    "title": "设置"
+    "title": "设置",
+    "photoDirectories": "照片目录"
   },
   "apperence": {
     "title": "外观",
@@ -14,9 +15,54 @@
     "zh": "简体中文"
   },
   "nav": {
+    "title": "导航栏",
+    "modern": "现代",
+    "classic": "经典",
     "photos": "照片",
     "albums": "相册",
     "explore": "探索",
-    "my": "我的"
+    "my": "我的",
+    "people": "人物",
+    "places": "地点",
+    "favorites": "收藏",
+    "trash": "回收站"
+  },
+  "action": {
+    "add": "添加",
+    "edit": "编辑",
+    "scan": "扫描",
+    "confirm": "确定",
+    "delete": "删除",
+    "close": "关闭",
+    "search": "搜索"
+  },
+  "photos": {
+    "upload": "上传",
+    "uploadTip": "上传照片",
+    "layoutTip": "布局设置",
+    "filterTip": "筛选",
+    "grid": "网格",
+    "grid1x1": "网格(1:1)",
+    "justified": "均匀对齐",
+    "masonry": "瀑布流",
+    "size": "大小",
+    "spacing": "间距",
+    "cornerRadius": "圆角",
+    "group": "分组",
+    "noGrouping": "不分组",
+    "groupByDay": "按天分组",
+    "groupByMonth": "按月分组",
+    "groupByYear": "按年份分组",
+    "resetToDefault": "恢复默认"
+  },
+  "albums": {
+    "createAlbum": "创建相册",
+    "addPhotos": "添加照片",
+    "noGrouping": "不分组",
+    "groupByYear": "按年份分组",
+    "groupByOwner": "按拥有者分组",
+    "album": "相册",
+    "smartAlbum": "智能相册",
+    "albumName": "相册名称"
   }
 }

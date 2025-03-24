@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 // import AddPhotos from '~/components/add-photos';
@@ -17,6 +18,7 @@ import { groupPhotosByDate } from '../../photos/utils';
 import DeleteAlbumModal from '../components/delete-album-modal';
 
 export default function Page({ params }: { params: { id: string } }) {
+  const t = useTranslations();
   const [album, setAlbum] = useState<Album>();
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
@@ -54,13 +56,13 @@ export default function Page({ params }: { params: { id: string } }) {
         <PageHeader title={album.title} backTarget="/albums">
           <button className="btn btn-ghost">
             <AddPhotoAlternateIcon className="size-5" />
-            Add photos
+            {t('albums.addPhotos')}
           </button>
 
           <IconButton
             active={openLayoutSetting}
             disabled={!photoGroups.length}
-            tooltip="Layout setting"
+            tooltip={t('photos.layoutTip')}
             onClick={() => setOpenLayoutSetting((prev) => !prev)}
             icon={<TuneIcon className="size-5" />}
           />
@@ -75,7 +77,7 @@ export default function Page({ params }: { params: { id: string } }) {
               )?.showModal()
             }
           >
-            Delete
+            {t('action.delete')}
           </button>
         </PageHeader>
         <div className="px-0 pt-2 sm:px-4">
@@ -84,7 +86,7 @@ export default function Page({ params }: { params: { id: string } }) {
               empty
               <button className="btn btn-ghost">
                 <AddPhotoAlternateIcon className="size-5" />
-                Add photos
+                {t('albums.addPhotos')}
               </button>
             </div>
           )}

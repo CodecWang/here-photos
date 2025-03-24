@@ -55,7 +55,7 @@ export default function Page() {
           <IconButton
             active={openLayoutSetting}
             disabled={!photoGroups.length}
-            tooltip="Layout setting"
+            tooltip={t('photos.layoutTip')}
             onClick={() => setOpenLayoutSetting((prev) => !prev)}
             icon={<TuneIcon className="size-5" />}
           />
@@ -66,9 +66,9 @@ export default function Page() {
             icon={<SelfImprovementIcon className="size-5" />}
           /> */}
           <IconButton
-            tooltip="Filter"
+            tooltip={t('photos.filterTip')}
             disabled={!photoGroups.length}
-            onClick={() => setNavMode(NavMode.Traditional)}
+            onClick={() => setNavMode(NavMode.Classic)}
             icon={<FilterAltIcon className="size-5" />}
           />
         </PageHeader>
