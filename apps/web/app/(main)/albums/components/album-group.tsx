@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { CACHE_KEY } from '~/config/constants';
 import ChevronRightIcon from '~/icons/chevron-right-icon';
 
 import Album from './album';
@@ -12,12 +13,42 @@ interface AlbumGroupProps {
   collapsed?: boolean;
 }
 
+const getIsCollapsed = (title: string) => {
+  if (!title) return false;
+
+  if (typeof window !== 'undefined') {
+    const albums = localStorage.getItem(CACHE_KEY.albums);
+    if (!albums) return false;
+
+    try {
+      return JSON.parse(albums)[title].isCollapsed ?? false;
+    } catch (error) {
+      return false;
+    }
+  }
+  return false;
+};
+
 export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(getIsCollapsed(title));
 
-  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
-
-  useEffect(() => setIsCollapsed(false), [albums]);
+  const toggleCollapse = () => {
+    setIsCollapsed(() => {
+      const newState = !isCollapsed;
+      try {
+        const albums = localStorage.getItem(CACHE_KEY.albums) ?? '{}';
+        const parsedAlbums = JSON.parse(albums);
+        parsedAlbums[title] = {
+          ...parsedAlbums[title],
+          isCollapsed: newState,
+        };
+        localStorage.setItem(CACHE_KEY.albums, JSON.stringify(parsedAlbums));
+      } catch (error) {
+        // Do nothing
+      }
+      return newState;
+    });
+  };
 
   return (
     <div>
@@ -51,8 +82,8 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
             animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
           }}
         >
-          {albums.map((album, index) => (
-            <Album key={index} album={album} />
+          {albums.map((album) => (
+            <Album key={album.id} album={album} />
           ))}
         </div>
       )}

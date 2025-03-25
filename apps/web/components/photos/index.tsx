@@ -46,9 +46,9 @@ export default function Photos({ data, layout }: PhotosProps) {
       <div ref={viewportRef}>
         {layout.layout === GalleryLayout.Justified && !viewportWidth
           ? null
-          : data.map(({ title, photos }, index) => (
+          : data.map(({ title, photos }) => (
               <PhotoGroup
-                key={index}
+                key={title}
                 title={title}
                 photos={photos}
                 layout={layout}

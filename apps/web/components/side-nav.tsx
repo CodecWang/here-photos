@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import DeleteIcon from '~/icons/delete-icon';
 import FavoriteIcon from '~/icons/favorite-icon';
@@ -78,13 +78,13 @@ export default function SideNav() {
               ((sideNavLabel as HTMLInputElement).checked = false);
           }}
         >
-          {menu.map((item, index) =>
+          {menu.map((item) =>
             item.isDivider ? (
-              <li key={index} className="menu-title">
+              <li key={item.title} className="menu-title">
                 LIBRARY
               </li>
             ) : (
-              <li key={index}>
+              <li key={item.title}>
                 <Link
                   className={clsx(
                     'rounded-full text-sm leading-6',

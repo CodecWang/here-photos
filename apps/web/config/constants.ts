@@ -12,4 +12,5 @@ export const DEFAULT_NAV_MODE = NavMode.Modern;
 export const CACHE_KEY = {
   navMode: 'nav-mode',
   groupAlbumsBy: 'group-albums-by',
+  albums: 'albums',
 };
