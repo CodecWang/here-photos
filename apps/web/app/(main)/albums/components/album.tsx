@@ -1,6 +1,6 @@
-import { useTranslations } from 'next-intl';
 import Image, { ImageLoaderProps } from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import IconButton from '~/components/ui/icon-button';
 import CheckIcon from '~/icons/check-icon';

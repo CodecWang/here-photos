@@ -38,7 +38,7 @@ export default function Page() {
 
   return (
     <div
-      className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500"
+      className="absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500"
       style={{
         animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
       }}

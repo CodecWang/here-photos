@@ -36,8 +36,6 @@ export default function Page() {
     if (!albums.length) return;
 
     const pinned = albums.filter((album) => album.pinned);
-    console.log('>>>', pinned);
-
     setPinnedAlbums(pinned);
 
     switch (groupBy) {
@@ -87,16 +85,16 @@ export default function Page() {
 
       <div className="space-y-6 p-4">
         {pinnedAlbums.length > 0 && (
-          <div className="bg-base-300 rounded-box flex space-x-2 overflow-hidden overflow-x-scroll p-4">
+          <div className="bg-base-300 rounded-box grid grid-flow-col gap-4 space-x-2 whitespace-nowrap p-4">
             {pinnedAlbums.map((album) => (
               <Album key={album.id} album={album} />
             ))}
           </div>
         )}
 
-        {albumGroups.map((group, index) => (
+        {albumGroups.map((group) => (
           <AlbumGroup
-            key={index}
+            key={group.title}
             title={group.title}
             count={group.count}
             albums={group.albums}

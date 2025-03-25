@@ -3,5 +3,10 @@
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "explorer.fileNesting.enabled": true
+  "explorer.fileNesting.enabled": true,
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": "./.vscode/daisyui.md"
+    }
+  ]
 }
