@@ -21,8 +21,6 @@ export default function PhotoGroup({
   const arrange = useMemo(() => {
     if (layout.layout !== GalleryLayout.Justified) return;
 
-    console.log('>>> re-calculating layout');
-
     return justifiedLayout(
       photos.map((photo) => photo.thumbnails[0]),
       {
@@ -56,9 +54,10 @@ export default function PhotoGroup({
         >
           {arrange?.boxes.map(({ width, height, top, left }, index) => (
             <Photo
-              photo={photos[index]}
               key={photos[index].id}
+              photo={photos[index]}
               layout={layout.layout}
+              roundedCorner={layout.roundedCorner}
               position={{ width, height, top, left }}
             />
           ))}
@@ -69,7 +68,12 @@ export default function PhotoGroup({
           style={{ gap: layout.spacing }}
         >
           {photos.map((photo) => (
-            <Photo photo={photo} key={photo.id} layout={layout.layout} />
+            <Photo
+              photo={photo}
+              key={photo.id}
+              layout={layout.layout}
+              roundedCorner={layout.roundedCorner}
+            />
           ))}
         </div>
       )}

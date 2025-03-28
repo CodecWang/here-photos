@@ -6,7 +6,7 @@ export enum GroupBy {
 }
 
 export enum GalleryLayout {
-  // Grid = 'Grid',
+  Grid = 'Grid',
   Grid1x1 = 'Grid 1:1',
   Justified = 'Justified',
   Masonry = 'Masonry',

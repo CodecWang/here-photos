@@ -5,6 +5,7 @@ export const DEFAULT_PHOTOS_LAYOUT: PhotosLayout = {
   layout: GalleryLayout.Justified,
   spacing: 2,
   size: 220,
+  roundedCorner: 0,
 };
 
 export const DEFAULT_NAV_MODE = NavMode.Modern;

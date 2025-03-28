@@ -59,7 +59,7 @@ export default function Page() {
   };
 
   return (
-    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500">
+    <div className="absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500">
       <PageHeader title={t('nav.albums')}>
         <div
           className="tooltip tooltip-bottom"
@@ -85,7 +85,7 @@ export default function Page() {
 
       <div className="space-y-6 p-4">
         {pinnedAlbums.length > 0 && (
-          <div className="bg-base-300 rounded-box grid grid-flow-col gap-4 space-x-2 whitespace-nowrap p-4">
+          <div className="bg-base-300 rounded-box grid grid-flow-col gap-4 space-x-2 p-4 whitespace-nowrap">
             {pinnedAlbums.map((album) => (
               <Album key={album.id} album={album} />
             ))}

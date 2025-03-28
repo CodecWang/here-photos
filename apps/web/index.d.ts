@@ -10,7 +10,7 @@ interface PhotosLayout {
   layout?: GalleryLayout;
   spacing?: number;
   size?: number;
-  cornerRadius?: number;
+  roundedCorner?: number;
 }
 
 interface Photo {

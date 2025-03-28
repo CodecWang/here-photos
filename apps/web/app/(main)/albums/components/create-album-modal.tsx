@@ -132,9 +132,6 @@ export default function CreateAlbumModal() {
       className="modal modal-bottom sm:modal-middle"
     >
       <div className="modal-box flex flex-col">
-        <button className="btn btn-circle btn-ghost absolute right-2 top-2">
-          <CloseIcon className="size-5" />
-        </button>
         <form onSubmit={handleFormSubmit}>
           <div className="join self-center">
             <input
