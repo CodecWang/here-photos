@@ -67,7 +67,7 @@ export default function Photo({
 
     return (
       <div
-        className="hover:border-base-content relative aspect-square cursor-pointer overflow-hidden rounded-[8px] hover:border"
+        className="hover:border-base-content relative aspect-square cursor-pointer overflow-hidden hover:border"
         onClick={setPhoto}
       >
         <Image
