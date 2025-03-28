@@ -19,7 +19,7 @@ export default function NavBar() {
           <li>
             <Link
               className={clsx(
-                pathname.startsWith('/photos') && 'active',
+                pathname.startsWith('/photos') && 'menu-active',
                 'rounded-full',
               )}
               href="/photos"
@@ -31,7 +31,7 @@ export default function NavBar() {
           <li>
             <Link
               className={clsx(
-                pathname.startsWith('/albums') && 'active',
+                pathname.startsWith('/albums') && 'menu-active',
                 'rounded-full',
               )}
               href="/albums"
@@ -48,7 +48,7 @@ export default function NavBar() {
           <li>
             <Link
               className={clsx(
-                pathname.startsWith('/explore') && 'active',
+                pathname.startsWith('/explore') && 'menu-active',
                 'rounded-full',
               )}
               href="/explore"
@@ -60,7 +60,7 @@ export default function NavBar() {
           <li>
             <Link
               className={clsx(
-                pathname.startsWith('/my') && 'active',
+                pathname.startsWith('/my') && 'menu-active',
                 'rounded-full',
               )}
               href="/my"

@@ -62,7 +62,7 @@ export default function PhotosLayoutSetting({
   }, [open]);
 
   const localeMapping = {
-    // [GalleryLayout.Grid]: t('photos.grid'),
+    [GalleryLayout.Grid]: t('photos.grid'),
     [GalleryLayout.Grid1x1]: t('photos.grid1x1'),
     [GalleryLayout.Justified]: t('photos.justified'),
     [GalleryLayout.Masonry]: t('photos.masonry'),
@@ -123,9 +123,9 @@ export default function PhotosLayoutSetting({
           <span className="block">{t('photos.cornerRadius')}</span>
           <RangeWithButtons
             min={0}
-            max={8}
-            value={layout.cornerRadius}
-            onChange={(value) => handleLayoutChange({ cornerRadius: value })}
+            max={80}
+            value={layout.roundedCorner}
+            onChange={(value) => handleLayoutChange({ roundedCorner: value })}
           />
         </div>
         <div className="space-y-2">

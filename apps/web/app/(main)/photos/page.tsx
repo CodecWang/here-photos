@@ -46,11 +46,51 @@ export default function Page() {
     <>
       <div
         className={clsx(
-          'absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500',
+          'absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500',
           openLayoutSetting && 'sm:right-80',
         )}
       >
         <PageHeader title={t('nav.photos')}>
+          <form className="m-auto hidden filter md:block">
+            <input className="btn btn-square" type="reset" value="×" />
+            <input
+              className="btn"
+              type="radio"
+              name="frameworks"
+              aria-label="Svelte"
+            />
+            <input
+              className="btn"
+              type="radio"
+              name="frameworks"
+              aria-label="Vue"
+            />
+            <input
+              className="btn"
+              type="radio"
+              name="frameworks"
+              aria-label="React"
+            />
+            <input
+              className="btn"
+              type="radio"
+              name="frameworks"
+              aria-label="React"
+            />
+            <input
+              className="btn"
+              type="radio"
+              name="frameworks"
+              aria-label="React"
+            />
+            <input
+              className="btn"
+              type="radio"
+              name="frameworks"
+              aria-label="React"
+            />
+          </form>
+
           {navMode === NavMode.Modern && <Upload />}
           <IconButton
             active={openLayoutSetting}
