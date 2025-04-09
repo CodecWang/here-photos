@@ -1,7 +1,7 @@
 import { thumbHashToDataURL } from '@here-photos/thumb-hash';
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 import Image, { ImageLoaderProps } from 'next/image';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { GalleryLayout } from '~/config/enums';
 
@@ -35,6 +35,18 @@ export default function Photo({
     setCurrentPhoto(photo);
   };
 
+  const roundedCorners = [
+    '0px',
+    '4px',
+    '8px',
+    '16px',
+    '24px',
+    '32px',
+    '48px',
+    '999px',
+  ];
+  const roundedCornerValue = roundedCorners[roundedCorner / 10];
+
   const imageProps = {
     loader: ({ src }: ImageLoaderProps) => src,
     src: `/api/v1/photos/${photo.id}/thumbnail?variant=2`,
@@ -55,7 +67,8 @@ export default function Photo({
         <Image
           {...imageProps}
           alt={photo.title}
-          style={{ borderRadius: roundedCorner }}
+          className="cursor-pointer transition-normal duration-500"
+          style={{ borderRadius: roundedCornerValue }}
         />
       </div>
     );
@@ -63,11 +76,13 @@ export default function Photo({
 
   if (layout === GalleryLayout.Grid || layout === GalleryLayout.Grid1x1) {
     const className =
-      layout === GalleryLayout.Grid ? 'object-scale-down' : 'object-cover';
+      layout === GalleryLayout.Grid
+        ? 'object-scale-down transition-all duration-500'
+        : 'object-cover transition-all duration-500';
 
     return (
       <div
-        className="hover:border-base-content relative aspect-square cursor-pointer overflow-hidden hover:border"
+        className="relative aspect-square cursor-pointer hover:border"
         onClick={setPhoto}
       >
         <Image
@@ -75,7 +90,8 @@ export default function Photo({
           className={className}
           alt={photo.title}
           style={{
-            borderRadius: layout === GalleryLayout.Grid ? 0 : roundedCorner,
+            borderRadius:
+              layout === GalleryLayout.Grid ? 0 : roundedCornerValue,
           }}
         />
       </div>

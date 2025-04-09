@@ -1,9 +1,12 @@
+import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
 import { GalleryLayout, GroupBy } from '~/config/enums';
 import CloseIcon from '~/icons/close-icon';
+import Dashboard from '~/icons/dashboard';
+import GridView from '~/icons/grid-view';
 
 import RangeWithButtons from '../range-with-buttons';
 
@@ -85,18 +88,33 @@ export default function PhotosLayoutSetting({
       </div>
       <div className="space-y-4">
         <div className="space-y-2">
-          <div className="join m-auto mt-2">
+          <div className="m-auto mt-2 flex flex-wrap space-y-2 space-x-2">
             {Object.values(GalleryLayout).map((layoutType) => (
-              <input
+              <button
                 key={layoutType}
-                className="btn btn-ghost btn-outline join-item"
-                type="radio"
+                className={clsx(
+                  'btn flex h-14 w-32 flex-row',
+                  layout.layout === layoutType && 'btn-primary',
+                )}
                 name="options"
-                checked={layout.layout === layoutType}
                 disabled={layoutType === GalleryLayout.Masonry}
-                onChange={() => handleLayoutChange({ layout: layoutType })}
+                onClick={() => handleLayoutChange({ layout: layoutType })}
                 aria-label={localeMapping[layoutType]}
-              />
+              >
+                {layoutType === GalleryLayout.Grid && (
+                  <GridView className="size-5" />
+                )}
+                {layoutType === GalleryLayout.Justified && (
+                  <Dashboard className="size-5 rotate-90" />
+                )}
+                {layoutType === GalleryLayout.Grid1x1 && (
+                  <GridView className="size-5" />
+                )}
+                {layoutType === GalleryLayout.Masonry && (
+                  <Dashboard className="size-5" />
+                )}
+                {localeMapping[layoutType]}
+              </button>
             ))}
           </div>
         </div>
@@ -104,7 +122,7 @@ export default function PhotosLayoutSetting({
           <span className="block">{t('photos.size')}</span>
           <RangeWithButtons
             min={100}
-            max={500}
+            max={600}
             step={100}
             value={layout.size}
             onChange={(value) => handleLayoutChange({ size: value })}
@@ -121,12 +139,42 @@ export default function PhotosLayoutSetting({
         </div>
         <div className="space-y-2">
           <span className="block">{t('photos.cornerRadius')}</span>
-          <RangeWithButtons
-            min={0}
-            max={80}
-            value={layout.roundedCorner}
-            onChange={(value) => handleLayoutChange({ roundedCorner: value })}
-          />
+          <div className="w-full max-w-xs">
+            <input
+              type="range"
+              min={0}
+              disabled={layout.layout === GalleryLayout.Grid}
+              max={70}
+              value={layout.roundedCorner}
+              className="range"
+              step={10}
+              onChange={(value) =>
+                handleLayoutChange({
+                  roundedCorner: Number(value.target.value),
+                })
+              }
+            />
+            <div className="mt-2 flex justify-between px-2.5 text-xs">
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+            </div>
+            <div className="mt-2 flex justify-between px-2.5 text-xs">
+              <span>0</span>
+              <span>4</span>
+              <span>8</span>
+              <span>16</span>
+              <span>24</span>
+              <span>32</span>
+              <span>48</span>
+              <span>∞</span>
+            </div>
+          </div>
         </div>
         <div className="space-y-2">
           <span className="block">{t('photos.group')}</span>

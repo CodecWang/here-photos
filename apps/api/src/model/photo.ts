@@ -14,6 +14,7 @@ interface PhotoModel
   > {
   id: CreationOptional<number>;
   filePath: string;
+  tags?: string;
   checkSum: string;
   blurHash?: string;
   shotTime: Date;
@@ -35,6 +36,7 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
         unique: true,
       },
+      tags: DataTypes.STRING,
       checkSum: {
         type: DataTypes.CHAR(32),
         allowNull: false,
