@@ -25,9 +25,11 @@ export default function PageHeader({
           <ArrowBackIcon className="size-5" />
         </button>
       )}
-      <span className="sm:text-xl">{title}</span>
+      <span className="whitespace-nowrap sm:text-xl">{title}</span>
 
-      <div className="flex flex-1 items-center justify-end">{children}</div>
+      <div className="ml-3 flex w-[calc(100%-120px)] flex-1 items-center justify-end">
+        {children}
+      </div>
     </header>
   );
 }

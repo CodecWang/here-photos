@@ -64,8 +64,11 @@ export default function PhotoGroup({
         </div>
       ) : (
         <div
-          className="grid grid-cols-[repeat(auto-fill,minmax(min(14rem,100%),1fr))]"
-          style={{ gap: layout.spacing }}
+          className="grid"
+          style={{
+            gap: layout.spacing,
+            gridTemplateColumns: `repeat(auto-fill, minmax(min(14rem, 100%), 1fr))`,
+          }}
         >
           {photos.map((photo) => (
             <Photo
