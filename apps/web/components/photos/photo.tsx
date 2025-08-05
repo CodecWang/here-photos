@@ -67,7 +67,7 @@ export default function Photo({
         <Image
           {...imageProps}
           alt={photo.title}
-          className="cursor-pointer transition-normal duration-500"
+          className="cursor-pointer transition-normal duration-500 hover:shadow-2xl"
           style={{ borderRadius: roundedCornerValue }}
         />
       </div>
@@ -82,7 +82,7 @@ export default function Photo({
 
     return (
       <div
-        className="relative aspect-square cursor-pointer hover:border"
+        className="group relative aspect-square cursor-pointer hover:shadow-lg"
         onClick={setPhoto}
       >
         <Image

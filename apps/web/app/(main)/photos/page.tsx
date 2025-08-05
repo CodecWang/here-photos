@@ -4,8 +4,10 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import KeywordFilter from '~/components/keyword-filter';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
+import PhotosFilter from '~/components/photos/photos-filter';
 import PhotosLayoutSetting from '~/components/photos/photos-layout-setting';
 import IconButton from '~/components/ui/icon-button';
 import Upload from '~/components/upload';
@@ -20,12 +22,13 @@ import { groupPhotosByDate } from './utils';
 
 export default function Page() {
   const t = useTranslations();
-  const { navMode, setNavMode } = useNavMode();
+  const { navMode } = useNavMode();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
   const [layout, setLayout] = useState<PhotosLayout>(DEFAULT_PHOTOS_LAYOUT);
-  const [filters, setFilters] = useState('');
+  const [keyword, setKeyword] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -38,61 +41,29 @@ export default function Page() {
     if (!photos.length) return;
 
     const filteredPhotos = photos.filter((photo) => {
-      if (!filters) return true;
-      return photo.tags?.includes(filters);
+      if (!keyword) return true;
+      return photo.tags?.includes(keyword);
     });
 
     const groups = groupPhotosByDate(filteredPhotos, layout.groupBy);
     setPhotoGroups(groups);
-  }, [photos, layout.groupBy, filters]);
+  }, [photos, layout.groupBy, keyword]);
 
   return (
     <>
       <div
         className={clsx(
           'absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500',
-          openLayoutSetting && 'sm:right-80',
+          (openLayoutSetting || openFilter) && 'sm:right-80',
         )}
       >
         <PageHeader title={t('nav.photos')}>
-          <form
+          <KeywordFilter
             className="m-auto hidden max-w-[326px] overflow-x-auto whitespace-nowrap filter sm:block md:max-w-[598px]"
-            onReset={() => setFilters('')}
-          >
-            <input className="btn btn-square" type="reset" value="×" />
-            <input
-              className="btn"
-              type="radio"
-              name="frameworks"
-              aria-label="旅行"
-              checked={filters === '旅行'}
-              onChange={() => setFilters('旅行')}
-            />
-            <input
-              className="btn"
-              type="radio"
-              name="frameworks"
-              aria-label="摄影"
-              checked={filters === '摄影'}
-              onChange={() => setFilters('摄影')}
-            />
-            <input
-              className="btn"
-              type="radio"
-              name="frameworks"
-              aria-label="家庭"
-              checked={filters === '家庭'}
-              onChange={() => setFilters('家庭')}
-            />
-            <input
-              className="btn"
-              type="radio"
-              name="frameworks"
-              aria-label="宠物"
-              checked={filters === '宠物'}
-              onChange={() => setFilters('宠物')}
-            />
-          </form>
+            keywords={['旅行', '摄影', '家庭', '宠物', '美食']}
+            selectedKeyword={keyword}
+            onKeywordChange={setKeyword}
+          />
 
           <div className="whitespace-nowrap">
             {navMode === NavMode.Modern && <Upload />}
@@ -100,19 +71,20 @@ export default function Page() {
               active={openLayoutSetting}
               disabled={!photoGroups.length}
               tooltip={t('photos.layoutTip')}
-              onClick={() => setOpenLayoutSetting((prev) => !prev)}
+              onClick={() => {
+                setOpenFilter(false);
+                setOpenLayoutSetting((prev) => !prev);
+              }}
               icon={<TuneIcon className="size-5" />}
             />
-            {/* <IconButton
-            tooltip="Zen mode"
-            disabled={!photoGroups.length}
-            onClick={() => setNavMode(NavMode.Traditional)}
-            icon={<SelfImprovementIcon className="size-5" />}
-          /> */}
             <IconButton
               tooltip={t('photos.filterTip')}
               disabled={!photoGroups.length}
-              onClick={() => setNavMode(NavMode.Classic)}
+              // onClick={() => setNavMode(NavMode.Classic)}
+              onClick={() => {
+                setOpenLayoutSetting(false);
+                setOpenFilter((prev) => !prev);
+              }}
               icon={<FilterAltIcon className="size-5" />}
             />
           </div>
@@ -132,6 +104,12 @@ export default function Page() {
         open={openLayoutSetting}
         onChange={setLayout}
         onClose={() => setOpenLayoutSetting(false)}
+      />
+
+      <PhotosFilter
+        open={openFilter}
+        onChange={setLayout}
+        onClose={() => setOpenFilter(false)}
       />
     </>
   );
