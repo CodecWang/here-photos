@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/here-web-e2e"
+    },
+    {
+      "path": "./apps/here-web"
+    },
+    {
+      "path": "./apps/here-api"
+    },
+    {
+      "path": "./apps/here-api-e2e"
+    },
+    {
+      "path": "./libs/thumb-hash"
+    }
+  ]
+}

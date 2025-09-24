@@ -1,0 +1,10 @@
+{
+  "name": "@here-photos/here-web-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@here-photos/here-web"
+    ]
+  }
+}

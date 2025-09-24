@@ -1,0 +1,24 @@
+{
+  "name": "@here-photos/thumb-hash",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@here-photos/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "name": "thumb-hash"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@here-photos/here-api-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "here-api-e2e",
+    "implicitDependencies": [
+      "here-api"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/here-api-e2e/jest.config.ts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "here-api:build",
+          "here-api:serve"
+        ]
+      }
+    }
+  }
+}

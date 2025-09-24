@@ -1,6 +1,0 @@
-@import 'tailwindcss';
-@plugin "daisyui";
-
-.btn {
-  @apply rounded-full font-normal;
-}

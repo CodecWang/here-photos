@@ -1,10 +1,9 @@
 {
   "recommendations": [
     "nrwl.angular-console",
-    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
     "ms-playwright.playwright",
-    "firsttris.vscode-jest-runner",
-    "bradlc.vscode-tailwindcss"
+    "firsttris.vscode-jest-runner"
   ]
 }

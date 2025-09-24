@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@here-photos/thumb-hash": ["libs/thumb-hash/src/index.ts"]
+    },
+    "noEmit": true
+  },
+  "files": ["test-import.ts"]
+}
