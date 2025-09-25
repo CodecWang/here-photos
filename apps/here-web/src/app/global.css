@@ -5,3 +5,8 @@
 .btn {
   @apply rounded-full font-normal;
 }
+
+.ar-glass {
+  @apply backdrop-blur-md bg-white/10 border-white/20;
+  /* @apply backdrop-blur-md bg-white/10 border-white/20 shadow-lg; */
+}

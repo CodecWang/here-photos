@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import KeywordFilter from '~/components/keyword-filter';
 import PageHeader from '~/components/page-header';
@@ -30,6 +30,8 @@ export default function Page() {
   const [layout, setLayout] = useState<PhotosLayout>(DEFAULT_PHOTOS_LAYOUT);
   const [keyword, setKeyword] = useState<string | null>(null);
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     (async () => {
       const rawPhotos = await request('/api/v1/photos');
@@ -54,18 +56,21 @@ export default function Page() {
       <div
         className={clsx(
           'absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500',
-          (openLayoutSetting || openFilter) && 'sm:right-80',
+          (openLayoutSetting || openFilter) && 'sm:right-80'
         )}
+        ref={scrollRef}
       >
-        <PageHeader title={t('nav.photos')}>
-          <KeywordFilter
-            className="m-auto hidden max-w-[326px] overflow-x-auto whitespace-nowrap filter sm:block md:max-w-[598px]"
-            keywords={['旅行', '摄影', '家庭', '宠物', '美食']}
-            selectedKeyword={keyword}
-            onKeywordChange={setKeyword}
-          />
+        <PageHeader title={t('nav.photos')} scrollContainer={scrollRef}>
+          <div className="rounded-full ar-glass p-1 m-auto border shadow">
+            <KeywordFilter
+              className="m-auto hidden max-w-[326px] overflow-x-auto whitespace-nowrap filter sm:block md:max-w-[598px]"
+              keywords={['旅行', '摄影', '家庭', '宠物', '美食']}
+              selectedKeyword={keyword}
+              onKeywordChange={setKeyword}
+            />
+          </div>
 
-          <div className="whitespace-nowrap">
+          <div className="whitespace-nowrap rounded-full ar-glass p-1 border shadow">
             {navMode === NavMode.Modern && <Upload />}
             <IconButton
               active={openLayoutSetting}
@@ -91,7 +96,7 @@ export default function Page() {
         </PageHeader>
 
         <div
-          className="px-0 pt-2 sm:px-4"
+          className="px-0 pt-2"
           style={{
             animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
           }}

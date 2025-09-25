@@ -20,7 +20,7 @@ export default function Page() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [pinnedAlbums, setPinnedAlbums] = useState<Album[]>([]);
   const [albumGroups, setAlbumGroups] = useState<AlbumGroup[]>([]);
-  const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.Year);
+  const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.None);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +70,7 @@ export default function Page() {
             onClick={() => {
               (
                 document.getElementById(
-                  'create-album-modal',
+                  'create-album-modal'
                 ) as HTMLDialogElement
               )?.showModal();
             }}
@@ -85,11 +85,24 @@ export default function Page() {
 
       <div className="space-y-6 p-4">
         {pinnedAlbums.length > 0 && (
-          <div className="bg-base-300 rounded-box grid grid-flow-col gap-4 space-x-2 p-4 whitespace-nowrap">
-            {pinnedAlbums.map((album) => (
-              <Album key={album.id} album={album} />
-            ))}
-          </div>
+          <>
+            <div className="w-full border-b border-base-200 py-2">
+              <span className="text-2xl font-bold">Pinned</span>
+            </div>
+            <div className="overflow-x-auto">
+              <div className="flex gap-4 w-max">
+                {pinnedAlbums.map((album) => (
+                  <div key={album.id} className="flex-none w-32">
+                    <Album
+                      album={album}
+                      showPhotosCount={false}
+                      showPinButton={false}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
         )}
 
         {albumGroups.map((group) => (

@@ -34,7 +34,9 @@
     "confirm": "Confirm",
     "delete": "Delete",
     "close": "Close",
-    "search": "Search"
+    "search": "Search",
+    "pin": "Pin",
+    "unpin": "Unpin"
   },
   "photos": {
     "upload": "Upload",

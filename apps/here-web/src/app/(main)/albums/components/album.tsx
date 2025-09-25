@@ -3,45 +3,60 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import IconButton from '~/components/ui/icon-button';
-import CheckIcon from '~/icons/check-icon';
-// import { AlbumOptionsDropdown } from './album-options-dropdown';
+import KeepIcon from '~/icons/keep-icon';
+import KeepOffIcon from '~/icons/keep-off-icon';
 
 interface AlbumProps {
   album: Album;
+  showPhotosCount?: boolean;
+  showPinButton?: boolean;
 }
 
-export default function Album({ album }: AlbumProps) {
+export default function Album({
+  album,
+  showPhotosCount = true,
+  showPinButton = true,
+}: AlbumProps) {
   const t = useTranslations();
   return (
     <Link href={`/albums/${album.id}`}>
-      <div className="rounded-box relative overflow-hidden shadow hover:shadow-2xl">
-        <div className="bg-base-200 relative aspect-square">
-          {album.cover && (
-            <Image
-              loader={({ src }: ImageLoaderProps) => src}
-              src={`/api/v1/photos/${album.cover.id}/thumbnail?variant=2`}
-              fill={true}
-              style={{ objectFit: 'cover' }}
-              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              alt=""
-            />
+      <div className="rounded-3xl relative overflow-hidden shadow hover:shadow-2xl group aspect-square">
+        {album.cover && (
+          <Image
+            loader={({ src }: ImageLoaderProps) => src}
+            src={`/api/v1/photos/${album.cover.id}/thumbnail?variant=2`}
+            fill={true}
+            style={{ objectFit: 'cover' }}
+            alt={album.title}
+          />
+        )}
+
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+          <h3 className="truncate font-bold text-white">{album.title}</h3>
+          {showPhotosCount && (
+            <span className="text-white/80 text-sm block sm:hidden sm:group-hover:block">
+              {album.photoCount ? `${album.photoCount} photos` : 'Empty'}
+            </span>
           )}
         </div>
-        <div className="px-4 py-2">
-          <h3 className="truncate text-lg">{album.title}</h3>
-          <span className="text-base-content/50 text-sm">
-            {album.photoCount ? `${album.photoCount} photos` : 'Empty'}
-          </span>
-        </div>
 
-        <IconButton
-          tooltip={t('action.confirm')}
-          className="absolute right-2 top-2"
-          // onClick={addNewDirectory}
-          icon={<CheckIcon className="size-5" />}
-        />
-
-        {/* <AlbumOptionsDropdown /> */}
+        {showPinButton && (
+          <IconButton
+            tooltip={album.pinned ? t('action.unpin') : t('action.pin')}
+            className="absolute right-2 bottom-2 block sm:hidden sm:group-hover:block"
+            icon={
+              album.pinned ? (
+                <KeepOffIcon className="size-5 rotate-45" />
+              ) : (
+                <KeepIcon className="size-5 rotate-45" />
+              )
+            }
+            onClick={(e) => {
+              e.preventDefault();
+              console.log('clicked');
+            }}
+          />
+        )}
       </div>
     </Link>
   );

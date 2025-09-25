@@ -1,7 +1,7 @@
 import { GalleryLayout, GroupBy, NavMode } from './enums';
 
 export const DEFAULT_PHOTOS_LAYOUT: PhotosLayout = {
-  groupBy: GroupBy.Month,
+  groupBy: GroupBy.None,
   layout: GalleryLayout.Justified,
   spacing: 2,
   size: 220,

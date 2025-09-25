@@ -7,4 +7,5 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
+  "nxConsole.generateAiAgentRules": true
 }
