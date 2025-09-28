@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import SearchIcon from '~/icons/search-icon';
 
 export default function NavBar() {
   const t = useTranslations();
@@ -10,7 +11,7 @@ export default function NavBar() {
   return (
     <div className="absolute bottom-0 flex w-full flex-col items-center transition-all">
       <nav
-        className="bg-base-200 mb-4 rounded-full shadow-2xl"
+        className="ar-glass border bg-base-200 mb-4 rounded-full shadow-2xl"
         style={{
           animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
         }}
@@ -20,7 +21,7 @@ export default function NavBar() {
             <Link
               className={clsx(
                 pathname.startsWith('/photos') && 'menu-active',
-                'rounded-full',
+                'rounded-full'
               )}
               href="/photos"
             >
@@ -32,7 +33,7 @@ export default function NavBar() {
             <Link
               className={clsx(
                 pathname.startsWith('/albums') && 'menu-active',
-                'rounded-full',
+                'rounded-full'
               )}
               href="/albums"
             >
@@ -40,16 +41,16 @@ export default function NavBar() {
               {t('nav.albums')}
             </Link>
           </li>
-          {/* <li>
+          <li>
             <button className="btn btn-circle btn-ghost btn-sm">
               <SearchIcon className="size-5" />
             </button>
-          </li> */}
+          </li>
           <li>
             <Link
               className={clsx(
                 pathname.startsWith('/explore') && 'menu-active',
-                'rounded-full',
+                'rounded-full'
               )}
               href="/explore"
             >
@@ -61,7 +62,7 @@ export default function NavBar() {
             <Link
               className={clsx(
                 pathname.startsWith('/my') && 'menu-active',
-                'rounded-full',
+                'rounded-full'
               )}
               href="/my"
             >

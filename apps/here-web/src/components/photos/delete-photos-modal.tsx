@@ -1,41 +1,36 @@
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import { request } from '~/utils/request';
 
-interface DeleteAlbumModalProps {
-  album: Album;
-}
-
-export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
-  const router = useRouter();
+export default function DeletePhotosModal({
+  photoIds,
+  onConfirm,
+}: {
+  photoIds: number[];
+  onConfirm?: () => void;
+}) {
   const t = useTranslations();
   const [loading, setLoading] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const deleteAlbum = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const deletePhotos = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     setLoading(true);
-    const response = await request(`/api/v1/albums`, {
+    const response = await request(`/api/v1/photos`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ids: [album.id] }),
+      body: JSON.stringify({ ids: photoIds }),
     });
-
-    console.log('>>> response:', response);
 
     if (response.code === 0) {
       dialogRef.current?.close();
-      router.replace('/albums');
       setLoading(false);
+      onConfirm?.();
     }
-    // redirect to albums page
-    // window.location.href = '/albums';
-    // response && router.replace('/albums/');
   };
 
   const closeModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,23 +39,21 @@ export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
   };
 
   return (
-    <dialog id="delete-album-modal" className="modal" ref={dialogRef}>
+    <dialog id="delete-photos-modal" className="modal" ref={dialogRef}>
       <div className="modal-box">
-        <h3 className="text-lg font-bold">{t('albums.deleteAlbum')}</h3>
+        <h3 className="text-lg font-bold">{t('action.delete')}</h3>
         <p className="py-4">
-          Deleting an album is permanent. Photos and videos that were in a
-          deleted album remain in Here Photos.
+          Temp: 你将要删除xxx张照片，删除后可以在回收站找回
         </p>
         <div className="modal-action">
           <form method="dialog space-x-2">
-            <button className="btn" onClick={deleteAlbum}>
+            <button className="btn" onClick={deletePhotos}>
               {loading ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
                 t('action.confirm')
               )}
             </button>
-            {/* if there is a button in form, it will close the modal */}
             <button className="btn" onClick={closeModal}>
               {t('action.close')}
             </button>

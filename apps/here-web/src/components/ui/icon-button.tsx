@@ -6,7 +6,7 @@ interface IconButtonProps {
   tooltip: string;
   active?: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function IconButton({
@@ -26,7 +26,7 @@ export default function IconButton({
         className={clsx(
           'btn btn-circle btn-ghost',
           active && 'btn-active',
-          disabled && 'btn-disabled',
+          disabled && 'btn-disabled'
         )}
         onClick={onClick}
       >

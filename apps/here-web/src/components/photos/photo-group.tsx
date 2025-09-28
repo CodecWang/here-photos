@@ -31,7 +31,7 @@ export default function PhotoGroup({
           vertical: layout.spacing ?? 0,
         },
         targetRowHeight: layout.size,
-      },
+      }
     );
   }, [photos, layout.spacing, layout.layout, layout.size, viewportWidth]);
 

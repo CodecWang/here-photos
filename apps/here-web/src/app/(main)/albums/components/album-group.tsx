@@ -5,6 +5,7 @@ import { CACHE_KEY } from '~/config/constants';
 import ChevronRightIcon from '~/icons/chevron-right-icon';
 
 import Album from './album';
+import { useTranslations } from 'next-intl';
 
 interface AlbumGroupProps {
   title: string;
@@ -31,6 +32,7 @@ const getIsCollapsed = (title: string) => {
 
 export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
   const [isCollapsed, setIsCollapsed] = useState(getIsCollapsed(title));
+  const t = useTranslations();
 
   const toggleCollapse = () => {
     setIsCollapsed(() => {
@@ -53,23 +55,23 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
   return (
     <div>
       {title && count && (
-        <div className="border-base-content/10 mb-4 w-full border-b py-2">
-          <div
-            className="flex items-center"
-            style={{
-              animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
-            }}
-            onClick={toggleCollapse}
-          >
-            <ChevronRightIcon
-              className={clsx(
-                'inline-block size-6 transition-all duration-300',
-                isCollapsed ? 'rotate-0' : 'rotate-90',
-              )}
-            />
-            <span className="mx-2 text-2xl font-medium">{title}</span>
+        <div className="mb-4 w-full border-b border-base-200 py-2">
+          <div className="flex items-center">
+            <button
+              className="btn btn-circle btn-ghost"
+              onClick={toggleCollapse}
+            >
+              <ChevronRightIcon
+                className={clsx(
+                  'inline-block size-6 transition-all duration-300',
+                  isCollapsed ? 'rotate-0' : 'rotate-90'
+                )}
+              />
+            </button>
+
+            <span className="mx-2 text-2xl font-bold">{title}</span>
             <span className="text-base-content/50 mt-1 text-sm">
-              ({count} albums)
+              {t('albums.albumsCount', { count })}
             </span>
           </div>
         </div>
@@ -77,7 +79,7 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
 
       {!isCollapsed && (
         <div
-          className="grid grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),1fr))] gap-4"
+          className="grid grid-cols-[repeat(auto-fill,minmax(min(12rem,100%),1fr))] gap-4"
           style={{
             animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
           }}

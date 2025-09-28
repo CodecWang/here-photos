@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-// import AddPhotos from '~/components/add-photos';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
 import PhotosLayoutSetting from '~/components/photos/photos-layout-setting';
@@ -16,9 +15,13 @@ import { request } from '~/utils/request';
 
 import { groupPhotosByDate } from '../../photos/utils';
 import DeleteAlbumModal from '../components/delete-album-modal';
+import { useAtom } from 'jotai';
+import { photosAtom } from '~/atoms';
+import PhotoActions from '~/components/photos/photo-actions';
 
 export default function Page({ params }: { params: { id: string } }) {
   const t = useTranslations();
+  const [photos, setPhotos] = useAtom(photosAtom);
   const [album, setAlbum] = useState<Album>();
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
@@ -32,13 +35,18 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [params.id]);
 
   useEffect(() => {
-    if (!album?.photos.length) return;
+    if (!album) return;
+    if (!album.photos.length) return;
 
     console.log('>>> regrouping photos');
 
-    const groups = groupPhotosByDate(album.photos, layout.groupBy);
+    setPhotos(album.photos);
+  }, [album, setPhotos]);
+
+  useEffect(() => {
+    const groups = groupPhotosByDate(photos, layout.groupBy);
     setPhotoGroups(groups);
-  }, [album?.photos, layout.groupBy]);
+  }, [photos, layout.groupBy]);
 
   if (!album) {
     return <div>Loading...</div>;
@@ -49,10 +57,9 @@ export default function Page({ params }: { params: { id: string } }) {
       <div
         className={clsx(
           'absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500',
-          openLayoutSetting && 'sm:right-80',
+          openLayoutSetting && 'sm:right-80'
         )}
       >
-        {/* <AddPhotos /> */}
         <PageHeader title={album.title} backTarget="/albums">
           <button className="btn btn-ghost">
             <AddPhotoAlternateIcon className="size-5" />
@@ -72,15 +79,17 @@ export default function Page({ params }: { params: { id: string } }) {
             onClick={() =>
               (
                 document.getElementById(
-                  'delete-album-modal',
+                  'delete-album-modal'
                 ) as HTMLDialogElement
               )?.showModal()
             }
           >
             {t('action.delete')}
           </button>
+
+          <PhotoActions />
         </PageHeader>
-        <div className="px-0 pt-2 sm:px-4">
+        <div className="pt-2">
           {!photoGroups.length && (
             <div>
               empty

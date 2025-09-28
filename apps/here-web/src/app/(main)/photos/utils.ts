@@ -1,6 +1,10 @@
 import { GroupBy } from '~/config/enums';
 
-export function groupPhotosByDate(photos: Photo[], groupBy?: GroupBy) {
+export function groupPhotosByDate(
+  photos: Photo[],
+  groupBy?: GroupBy,
+  locale = 'en-US'
+) {
   if (!groupBy || groupBy === GroupBy.None) {
     return [{ photos, title: '' }];
   }
@@ -19,16 +23,13 @@ export function groupPhotosByDate(photos: Photo[], groupBy?: GroupBy) {
   const options = optionsMap[groupBy];
   const groupedPhotos = photos.reduce(
     (acc: { [key: string]: Photo[] }, photo) => {
-      const date = new Date(photo.shotTime).toLocaleDateString(
-        'en-US',
-        options,
-      );
+      const date = new Date(photo.shotTime).toLocaleDateString(locale, options);
 
       if (!acc[date]) acc[date] = [];
       acc[date].push(photo);
       return acc;
     },
-    {},
+    {}
   );
 
   return Object.entries(groupedPhotos).map(([date, photos]) => ({
