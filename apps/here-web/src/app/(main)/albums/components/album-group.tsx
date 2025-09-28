@@ -5,6 +5,7 @@ import { CACHE_KEY } from '~/config/constants';
 import ChevronRightIcon from '~/icons/chevron-right-icon';
 
 import Album from './album';
+import { useTranslations } from 'next-intl';
 
 interface AlbumGroupProps {
   title: string;
@@ -31,6 +32,7 @@ const getIsCollapsed = (title: string) => {
 
 export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
   const [isCollapsed, setIsCollapsed] = useState(getIsCollapsed(title));
+  const t = useTranslations();
 
   const toggleCollapse = () => {
     setIsCollapsed(() => {
@@ -69,7 +71,7 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
 
             <span className="mx-2 text-2xl font-bold">{title}</span>
             <span className="text-base-content/50 mt-1 text-sm">
-              ({count} albums)
+              {t('albums.albumsCount', { count })}
             </span>
           </div>
         </div>

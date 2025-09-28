@@ -1,20 +1,13 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-import CloseIcon from '~/icons/close-icon';
 import { request } from '~/utils/request';
-
-enum AlbumType {
-  Album,
-  SmartAlbum,
-}
 
 export default function CreateAlbumModal() {
   const t = useTranslations();
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [albumType, setAlbumType] = useState<AlbumType>(AlbumType.Album);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -35,9 +28,6 @@ export default function CreateAlbumModal() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    // for (var [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
 
     const response = await request(`/api/v1/albums`, {
       method: 'POST',
@@ -70,61 +60,6 @@ export default function CreateAlbumModal() {
     </label>
   );
 
-  const SmartAlbum = () => (
-    <div>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Album name</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full max-w-xs"
-        />
-      </label>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Album name</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full max-w-xs"
-        />
-      </label>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Album name</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full max-w-xs"
-        />
-      </label>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Album name</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full max-w-xs"
-        />
-      </label>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Album name</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full max-w-xs"
-        />
-      </label>
-    </div>
-  );
-
   return (
     <dialog
       ref={dialogRef}
@@ -139,21 +74,11 @@ export default function CreateAlbumModal() {
               type="radio"
               name="options"
               aria-label={t('albums.album')}
-              checked={albumType === AlbumType.Album}
-              onChange={() => setAlbumType(AlbumType.Album)}
-            />
-            <input
-              className="btn join-item"
-              type="radio"
-              name="options"
-              disabled
-              aria-label={t('albums.smartAlbum')}
-              checked={albumType === AlbumType.SmartAlbum}
-              onChange={() => setAlbumType(AlbumType.SmartAlbum)}
+              checked={true}
             />
           </div>
           <div className="py-4">
-            {albumType === AlbumType.Album ? <Album /> : <SmartAlbum />}
+            <Album />
           </div>
           <div className="modal-action">
             <button

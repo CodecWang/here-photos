@@ -19,6 +19,7 @@ interface Photo {
   shotTime: Date;
   blurHash: string;
   thumbnails: any[];
+  selected?: boolean;
 }
 
 interface PhotoGroup {

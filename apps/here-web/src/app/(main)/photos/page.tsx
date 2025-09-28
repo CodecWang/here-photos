@@ -1,8 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import KeywordFilter from '~/components/keyword-filter';
 import PageHeader from '~/components/page-header';
@@ -19,11 +19,15 @@ import { request } from '~/utils/request';
 
 import { useNavMode } from '../nav-provider';
 import { groupPhotosByDate } from './utils';
+import { useAtom } from 'jotai';
+import { photosAtom } from '~/atoms';
+import PhotoActions from '~/components/photos/photo-actions';
 
 export default function Page() {
+  const locale = useLocale();
   const t = useTranslations();
   const { navMode } = useNavMode();
-  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [photos, setPhotos] = useAtom(photosAtom);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
@@ -32,12 +36,14 @@ export default function Page() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const fetchPhotos = useCallback(async () => {
+    const rawPhotos = await request('/api/v1/photos');
+    rawPhotos && setPhotos(rawPhotos.data);
+  }, [setPhotos]);
+
   useEffect(() => {
-    (async () => {
-      const rawPhotos = await request('/api/v1/photos');
-      rawPhotos && setPhotos(rawPhotos.data);
-    })();
-  }, []);
+    fetchPhotos();
+  }, [fetchPhotos]);
 
   useEffect(() => {
     if (!photos.length) return;
@@ -47,9 +53,9 @@ export default function Page() {
       return photo.tags?.includes(keyword);
     });
 
-    const groups = groupPhotosByDate(filteredPhotos, layout.groupBy);
+    const groups = groupPhotosByDate(filteredPhotos, layout.groupBy, locale);
     setPhotoGroups(groups);
-  }, [photos, layout.groupBy, keyword]);
+  }, [photos, layout.groupBy, keyword, locale]);
 
   return (
     <>
@@ -61,7 +67,7 @@ export default function Page() {
         ref={scrollRef}
       >
         <PageHeader title={t('nav.photos')} scrollContainer={scrollRef}>
-          <div className="rounded-full ar-glass p-1 m-auto border shadow">
+          <div className="rounded-full ar-action-wrap m-auto">
             <KeywordFilter
               className="m-auto hidden max-w-[326px] overflow-x-auto whitespace-nowrap filter sm:block md:max-w-[598px]"
               keywords={['旅行', '摄影', '家庭', '宠物', '美食']}
@@ -70,7 +76,7 @@ export default function Page() {
             />
           </div>
 
-          <div className="whitespace-nowrap rounded-full ar-glass p-1 border shadow">
+          <div className="whitespace-nowrap ar-action-wrap">
             {navMode === NavMode.Modern && <Upload />}
             <IconButton
               active={openLayoutSetting}
@@ -93,6 +99,11 @@ export default function Page() {
               icon={<FilterAltIcon className="size-5" />}
             />
           </div>
+
+          <PhotoActions
+            onDelete={() => fetchPhotos()}
+            onAddToAlbum={() => fetchPhotos()}
+          />
         </PageHeader>
 
         <div

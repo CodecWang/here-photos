@@ -36,7 +36,8 @@
     "close": "关闭",
     "search": "搜索",
     "pin": "置顶",
-    "unpin": "取消置顶"
+    "unpin": "取消置顶",
+    "share": "分享"
   },
   "photos": {
     "upload": "上传",
@@ -55,7 +56,8 @@
     "groupByDay": "按天分组",
     "groupByMonth": "按月分组",
     "groupByYear": "按年份分组",
-    "resetToDefault": "恢复默认"
+    "resetToDefault": "恢复默认",
+    "addToAlbum": "添加到相册"
   },
   "albums": {
     "createAlbum": "创建相册",
@@ -65,6 +67,8 @@
     "groupByOwner": "按拥有者分组",
     "album": "相册",
     "smartAlbum": "智能相册",
-    "albumName": "相册名称"
+    "albumName": "相册名称",
+    "deleteAlbum": "删除相册？",
+    "albumsCount": "{count} 个相册"
   }
 }

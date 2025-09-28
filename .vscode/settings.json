@@ -7,5 +7,7 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
-  "nxConsole.generateAiAgentRules": true
+  "nxConsole.generateAiAgentRules": true,
+  "i18n-ally.localesPaths": ["apps/here-web/src/locales"],
+  "i18n-ally.keystyle": "nested"
 }

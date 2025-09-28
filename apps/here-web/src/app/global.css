@@ -10,3 +10,7 @@
   @apply backdrop-blur-md bg-white/10 border-white/20;
   /* @apply backdrop-blur-md bg-white/10 border-white/20 shadow-lg; */
 }
+
+.ar-action-wrap {
+  @apply rounded-full ar-glass p-1 border shadow;
+}

@@ -1,11 +1,14 @@
 import { thumbHashToDataURL } from '@here-photos/thumb-hash';
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 import Image, { ImageLoaderProps } from 'next/image';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { GalleryLayout } from '~/config/enums';
 
 import { usePhotos } from './context';
+import { useSetAtom } from 'jotai';
+import { photosAtom } from '~/atoms';
+import clsx from 'clsx';
 
 interface PhotoProps {
   photo: Photo;
@@ -26,6 +29,7 @@ export default function Photo({
   roundedCorner = 0,
 }: PhotoProps) {
   const { setCurrentPhoto } = usePhotos();
+  const setPhotos = useSetAtom(photosAtom);
 
   const blurDataURL = useMemo(() => {
     return thumbHashToDataURL(Buffer.from(photo.blurHash, 'base64'));
@@ -60,7 +64,7 @@ export default function Photo({
     const { width, height, top, left } = position;
     return (
       <div
-        className="absolute cursor-pointer overflow-hidden"
+        className="absolute cursor-pointer overflow-hidden group bg-base-300"
         style={{ top, left, width, height }}
         onClick={setPhoto}
       >
@@ -68,8 +72,43 @@ export default function Photo({
           {...imageProps}
           alt={photo.title}
           className="cursor-pointer transition-normal duration-500 hover:shadow-2xl"
-          style={{ borderRadius: roundedCornerValue }}
+          style={{
+            borderRadius: roundedCornerValue,
+            padding: photo.selected ? 20 : 0,
+            objectFit: 'contain',
+          }}
         />
+        <div
+          className={clsx(
+            'absolute top-0 left-0 right-0 p-2',
+            photo.selected
+              ? 'flex'
+              : 'bg-gradient-to-b from-black/70 to-transparent hidden group-hover:flex'
+          )}
+        >
+          <input
+            type="checkbox"
+            checked={photo.selected}
+            className="checkbox rounded-full ml-auto"
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => {
+              if (e.target.checked) {
+                setPhotos((prev) =>
+                  prev.map((p) =>
+                    p.id === photo.id ? { ...p, selected: true } : p
+                  )
+                );
+              } else {
+                console.log('deselected');
+                setPhotos((prev) =>
+                  prev.map((p) =>
+                    p.id === photo.id ? { ...p, selected: false } : p
+                  )
+                );
+              }
+            }}
+          />
+        </div>
       </div>
     );
   }

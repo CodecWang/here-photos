@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.22",
+    "jotai": "^2.15.0",
     "justified-layout": "^4.1.0",
     "next": "~15.2.4",
     "next-intl": "^4.3.9",

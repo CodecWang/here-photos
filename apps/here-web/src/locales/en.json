@@ -36,7 +36,8 @@
     "close": "Close",
     "search": "Search",
     "pin": "Pin",
-    "unpin": "Unpin"
+    "unpin": "Unpin",
+    "share": "Share"
   },
   "photos": {
     "upload": "Upload",
@@ -55,7 +56,8 @@
     "groupByDay": "Group by day",
     "groupByMonth": "Group by month",
     "groupByYear": "Group by year",
-    "resetToDefault": "Reset to default"
+    "resetToDefault": "Reset to default",
+    "addToAlbum": "Add to album"
   },
   "albums": {
     "createAlbum": "Create Album",
@@ -65,6 +67,8 @@
     "groupByOwner": "Group by owner",
     "album": "Album",
     "smartAlbum": "Smart Album",
-    "albumName": "Album name"
+    "albumName": "Album name",
+    "deleteAlbum": "Delete album?",
+    "albumsCount": "{count, plural, one {# album} other {# albums}}"
   }
 }
