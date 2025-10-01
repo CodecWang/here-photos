@@ -1,9 +1,9 @@
 {
-  "name": "@here-photos/here-api",
+  "name": "@here-photos/here-worker",
   "version": "0.0.1",
   "private": true,
   "nx": {
-    "name": "here-api",
+    "name": "here-worker",
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",
@@ -13,15 +13,15 @@
         "defaultConfiguration": "production",
         "options": {
           "platform": "node",
-          "outputPath": "apps/here-api/dist",
+          "outputPath": "apps/here-worker/dist",
           "format": [
             "cjs"
           ],
           "bundle": false,
-          "main": "apps/here-api/src/main.ts",
-          "tsConfig": "apps/here-api/tsconfig.app.json",
+          "main": "apps/here-worker/src/main.ts",
+          "tsConfig": "apps/here-worker/tsconfig.app.json",
           "assets": [
-            "apps/here-api/src/assets"
+            "apps/here-worker/src/assets"
           ],
           "esbuildOptions": {
             "sourcemap": true,
@@ -49,8 +49,8 @@
         "cache": true,
         "executor": "@nx/js:prune-lockfile",
         "outputs": [
-          "{workspaceRoot}/apps/here-api/dist/package.json",
-          "{workspaceRoot}/apps/here-api/dist/pnpm-lock.yaml"
+          "{workspaceRoot}/apps/here-worker/dist/package.json",
+          "{workspaceRoot}/apps/here-worker/dist/pnpm-lock.yaml"
         ],
         "options": {
           "buildTarget": "build"
@@ -62,7 +62,7 @@
         ],
         "cache": true,
         "outputs": [
-          "{workspaceRoot}/apps/here-api/dist/workspace_modules"
+          "{workspaceRoot}/apps/here-worker/dist/workspace_modules"
         ],
         "executor": "@nx/js:copy-workspace-modules",
         "options": {
@@ -84,15 +84,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "here-api:build",
+          "buildTarget": "here-worker:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "here-api:build:development"
+            "buildTarget": "here-worker:build:development"
           },
           "production": {
-            "buildTarget": "here-api:build:production"
+            "buildTarget": "here-worker:build:production"
           }
         }
       },
@@ -104,12 +104,7 @@
     }
   },
   "dependencies": {
-    "@koa/router": "^14.0.0",
-    "koa": "~2.14.1",
-    "koa-body": "^6.0.1",
-    "zod": "^4.1.11"
-  },
-  "devDependencies": {
-    "@types/koa__router": "^12.0.4"
+    "exif-reader": "^2.0.2",
+    "sharp": "^0.34.4"
   }
 }

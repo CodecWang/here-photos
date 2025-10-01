@@ -1,0 +1,27 @@
+{
+  "name": "@here-photos/db",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@here-photos/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "name": "db"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.16.2"
+  }
+}

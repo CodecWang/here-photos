@@ -1,22 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "dist",
-    // "module": "nodenext",
+    "module": "nodenext",
     "types": ["node"],
-    "rootDir": ".",
-    // "moduleResolution": "nodenext",
+    "rootDir": "src",
+    "moduleResolution": "nodenext",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "paths": {
       "@here-photos/db": ["../../libs/db/src/index.ts"],
-      "@here-photos/queue": ["../../libs/queue/src/index.ts"]
+      "@here-photos/queue": ["../../libs/queue/src/index.ts"],
+      "@here-photos/thumb-hash": ["../../libs/thumb-hash/src/index.ts"]
     }
   },
   "include": [
     "src/**/*.ts",
     "../../libs/db/src/**/*.ts",
-    "../../libs/queue/src/**/*.ts"
+    "../../libs/queue/src/**/*.ts",
+    "../../libs/thumb-hash/src/**/*.ts"
   ],
   "exclude": [
     "out-tsc",
@@ -26,16 +27,20 @@
     "src/**/*.test.ts",
     "../../libs/db/src/**/*.spec.ts",
     "../../libs/queue/src/**/*.spec.ts",
+    "../../libs/thumb-hash/src/**/*.spec.ts",
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
   "references": [
     {
-      "path": "../../libs/queue/tsconfig.lib.json"
+      "path": "../../libs/thumb-hash/tsconfig.lib.json"
     },
     {
       "path": "../../libs/db/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/queue/tsconfig.lib.json"
     }
   ]
 }

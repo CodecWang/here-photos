@@ -18,6 +18,8 @@
     "target": "es2022",
     "customConditions": ["@here-photos/source"],
     "paths": {
+      "@here-photos/db": ["libs/db/src/index.ts"],
+      "@here-photos/queue": ["libs/queue/src/index.ts"],
       "@here-photos/thumb-hash": ["libs/thumb-hash/src/index.ts"]
     }
   }

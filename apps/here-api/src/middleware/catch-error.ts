@@ -1,5 +1,6 @@
+// import { Prisma } from '@prisma/client';
 import type { Context, Next } from 'koa';
-import { UniqueConstraintError } from 'sequelize';
+import z, { ZodError } from 'zod';
 
 export async function catchError(ctx: Context, next: Next) {
   try {
@@ -13,21 +14,34 @@ export async function catchError(ctx: Context, next: Next) {
       };
     }
   } catch (error) {
-    // @ts-ignore
-    let { message } = error;
-    // @ts-ignore
-    let status = error.status ?? 500;
-
-    if (error instanceof UniqueConstraintError) {
-      status = 400;
-      message = error.errors.map((e) => e.message).join('\n');
+    if (error instanceof ZodError) {
+      ctx.status = 400;
+      ctx.body = {
+        code: 400,
+        data: null,
+        message: z.treeifyError(error),
+      };
+      return;
     }
 
-    ctx.status = status;
+    // if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    //   // https://www.prisma.io/docs/reference/api-reference/error-reference
+    //   if (error.code === 'P2002') {
+    //     ctx.status = 400;
+    //     ctx.body = {
+    //       code: 409,
+    //       data: null,
+    //       message: 'Unique constraint failed',
+    //     };
+    //     return;
+    //   }
+    // }
+
+    ctx.status = 500;
     ctx.body = {
-      message,
-      code: status, // TODO(arthur): use status for now, use define ctx.code later.
+      code: 500,
       data: null,
+      message: error instanceof Error ? error.message : 'Unknown error',
     };
 
     // ctx.app.emit('error', error, ctx); // 触发错误事件
