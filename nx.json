@@ -58,7 +58,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/here-api-e2e/**/*"]
+      "exclude": ["apps/here-api-e2e/**/*", "apps/here-worker-e2e/**/*"]
     }
   ],
   "targetDefaults": {
@@ -66,6 +66,11 @@
       "dependsOn": ["^build"]
     },
     "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "@nx/js:tsc": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]

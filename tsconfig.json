@@ -17,6 +17,18 @@
     },
     {
       "path": "./libs/thumb-hash"
+    },
+    {
+      "path": "./apps/here-worker-e2e"
+    },
+    {
+      "path": "./apps/here-worker"
+    },
+    {
+      "path": "./libs/db"
+    },
+    {
+      "path": "./libs/queue"
     }
   ]
 }

@@ -10,8 +10,10 @@ import {
   UPLOADS_DIR,
 } from './config/constants';
 import { catchError } from './middleware/catch-error';
-import db from './model';
-import routes from './route';
+
+import albumRoutes from './routes/album';
+import settingRoutes from './routes/setting';
+import photoRoutes from './routes/photo';
 
 function checkPrerequisites() {
   try {
@@ -48,23 +50,16 @@ function initApp() {
         multiples: true,
         hashAlgorithm: 'md5',
       },
-    }),
+    })
   );
-  routes.forEach((router) => app.use(router.middleware()));
+
+  app.use(albumRoutes.routes()).use(albumRoutes.allowedMethods());
+  app.use(settingRoutes.routes()).use(settingRoutes.allowedMethods());
+  app.use(photoRoutes.routes()).use(photoRoutes.allowedMethods());
+
   app.use(async (ctx) => {
     ctx.body = { message: 'Hi, welcome to visit Here APIs.' };
   });
-
-  // if (process.env.DB_SYNC === '1') {
-  db.sequelize
-    .sync()
-    .then(() => {
-      console.log('Database synced');
-    })
-    .catch((error: Error) => {
-      console.error(`Error syncing database: ${error.message}`);
-    });
-  // }
 
   const host = process.env.HOST ?? 'localhost';
   const port = process.env.PORT ? Number(process.env.PORT) : 3001;
