@@ -1,6 +1,6 @@
-// export * from './prisma.js';
-import { PrismaClient } from '@prisma/client';
-
-export const prisma = new PrismaClient({
-  // log: ['query', 'info', 'warn', 'error'],
-});
+export * from './schemas';
+export * from './dao/photo';
+export * from './dao/album';
+export * from './dao/photo-file';
+export * from './dao/queue-task';
+export * from './prisma/prisma-instance';
