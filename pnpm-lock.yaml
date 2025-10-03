@@ -26,6 +26,9 @@ importers:
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
+      zod:
+        specifier: ^4.1.11
+        version: 4.1.11
     devDependencies:
       '@eslint/compat':
         specifier: ^1.1.1
@@ -195,9 +198,6 @@ importers:
       koa-body:
         specifier: ^6.0.1
         version: 6.0.1
-      zod:
-        specifier: ^4.1.11
-        version: 4.1.11
     devDependencies:
       '@types/koa__router':
         specifier: ^12.0.4

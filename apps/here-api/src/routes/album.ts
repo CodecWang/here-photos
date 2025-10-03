@@ -1,6 +1,7 @@
 import Router from '@koa/router';
-import { prisma } from '@here-photos/db';
+import { AlbumDAO } from '@here-photos/db';
 import {
+  addPhotosSchema,
   albumIdSchema,
   CreateAlbumInput,
   createAlbumSchema,
@@ -15,32 +16,17 @@ import { nanoid } from 'nanoid';
 const router = new Router({ prefix: '/api/v1/albums' });
 
 router.get('/', async (ctx) => {
-  ctx.body = await prisma.album.findMany({
-    include: {
-      _count: {
-        // TODO(arthur): validate here
-        select: { AlbumPhoto: true },
-      },
-    },
-  });
+  ctx.body = await AlbumDAO.findMany();
 });
 
 router.post('/', validate({ body: createAlbumSchema }), async (ctx) => {
   const { title } = ctx.request.body as CreateAlbumInput;
-
-  ctx.body = await prisma.album.create({
-    data: {
-      title,
-      albumId: nanoid(8),
-    },
-  });
+  ctx.body = await AlbumDAO.create({ title, albumId: nanoid(8) });
 });
 
 router.delete('/', validate({ body: deleteAlbumsSchema }), async (ctx) => {
   const { albumIds } = ctx.request.body as DeleteAlbumsInput;
-  ctx.body = await prisma.album.deleteMany({
-    where: { albumId: { in: albumIds } },
-  });
+  ctx.body = await AlbumDAO.deleteManyByAlbumIds(albumIds);
 });
 
 router.put(
@@ -49,11 +35,25 @@ router.put(
   async (ctx) => {
     const { albumId } = ctx.params;
     const { title } = ctx.request.body as UpdateAlbumInput;
+    ctx.body = await AlbumDAO.update(albumId, { title });
+  }
+);
 
-    ctx.body = await prisma.album.update({
-      where: { albumId },
-      data: { title },
-    });
+router.get('/:albumId', validate({ params: albumIdSchema }), async (ctx) => {
+  const { albumId } = ctx.params;
+  ctx.body = await AlbumDAO.findPhotosByAlbumId(albumId);
+});
+
+router.post(
+  '/:albumId/photos',
+  validate({
+    params: albumIdSchema,
+    body: addPhotosSchema,
+  }),
+  async (ctx) => {
+    const { albumId } = ctx.params;
+    const { photoIds } = ctx.request.body;
+    ctx.body = await AlbumDAO.addPhotos(albumId, photoIds);
   }
 );
 

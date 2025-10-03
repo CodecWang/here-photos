@@ -1,8 +1,6 @@
 import fs from 'fs';
 import koa from 'koa';
 import { HttpMethodEnum, koaBody } from 'koa-body';
-import os from 'os';
-import path from 'path';
 
 import {
   DEFAULT_MEDIA_DIR,
@@ -45,7 +43,7 @@ function initApp() {
       ],
       multipart: true,
       formidable: {
-        uploadDir: path.join(os.homedir(), '.here-photos/uploads'),
+        uploadDir: UPLOADS_DIR,
         keepExtensions: true,
         multiples: true,
         hashAlgorithm: 'md5',

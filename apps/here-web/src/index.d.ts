@@ -16,7 +16,7 @@ interface PhotosLayout {
 interface Photo {
   id: number;
   title: string;
-  shotTime: Date;
+  birthTime: Date;
   blurHash: string;
   thumbnails: any[];
   selected?: boolean;

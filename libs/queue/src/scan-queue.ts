@@ -1,10 +1,7 @@
-import { Job, Queue, QueueEvents, Worker } from 'bullmq';
-import IORedis from 'ioredis';
+import { Job, Queue, Worker } from 'bullmq';
+import { connection } from './redis-connection';
 
-const connection = new IORedis({ maxRetriesPerRequest: null });
-export const scanQueue = new Queue('scan', { connection });
-
-export const scanQueueEvents = new QueueEvents('scan', { connection });
+const scanQueue = new Queue('scan', { connection });
 
 export async function addScanTask(payload: unknown) {
   return await scanQueue.add('scanDirs', payload, {
