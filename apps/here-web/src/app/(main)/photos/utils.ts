@@ -23,7 +23,10 @@ export function groupPhotosByDate(
   const options = optionsMap[groupBy];
   const groupedPhotos = photos.reduce(
     (acc: { [key: string]: Photo[] }, photo) => {
-      const date = new Date(photo.shotTime).toLocaleDateString(locale, options);
+      const date = new Date(photo.birthTime).toLocaleDateString(
+        locale,
+        options
+      );
 
       if (!acc[date]) acc[date] = [];
       acc[date].push(photo);

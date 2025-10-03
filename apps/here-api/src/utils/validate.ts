@@ -6,9 +6,15 @@ type SchemaMap = {
   body?: ZodType<unknown>;
   query?: ZodType<unknown>;
   params?: ZodType<unknown>;
+  files?: ZodType<unknown>;
 };
 
-export const validate = <T extends SchemaMap>({ body, query, params }: T) => {
+export const validate = <T extends SchemaMap>({
+  body,
+  query,
+  params,
+  files,
+}: T) => {
   return async (ctx: Context, next: Next) => {
     if (body) {
       ctx.request.body = await body.parse(ctx.request.body);
@@ -24,6 +30,10 @@ export const validate = <T extends SchemaMap>({ body, query, params }: T) => {
       ctx.params = (await params.parseAsync(ctx.params)) as {
         [key: string]: string;
       };
+    }
+
+    if (files) {
+      ctx.request.files = (await files.parse(ctx.request.files)) as any;
     }
 
     await next();

@@ -1,43 +1,28 @@
 import Router from '@koa/router';
-import { addScanTask } from '@here-photos/queue';
-import { prisma } from '@here-photos/db';
+import { addScanTask, addUploadTask } from '@here-photos/queue';
+import { PhotoDAO, QueueTaskDAO } from '@here-photos/db';
 import { nanoid } from 'nanoid';
 import { validate } from '../utils/validate';
 import {
-  DeletePhotosInput,
   deletePhotosSchema,
   photoIdSchema,
-  scanTaskIdSchema,
+  nanoId8Schema,
+  uploadPhotosSchema,
+  UploadPhotosInput,
 } from '../schemas/photo';
 
 const router = new Router({ prefix: '/api/v1/photos' });
 
 router.get('/', async (ctx) => {
-  const photos = await prisma.photo.findMany({
-    include: {
-      Exif: true,
-      Thumbnail: true,
-    },
-    orderBy: { shotTime: 'desc' },
-  });
-  ctx.body = photos;
-});
-
-router.get('/:photoId', validate({ params: photoIdSchema }), async (ctx) => {
-  ctx.body = await prisma.photo.findFirstOrThrow({
-    where: { photoId: ctx.params.photoId },
-    include: {
-      Exif: true,
-      Thumbnail: true,
-    },
-  });
+  ctx.body = await PhotoDAO.findMany();
 });
 
 router.delete('/', validate({ body: deletePhotosSchema }), async (ctx) => {
-  const { photoIds } = ctx.request.body as DeletePhotosInput;
-  ctx.body = await prisma.photo.deleteMany({
-    where: { photoId: { in: photoIds } },
-  });
+  ctx.body = await PhotoDAO.deleteManyByPhotoIds(ctx.request.body.photoIds);
+});
+
+router.get('/:photoId', validate({ params: photoIdSchema }), async (ctx) => {
+  ctx.body = await PhotoDAO.findByPhotoId(ctx.params.photoId);
 });
 
 router.post('/scan', async (ctx) => {
@@ -47,20 +32,34 @@ router.post('/scan', async (ctx) => {
     '/Users/arthur/Pictures/sample-photos/test2',
   ];
 
-  const task = await prisma.scanTask.create({
-    data: { taskId: nanoid(8) },
-  });
+  const task = await QueueTaskDAO.create({ taskId: nanoid(8), type: 'scan' });
   const job = await addScanTask({ photoDirs, taskId: task.taskId });
   ctx.body = { taskId: task.taskId, jobId: job.id };
 });
 
 router.get(
   '/scan/:taskId',
-  validate({ params: scanTaskIdSchema }),
+  validate({ params: nanoId8Schema }),
   async (ctx) => {
-    ctx.body = await prisma.scanTask.findFirstOrThrow({
-      where: { taskId: ctx.params.taskId },
-    });
+    ctx.body = await QueueTaskDAO.findByTaskId(ctx.params.taskId);
+  }
+);
+
+router.post('/upload', validate({ files: uploadPhotosSchema }), async (ctx) => {
+  const { files, albumIds } = ctx.request.files as unknown as UploadPhotosInput;
+  const task = await QueueTaskDAO.create({
+    taskId: nanoid(8),
+    type: 'upload',
+  });
+  const job = await addUploadTask({ files, taskId: task.taskId, albumIds });
+  ctx.body = { taskId: task.taskId, jobId: job.id, albumIds };
+});
+
+router.get(
+  '/upload/:taskId',
+  validate({ params: nanoId8Schema }),
+  async (ctx) => {
+    ctx.body = await QueueTaskDAO.findByTaskId(ctx.params.taskId);
   }
 );
 

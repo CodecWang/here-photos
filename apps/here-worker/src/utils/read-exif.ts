@@ -1,6 +1,7 @@
+import { Exif } from '@here-photos/db';
 import exifReader from 'exif-reader';
 
-export async function readExif(exif?: Buffer) {
+export async function readExif(exif?: Buffer): Promise<Exif> {
   const exifData = exif ? exifReader(exif) : null;
 
   // TODO(arthur): add most used exif fields and handle gps info
@@ -9,7 +10,7 @@ export async function readExif(exif?: Buffer) {
     cameraMake: exifData?.Image?.Make,
     cameraModel: exifData?.Image?.Model,
     iso: exifData?.Photo?.ISOSpeedRatings,
-    gpsLatitude: null,
-    gpsLongitude: null,
+    gpsLatitude: undefined,
+    gpsLongitude: undefined,
   };
 }
