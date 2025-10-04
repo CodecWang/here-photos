@@ -1,9 +1,11 @@
-import { Job } from '@here-photos/queue';
 import { QueueStatus, QueueTaskDAO } from '@here-photos/db';
+import { Job } from '@here-photos/queue';
+
 import { filterTopDirs } from '../utils/filter-top-dirs';
 import { readDirsFiles } from '../utils/read-dirs-files';
-import { handleScan } from './handle-scan';
 import { reconcilePhotoFiles } from '../utils/reconcilePhotoFiles';
+
+import { handleScan } from './handle-scan';
 
 export async function scanPhotoDirs(job: Job) {
   const { photoDirs, taskId } = job.data;

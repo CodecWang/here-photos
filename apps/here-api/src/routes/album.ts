@@ -1,5 +1,7 @@
-import Router from '@koa/router';
 import { AlbumDAO } from '@here-photos/db';
+import Router from '@koa/router';
+import { nanoid } from 'nanoid';
+
 import {
   addPhotosSchema,
   albumIdSchema,
@@ -11,7 +13,6 @@ import {
   updateAlbumSchema,
 } from '../schemas/album';
 import { validate } from '../utils/validate';
-import { nanoid } from 'nanoid';
 
 const router = new Router({ prefix: '/api/v1/albums' });
 

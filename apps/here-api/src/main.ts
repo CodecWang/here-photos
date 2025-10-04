@@ -1,4 +1,5 @@
 import fs from 'fs';
+
 import koa from 'koa';
 import { HttpMethodEnum, koaBody } from 'koa-body';
 
@@ -8,10 +9,9 @@ import {
   UPLOADS_DIR,
 } from './config/constants';
 import { catchError } from './middleware/catch-error';
-
 import albumRoutes from './routes/album';
-import settingRoutes from './routes/setting';
 import photoRoutes from './routes/photo';
+import settingRoutes from './routes/setting';
 
 function checkPrerequisites() {
   try {

@@ -1,8 +1,9 @@
 import { promises as fs } from 'fs';
 
 import { Exif, PhotoDAO, Thumbnail } from '@here-photos/db';
-import sharp from 'sharp';
 import { nanoid } from 'nanoid';
+import sharp from 'sharp';
+
 import { calculateHash } from '../utils/calculate-hash';
 import { generateThumbHash } from '../utils/generate-thumb-hash';
 import { generateThumbnails } from '../utils/generate-thumbnails';

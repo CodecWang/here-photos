@@ -1,5 +1,3 @@
-import { eventBus } from './event-bus';
-
 export const request = async (url: string, options: RequestInit = {}) => {
   try {
     const response = await fetch(url, options);
@@ -7,6 +5,8 @@ export const request = async (url: string, options: RequestInit = {}) => {
 
     return await response.json();
   } catch (error) {
-    eventBus.emit('request.error', (error as Error).message);
+    // TODO(arthur): handle error globally
+    console.error('Request error:', error);
+    // eventBus.emit('request.error', (error as Error).message);
   }
 };

@@ -12,11 +12,6 @@ export enum GalleryLayout {
   Masonry = 'Masonry',
 }
 
-export const enum NavMode {
-  Modern,
-  Classic,
-}
-
 export enum GroupAlbumsBy {
   None = 'No grouping',
   Year = 'Group by year',

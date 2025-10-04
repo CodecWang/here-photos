@@ -8,7 +8,7 @@ import EditIcon from '~/icons/edit-icon';
 import { request } from '~/utils/request';
 
 interface ScanDirectoriesProps {
-  photoDirs: string[];
+  photoDirs?: string[];
   onChange: (photoDirs: string[]) => Promise<void>;
 }
 
@@ -27,6 +27,7 @@ export default function ScanDirectories({
   };
 
   const addNewDirectory = async () => {
+    if (!photoDirs) return;
     if (photoDirs.includes(newDir)) return hideAdding();
 
     await onChange([...photoDirs, newDir]);
@@ -35,6 +36,7 @@ export default function ScanDirectories({
   };
 
   const deleteDirectory = async (targetDir: string) => {
+    if (!photoDirs) return;
     await onChange(photoDirs.filter((dir) => dir !== targetDir));
     await triggerScan();
     hideAdding();
@@ -80,7 +82,7 @@ export default function ScanDirectories({
             />
           </div>
         )}
-        {photoDirs.map((dir) => (
+        {photoDirs?.map((dir) => (
           <div className="flex items-center" key={dir}>
             <input
               type="text"

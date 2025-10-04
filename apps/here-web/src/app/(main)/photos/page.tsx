@@ -1,32 +1,30 @@
 'use client';
 
 import clsx from 'clsx';
+import { useAtom, useAtomValue } from 'jotai';
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { navModeAtom, photosAtom } from '~/atoms';
 import KeywordFilter from '~/components/keyword-filter';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
+import PhotoActions from '~/components/photos/photo-actions';
 import PhotosFilter from '~/components/photos/photos-filter';
 import PhotosLayoutSetting from '~/components/photos/photos-layout-setting';
 import IconButton from '~/components/ui/icon-button';
 import Upload from '~/components/upload';
 import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
-import { NavMode } from '~/config/enums';
 import FilterAltIcon from '~/icons/filter-alt-icon';
 import TuneIcon from '~/icons/tune-icon';
 import { request } from '~/utils/request';
 
-import { useNavMode } from '../nav-provider';
 import { groupPhotosByDate } from './utils';
-import { useAtom } from 'jotai';
-import { photosAtom } from '~/atoms';
-import PhotoActions from '~/components/photos/photo-actions';
 
 export default function Page() {
   const locale = useLocale();
   const t = useTranslations();
-  const { navMode } = useNavMode();
+  const navMode = useAtomValue(navModeAtom);
   const [photos, setPhotos] = useAtom(photosAtom);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
@@ -77,7 +75,7 @@ export default function Page() {
           </div>
 
           <div className="whitespace-nowrap ar-action-wrap">
-            {navMode === NavMode.Modern && <Upload />}
+            {navMode === 1 && <Upload />}
             <IconButton
               active={openLayoutSetting}
               disabled={!photoGroups.length}

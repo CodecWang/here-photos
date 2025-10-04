@@ -1,4 +1,5 @@
 import { rgbaToThumbHash } from '@here-photos/thumb-hash';
+
 import type { Sharp } from 'sharp';
 
 export async function generateThumbHash(photoSharp: Sharp) {

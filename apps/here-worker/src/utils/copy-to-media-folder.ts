@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
-import { DEFAULT_MEDIA_DIR } from '../constants';
 import path from 'path';
+
+import { DEFAULT_MEDIA_DIR } from '../constants';
 
 export async function copyToMediaFolder(file: File) {
   // @ts-ignore

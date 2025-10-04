@@ -1,14 +1,15 @@
+import { useAtom, useSetAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 
-import { useLanguage } from '~/app/language-provider';
-
-import { useNavMode } from '../../nav-provider';
+import { navModeAtom } from '~/atoms';
+import { localeAtom } from '~/atoms/i18n';
 
 export default function Apperence() {
   const t = useTranslations();
-  const { locale, setLocale } = useLanguage();
-  const { navMode, setNavMode } = useNavMode();
+  const setLocale = useSetAtom(localeAtom);
+
+  const [navMode, setNavMode] = useAtom(navModeAtom);
   const { setTheme } = useTheme();
 
   const toggleNavMode = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,15 +45,17 @@ export default function Apperence() {
       <div>
         <button
           className="btn"
+          // onClick={() => setLocale('zh')}
           onClick={() => setLocale('zh')}
-          disabled={locale === 'zh'}
+          // disabled={locale === 'zh'}
         >
-          {t('language.zh')}
+          简体中文
         </button>
         <button
           className="btn"
+          // onClick={() => setLocale('en')}
           onClick={() => setLocale('en')}
-          disabled={locale === 'en'}
+          // disabled={locale === 'en'}
         >
           {t('language.en')}
         </button>
