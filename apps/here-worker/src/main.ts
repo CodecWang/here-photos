@@ -1,6 +1,7 @@
-import { createScanWorker, createUploadWorker } from '@here-photos/queue';
-import { scanPhotoDirs } from './scan-photo-dirs';
 import { QueueStatus, QueueTaskDAO } from '@here-photos/db';
+import { createScanWorker, createUploadWorker } from '@here-photos/queue';
+
+import { scanPhotoDirs } from './scan-photo-dirs';
 import { uploadPhotos } from './upload-photos';
 
 console.log('>>> Here Worker started...');

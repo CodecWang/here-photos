@@ -1,11 +1,13 @@
-import { Exif, PhotoDAO, Thumbnail } from '@here-photos/db';
 import { promises as fs } from 'fs';
-import { copyToMediaFolder } from '../utils/copy-to-media-folder';
-import sharp from 'sharp';
+
+import { Exif, PhotoDAO, Thumbnail } from '@here-photos/db';
 import { nanoid } from 'nanoid';
+import sharp from 'sharp';
+
+import { copyToMediaFolder } from '../utils/copy-to-media-folder';
+import { generateThumbHash } from '../utils/generate-thumb-hash';
 import { generateThumbnails } from '../utils/generate-thumbnails';
 import { readExif } from '../utils/read-exif';
-import { generateThumbHash } from '../utils/generate-thumb-hash';
 
 // TODO(arthur): handle file type(zod)
 export async function handleUpload(file: {

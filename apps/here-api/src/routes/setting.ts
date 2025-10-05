@@ -1,5 +1,5 @@
-import Router from '@koa/router';
 import { prisma } from '@here-photos/db';
+import Router from '@koa/router';
 
 const router = new Router({ prefix: '/api/v1/settings' });
 

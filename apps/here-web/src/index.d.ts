@@ -18,7 +18,7 @@ interface Photo {
   title: string;
   birthTime: Date;
   blurHash: string;
-  thumbnails: any[];
+  Thumbnail: any[];
   selected?: boolean;
 }
 

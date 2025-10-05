@@ -1,23 +1,22 @@
 import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 
-import { NavMode } from '~/config/enums';
 import DarkModeIcon from '~/icons/dark-mode-icon';
 import LightModeIcon from '~/icons/light-mode-icon';
 import MenuIcon from '~/icons/menu-icon';
 import SearchIcon from '~/icons/search-icon';
-import SelfImprovementIcon from '~/icons/self-improvement-icon';
 
-import { useNavMode } from '../app/(main)/nav-provider';
+// import { useNavMode } from '../app/(main)/nav-provider';
+
 import IconButton from './ui/icon-button';
 import Upload from './upload';
-import { useTranslations } from 'next-intl';
 
 export default function Header() {
   const t = useTranslations();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const { navMode, setNavMode } = useNavMode();
+  // const { navMode, setNavMode } = useNavMode();
   const router = useRouter();
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,14 +69,6 @@ export default function Header() {
             icon={<SearchIcon className="size-6" />}
           />
           <Upload />
-
-          <IconButton
-            tooltip={
-              navMode === NavMode.Modern ? t('nav.classic') : t('nav.modern')
-            }
-            onClick={() => setNavMode(NavMode.Modern)}
-            icon={<SelfImprovementIcon className="size-6" />}
-          />
 
           <IconButton
             tooltip={

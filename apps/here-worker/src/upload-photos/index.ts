@@ -1,7 +1,10 @@
-import type { Job } from '@here-photos/queue';
-import { AlbumDAO, QueueStatus, QueueTaskDAO } from '@here-photos/db';
 import { promises as fs } from 'fs';
+
+import { AlbumDAO, QueueStatus, QueueTaskDAO } from '@here-photos/db';
+
 import { handleUpload } from './handle-upload';
+
+import type { Job } from '@here-photos/queue';
 
 export async function uploadPhotos(job: Job) {
   const { files, taskId, albumIds } = job.data;

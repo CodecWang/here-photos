@@ -1,5 +1,6 @@
-import path from 'path';
 import { promises as fs } from 'fs';
+import path from 'path';
+
 import { SUPPORTED_PHOTO_FORMATS } from '../constants';
 
 export async function readDirsFiles(dirs: string[]): Promise<string[]> {

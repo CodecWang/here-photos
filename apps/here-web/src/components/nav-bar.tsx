@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+
+import PhotoIcon from '~/icons/photo-icon';
 import SearchIcon from '~/icons/search-icon';
 
 export default function NavBar() {
@@ -25,7 +27,7 @@ export default function NavBar() {
               )}
               href="/photos"
             >
-              {/* <PhotoIcon className="size-4" /> */}
+              <PhotoIcon className="size-4" />
               {t('nav.photos')}
             </Link>
           </li>

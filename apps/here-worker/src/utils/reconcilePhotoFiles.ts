@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
-import { PhotoDAO, PhotoFileDAO } from '@here-photos/db';
 import path from 'path';
+
+import { PhotoDAO, PhotoFileDAO } from '@here-photos/db';
 
 // Reconciliation and cleanup of photo files
 export async function reconcilePhotoFiles(scanDirs: string[]) {

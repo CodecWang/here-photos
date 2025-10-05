@@ -1,8 +1,8 @@
-import Router from '@koa/router';
-import { addScanTask, addUploadTask } from '@here-photos/queue';
 import { PhotoDAO, QueueTaskDAO } from '@here-photos/db';
+import { addScanTask, addUploadTask } from '@here-photos/queue';
+import Router from '@koa/router';
 import { nanoid } from 'nanoid';
-import { validate } from '../utils/validate';
+
 import {
   deletePhotosSchema,
   photoIdSchema,
@@ -10,6 +10,7 @@ import {
   uploadPhotosSchema,
   UploadPhotosInput,
 } from '../schemas/photo';
+import { validate } from '../utils/validate';
 
 const router = new Router({ prefix: '/api/v1/photos' });
 

@@ -22,7 +22,7 @@ export default function PhotoGroup({
     if (layout.layout !== GalleryLayout.Justified) return;
 
     return justifiedLayout(
-      photos.map((photo) => photo.thumbnails[0]),
+      photos.map((photo) => photo.Thumbnail[0]),
       {
         containerWidth: viewportWidth,
         containerPadding: 0,

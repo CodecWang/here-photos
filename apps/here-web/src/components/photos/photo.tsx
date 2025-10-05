@@ -1,14 +1,14 @@
-import { thumbHashToDataURL } from '@here-photos/thumb-hash';
+import clsx from 'clsx';
+import { useSetAtom } from 'jotai';
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 import Image, { ImageLoaderProps } from 'next/image';
 import { useMemo } from 'react';
 
+import { thumbHashToDataURL } from '@here-photos/thumb-hash';
+import { photosAtom } from '~/atoms';
 import { GalleryLayout } from '~/config/enums';
 
 import { usePhotos } from './context';
-import { useSetAtom } from 'jotai';
-import { photosAtom } from '~/atoms';
-import clsx from 'clsx';
 
 interface PhotoProps {
   photo: Photo;

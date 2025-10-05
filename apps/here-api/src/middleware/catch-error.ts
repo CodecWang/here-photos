@@ -1,6 +1,7 @@
 // import { Prisma } from '@prisma/client';
-import type { Context, Next } from 'koa';
 import z, { ZodError } from 'zod';
+
+import type { Context, Next } from 'koa';
 
 export async function catchError(ctx: Context, next: Next) {
   try {

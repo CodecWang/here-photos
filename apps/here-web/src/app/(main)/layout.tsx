@@ -1,46 +1,45 @@
 'use client';
 
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
-import { eventBus } from '~/utils/event-bus';
+import { navModeAtom } from '~/atoms';
+import Header from '~/components/header';
+import NavBar from '~/components/nav-bar';
+import SideNav from '~/components/side-nav';
 
-import { MessageProvider, useMessage } from './message-provider';
-import { NavProvider } from './nav-provider';
+import type { PropsWithChildren } from 'react';
 
-export default function MainLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function MainLayout({ children }: PropsWithChildren) {
+  const navMode = useAtomValue(navModeAtom);
+
+  // Avoid hydration mismatch
   const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   if (!isClient) return null;
 
-  return (
-    <NavProvider>
-      <MessageProvider>
+  if (navMode === 1) {
+    return (
+      <main className="absolute h-full w-full overflow-hidden">
         {children}
-        <Empty />
-      </MessageProvider>
-    </NavProvider>
+        <NavBar />
+      </main>
+    );
+  }
+
+  return (
+    <div className="flex h-lvh flex-col">
+      <Header />
+      <main className="drawer lg:drawer-open bg-base-200 h-full flex-grow overflow-hidden pt-16">
+        <input id="side-nav-drawer" type="checkbox" className="drawer-toggle" />
+        <section className="drawer-content bg-base-100 sm:rounded-box relative overflow-hidden sm:mx-3 sm:mb-3 lg:ml-0">
+          {children}
+        </section>
+        <SideNav />
+      </main>
+    </div>
   );
 }
-
-const Empty = () => {
-  const { message } = useMessage();
-
-  useEffect(() => {
-    const handleMessage = (msg: string) => message.error(msg);
-
-    eventBus.on('request.error', handleMessage);
-    return () => {
-      eventBus.off('request.error', handleMessage);
-    };
-  }, [message]);
-
-  return null;
-};

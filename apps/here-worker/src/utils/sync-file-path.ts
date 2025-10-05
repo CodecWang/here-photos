@@ -1,5 +1,7 @@
-import { PhotoDAO } from '@here-photos/db';
 import { promises as fs } from 'fs';
+
+import { PhotoDAO } from '@here-photos/db';
+
 import { calculateHash } from './calculate-hash';
 
 export async function syncFilePath(

@@ -1,7 +1,9 @@
 import path from 'path';
-import { THUMBNAILS_DIR } from '../constants';
-import { Sharp } from 'sharp';
+
 import { Thumbnail } from '@here-photos/db';
+import { Sharp } from 'sharp';
+
+import { THUMBNAILS_DIR } from '../constants';
 
 export async function generateThumbnails(
   photoId: string,
