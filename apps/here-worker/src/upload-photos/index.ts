@@ -7,7 +7,8 @@ import { handleUpload } from './handle-upload';
 import type { Job } from '@here-photos/queue';
 
 export async function uploadPhotos(job: Job) {
-  const { files, taskId, albumIds } = job.data;
+  const { files: originFiles, taskId, albumIds } = job.data;
+  const files = Array.isArray(originFiles) ? originFiles : [originFiles];
   await QueueTaskDAO.update(taskId, {
     status: QueueStatus.RUNNING,
     total: files.length,

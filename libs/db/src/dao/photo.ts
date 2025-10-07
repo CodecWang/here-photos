@@ -1,8 +1,9 @@
-import type { Prisma } from '@prisma/client';
 import { prisma } from '../prisma/prisma-instance';
 
+import type { Prisma } from '@prisma/client';
+
 export const PhotoDAO = {
-  findByHash: async (hash: string) => {
+  findByHash: async (hash?: string) => {
     // TODO(arthur): only select id info to optimize
     // const existingPhoto = await prisma.photo.findFirst({
     //   where: { hash: file.hash },
@@ -14,6 +15,7 @@ export const PhotoDAO = {
     //     Thumbnail: { select: { id: true } },
     //   },
     // });
+    if (!hash) return null;
     return await prisma.photo.findUnique({
       where: { hash },
       include: { Exif: true, Thumbnail: true, PhotoFile: true },

@@ -47,7 +47,7 @@ export default function PageHeader({
     <header
       className={`sticky top-0 z-10 flex h-14 w-full items-center px-4 py-2 transition-all duration-200 ${
         isScrolled
-          ? 'bg-gradient-to-b from-black/70 to-transparent'
+          ? 'bg-gradient-to-b from-background/40 to-transparent'
           : 'bg-transparent'
       }`}
     >

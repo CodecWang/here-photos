@@ -24,7 +24,7 @@ export default function Page() {
       >
         <div className="card bg-base-100 w-96 shadow-xl">
           <figure>
-            <img src="/api/v1/photos/244/thumbnail?variant=2" alt="Shoes" />
+            <img src="/api/v1/photos/244/thumbnails?type=md" alt="Shoes" />
           </figure>
           <div className="card-body">
             <h2 className="card-title">People</h2>
@@ -32,7 +32,7 @@ export default function Page() {
         </div>
         <div className="card bg-base-100 w-96 shadow-xl">
           <figure>
-            <img src="/api/v1/photos/257/thumbnail?variant=2" alt="Shoes" />
+            <img src="/api/v1/photos/257/thumbnails?type=md" alt="Shoes" />
           </figure>
           <div className="card-body">
             <h2 className="card-title">Animals</h2>

@@ -1,16 +1,17 @@
 import path from 'path';
 
-import { Thumbnail } from '@here-photos/db';
 import { Sharp } from 'sharp';
 
 import { THUMBNAILS_DIR } from '../constants';
+
+import type { Prisma } from '@here-photos/db';
 
 export async function generateThumbnails(
   photoId: string,
   width: number,
   height: number,
   photoSharp: Sharp
-): Promise<Thumbnail[]> {
+): Promise<Prisma.ThumbnailCreateManyPhotoInput[]> {
   // TODO(arthur): 1. also delete thumbnail files when delete db record
   //               2. check if local thumbnail file exists, if not, generate it again
   //               3. thumbnail not only for jpg, but also png, etc.

@@ -1,36 +1,36 @@
+import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { GalleryLayout } from '~/config/enums';
+import { photosLayoutAtom } from '~/atoms';
+import { GalleryArrange } from '~/schemas';
 
-import { PhotosProvider } from './context';
 import PhotoGroup from './photo-group';
 import PhotoViewer from './photo-viewer';
 
 interface PhotosProps {
-  data: PhotoGroup[];
-  layout: PhotosLayout;
+  data: PhotoGroupType[];
 }
 
-export default function Photos({ data, layout }: PhotosProps) {
+export default function Photos({ data }: PhotosProps) {
+  const photosLayout = useAtomValue(photosLayoutAtom);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = useState(0);
+  const isJustified = photosLayout.arrange === GalleryArrange.Justified;
 
-  const handleResize = useCallback((entries: ResizeObserverEntry[]) => {
-    entries.forEach((entry) => {
-      const newWidth = entry.contentRect.width;
-      setViewportWidth((prevWidth) => {
-        if (prevWidth !== newWidth) {
-          return newWidth;
-        }
-        return prevWidth;
-      });
-    });
+  const handleResize = useCallback(([entry]: ResizeObserverEntry[]) => {
+    if (!entry) return;
+
+    const newWidth = entry.contentRect.width;
+    setViewportWidth((prevWidth) =>
+      prevWidth !== newWidth ? newWidth : prevWidth
+    );
   }, []);
 
   useEffect(() => {
     const currentViewportRef = viewportRef.current;
-    if (!currentViewportRef || layout.layout !== GalleryLayout.Justified)
+    if (!currentViewportRef || !isJustified) {
       return;
+    }
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(currentViewportRef);
@@ -39,25 +39,24 @@ export default function Photos({ data, layout }: PhotosProps) {
       resizeObserver.unobserve(currentViewportRef);
       resizeObserver.disconnect();
     };
-  }, [layout.layout, handleResize]);
+  }, [isJustified, handleResize]);
+
+  if (isJustified && !viewportWidth) {
+    return <div ref={viewportRef} />;
+  }
 
   return (
-    <PhotosProvider>
-      <div ref={viewportRef}>
-        {layout.layout === GalleryLayout.Justified && !viewportWidth
-          ? null
-          : data.map(({ title, photos }) => (
-              <PhotoGroup
-                key={title}
-                title={title}
-                photos={photos}
-                layout={layout}
-                viewportWidth={viewportWidth}
-              />
-            ))}
+    <div ref={viewportRef}>
+      {data.map(({ title, photos }) => (
+        <PhotoGroup
+          key={title}
+          title={title}
+          photos={photos}
+          viewportWidth={viewportWidth}
+        />
+      ))}
 
-        <PhotoViewer />
-      </div>
-    </PhotosProvider>
+      <PhotoViewer />
+    </div>
   );
 }

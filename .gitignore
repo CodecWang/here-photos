@@ -48,3 +48,6 @@ Thumbs.db
 out
 
 test-output
+
+# prisma-zod-generator
+/libs/db/src/prisma/generated

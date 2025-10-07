@@ -19,7 +19,9 @@ export default function AddToAlbumModal({
   useEffect(() => {
     (async () => {
       const albums = await request('/api/v1/albums');
-      albums && setAlbums(albums.data);
+      if (albums) {
+        setAlbums(albums);
+      }
     })();
   }, []);
 

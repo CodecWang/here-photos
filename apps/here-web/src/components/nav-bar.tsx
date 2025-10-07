@@ -1,79 +1,89 @@
-import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import PhotoIcon from '~/icons/photo-icon';
 import SearchIcon from '~/icons/search-icon';
+import { cn } from '~/lib/utils';
+
+import { IconButton } from './icon-button';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from './ui/navigation-menu';
 
 export default function NavBar() {
   const t = useTranslations();
   const pathname = usePathname();
 
   return (
-    <div className="absolute bottom-0 flex w-full flex-col items-center transition-all">
-      <nav
-        className="ar-glass border bg-base-200 mb-4 rounded-full shadow-2xl"
-        style={{
-          animation: 'button-pop var(--animation-btn, 0.25s) ease-out',
-        }}
-      >
-        <ul className="menu menu-horizontal flex items-center space-x-2">
-          <li>
-            <Link
-              className={clsx(
-                pathname.startsWith('/photos') && 'menu-active',
+    <div className="absolute bottom-0 flex w-full flex-col items-center">
+      <NavigationMenu className="border mb-4 rounded-full shadow-2xl bg-background p-1">
+        <NavigationMenuList>
+          <NavigationMenuItem defaultChecked={true} className="flex">
+            <NavigationMenuLink
+              asChild
+              active
+              className={cn(
+                navigationMenuTriggerStyle(),
+                pathname === '/photos' ? 'bg-secondary' : 'bg-transparent',
                 'rounded-full'
               )}
-              href="/photos"
             >
-              <PhotoIcon className="size-4" />
-              {t('nav.photos')}
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={clsx(
-                pathname.startsWith('/albums') && 'menu-active',
+              <Link href="/photos">
+                <PhotoIcon className="hidden lg:block size-4" />
+                {t('nav.photos')}
+              </Link>
+            </NavigationMenuLink>
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                pathname === '/albums' ? 'bg-secondary' : 'bg-transparent',
                 'rounded-full'
               )}
-              href="/albums"
             >
-              {/* <FolderOpenIcon className="size-4" /> */}
-              {t('nav.albums')}
-            </Link>
-          </li>
-          <li>
-            <button className="btn btn-circle btn-ghost btn-sm">
-              <SearchIcon className="size-5" />
-            </button>
-          </li>
-          <li>
-            <Link
-              className={clsx(
-                pathname.startsWith('/explore') && 'menu-active',
+              <Link href="/albums">{t('nav.albums')}</Link>
+            </NavigationMenuLink>
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                'rounded-full bg-transparent'
+              )}
+            >
+              <IconButton
+                icon={<SearchIcon />}
+                aria-label={t('action.search')}
+                tooltipContent={t('action.search')}
+              />
+            </NavigationMenuLink>
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                pathname === '/explore' ? 'bg-secondary' : 'bg-transparent',
                 'rounded-full'
               )}
-              href="/explore"
             >
-              {/* <GlobeAsiaAustraliaIcon className="size-4" /> */}
-              {t('nav.explore')}
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={clsx(
-                pathname.startsWith('/my') && 'menu-active',
+              <Link href="/explore">{t('nav.explore')}</Link>
+            </NavigationMenuLink>
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                pathname === '/my' ? 'bg-secondary' : 'bg-transparent',
                 'rounded-full'
               )}
-              href="/my"
             >
-              {/* <UserIcon className="size-4" /> */}
-              {t('nav.my')}
-            </Link>
-          </li>
-        </ul>
-      </nav>
+              <Link href="/my">{t('nav.my')}</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
   );
 }

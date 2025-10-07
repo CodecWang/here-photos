@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
+    "prisma-zod-generator": "1.26.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

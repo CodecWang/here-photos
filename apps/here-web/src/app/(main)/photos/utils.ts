@@ -1,18 +1,19 @@
-import { GroupBy } from '~/config/enums';
+import { PhotoUIType, TimelineGroup } from '~/schemas';
 
 export function groupPhotosByDate(
-  photos: Photo[],
-  groupBy?: GroupBy,
+  photos: PhotoUIType[],
+  timeline: TimelineGroup,
   locale = 'en-US'
 ) {
-  if (!groupBy || groupBy === GroupBy.None) {
+  console.log('>>> groupPhotosByDate called with timeline:', timeline);
+  if (!timeline || timeline === TimelineGroup.None) {
     return [{ photos, title: '' }];
   }
 
-  const optionsMap: { [key in GroupBy]?: Intl.DateTimeFormatOptions } = {
-    [GroupBy.Year]: { year: 'numeric' },
-    [GroupBy.Month]: { year: 'numeric', month: 'short' },
-    [GroupBy.Day]: {
+  const optionsMap: { [key in TimelineGroup]?: Intl.DateTimeFormatOptions } = {
+    [TimelineGroup.Year]: { year: 'numeric' },
+    [TimelineGroup.Month]: { year: 'numeric', month: 'short' },
+    [TimelineGroup.Day]: {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
@@ -20,9 +21,10 @@ export function groupPhotosByDate(
     },
   };
 
-  const options = optionsMap[groupBy];
+  const options = optionsMap[timeline];
+  console.log('Grouping photos with options:', options);
   const groupedPhotos = photos.reduce(
-    (acc: { [key: string]: Photo[] }, photo) => {
+    (acc: { [key: string]: PhotoUIType[] }, photo) => {
       const date = new Date(photo.birthTime).toLocaleDateString(
         locale,
         options

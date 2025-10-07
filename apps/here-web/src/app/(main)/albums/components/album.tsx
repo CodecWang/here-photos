@@ -24,7 +24,7 @@ export default function Album({
         {album.cover && (
           <Image
             loader={({ src }: ImageLoaderProps) => src}
-            src={`/api/v1/photos/${album.cover.id}/thumbnail?variant=2`}
+            src={`/api/v1/photos/${album.cover.id}/thumbnails?type=md`}
             fill={true}
             style={{ objectFit: 'cover' }}
             alt={album.title}

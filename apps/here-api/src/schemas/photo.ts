@@ -15,6 +15,10 @@ export const photoIdSchema = z.object({
   photoId: z.string().length(8),
 });
 
+export const thumbnailTypeSchema = z.object({
+  type: z.enum(['sm', 'md', 'lg']),
+});
+
 export const deletePhotosSchema = z.object({
   photoIds: z.array(z.string().length(8)).min(1),
 });

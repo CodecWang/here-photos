@@ -1,14 +1,19 @@
-import { PhotoDAO, QueueTaskDAO } from '@here-photos/db';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+import { PhotoDAO, QueueTaskDAO, ThumbnailDAO } from '@here-photos/db';
 import { addScanTask, addUploadTask } from '@here-photos/queue';
 import Router from '@koa/router';
 import { nanoid } from 'nanoid';
 
+import { THUMBNAILS_DIR } from '../config/constants';
 import {
   deletePhotosSchema,
   photoIdSchema,
   nanoId8Schema,
   uploadPhotosSchema,
   UploadPhotosInput,
+  thumbnailTypeSchema,
 } from '../schemas/photo';
 import { validate } from '../utils/validate';
 
@@ -25,6 +30,26 @@ router.delete('/', validate({ body: deletePhotosSchema }), async (ctx) => {
 router.get('/:photoId', validate({ params: photoIdSchema }), async (ctx) => {
   ctx.body = await PhotoDAO.findByPhotoId(ctx.params.photoId);
 });
+
+router.get(
+  '/:photoId/thumbnails',
+  validate({ params: photoIdSchema, query: thumbnailTypeSchema }),
+  async (ctx) => {
+    const thumbnail = await ThumbnailDAO.findByPhotoIdAndType({
+      photoId: ctx.params.photoId,
+      type: ctx.request.query.type as string,
+    });
+
+    const imagePath = path.join(THUMBNAILS_DIR, thumbnail.filePath);
+    await fs.access(imagePath, fs.constants.F_OK);
+    const data = await fs.readFile(imagePath);
+    ctx.set('Cache-Control', 'public, max-age=86400');
+    // TODO(arthur): enable ETAG -> enable caching
+    // ctx.set('ETag', thumbnail.Photo.checkSum);
+    ctx.type = `image/${thumbnail.format}`;
+    ctx.body = data;
+  }
+);
 
 router.post('/scan', async (ctx) => {
   // const photoDirs = ['/Users/arthur/Pictures/sample-photos'];

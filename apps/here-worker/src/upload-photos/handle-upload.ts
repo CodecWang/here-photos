@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 
-import { Exif, PhotoDAO, Thumbnail } from '@here-photos/db';
+import { PhotoDAO } from '@here-photos/db';
 import { nanoid } from 'nanoid';
 import sharp from 'sharp';
 
@@ -8,6 +8,8 @@ import { copyToMediaFolder } from '../utils/copy-to-media-folder';
 import { generateThumbHash } from '../utils/generate-thumb-hash';
 import { generateThumbnails } from '../utils/generate-thumbnails';
 import { readExif } from '../utils/read-exif';
+
+import type { Prisma } from '@here-photos/db';
 
 // TODO(arthur): handle file type(zod)
 export async function handleUpload(file: {
@@ -25,8 +27,8 @@ export async function handleUpload(file: {
     return existingPhoto.photoId;
   }
 
-  let thumbnails: Thumbnail[] | undefined;
-  let exifData: Exif | undefined;
+  let thumbnails: Prisma.ThumbnailCreateManyPhotoInput[] | undefined;
+  let exifData: Prisma.ExifCreateWithoutPhotoInput | undefined;
 
   const stat = await fs.stat(file.filepath);
   const fileBuffer = await fs.readFile(file.filepath);
@@ -64,8 +66,8 @@ export async function handleUpload(file: {
       birthTime,
       modifiedTime: stat.mtime,
       PhotoFile: { createMany: { data: [{ filePath: file.filepath }] } },
-      Exif: exifData && { create: exifData },
-      Thumbnail: thumbnails && { createMany: { data: thumbnails } },
+      Exif: { create: exifData },
+      Thumbnail: { createMany: thumbnails && { data: thumbnails } },
     };
     await PhotoDAO.create(data);
   } else {

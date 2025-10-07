@@ -5,11 +5,15 @@ import CloseIcon from '~/icons/close-icon';
 import DeleteIcon from '~/icons/delete-icon';
 
 import IconButton from '../ui/icon-button';
-import { usePhotos } from './context';
+
+// import { usePhotos } from './context';
+
+import type { Photo } from '@here-photos/db';
 
 export default function PhotoViewer() {
   const t = useTranslations();
-  const { currentPhoto } = usePhotos();
+  const currentPhoto = null;
+  // const { currentPhoto } = usePhotos();
   const [close, setClose] = useState(false);
 
   useEffect(() => {
@@ -42,7 +46,9 @@ export default function PhotoViewer() {
       </button>
       <div className="flex h-full flex-col items-center justify-center">
         <img
-          src={`/api/v1/photos/${(currentPhoto as Photo).id}/thumbnail?variant=2`}
+          src={`/api/v1/photos/${
+            (currentPhoto as Photo).photoId
+          }/thumbnails?type=md`}
           alt=""
           className="max-h-full max-w-full"
         />

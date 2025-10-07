@@ -5,36 +5,9 @@ declare module '*.svg' {
   export default content;
 }
 
-interface PhotosLayout {
-  groupBy?: GroupBy;
-  layout?: GalleryLayout;
-  spacing?: number;
-  size?: number;
-  roundedCorner?: number;
-}
-
-interface Photo {
-  id: number;
+interface PhotoGroupType {
   title: string;
-  birthTime: Date;
-  blurHash: string;
-  Thumbnail: any[];
-  selected?: boolean;
-}
-
-interface PhotoGroup {
-  title: string;
-  photos: Photo[];
-}
-
-interface Album {
-  id: number;
-  title: string;
-  cover: Photo;
-  pinned: boolean;
-  photoCount?: number;
-  photos: Photo[];
-  createdAt: Date;
+  photos: PhotoType[];
 }
 
 interface AlbumGroup {
