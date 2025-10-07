@@ -1,36 +1,37 @@
 'use client';
 
 import clsx from 'clsx';
+import { useAtom, useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { photosAtom, photosLayoutAtom } from '~/atoms';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
-import PhotosLayoutSetting from '~/components/photos/photos-layout-setting';
+import PhotoActions from '~/components/photos/photo-actions';
+import PhotosLayout from '~/components/photos/photos-layout-setting';
 import IconButton from '~/components/ui/icon-button';
-import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
 import AddPhotoAlternateIcon from '~/icons/add-photo-alternate-icon';
 import TuneIcon from '~/icons/tune-icon';
 import { request } from '~/utils/request';
 
 import { groupPhotosByDate } from '../../photos/utils';
 import DeleteAlbumModal from '../components/delete-album-modal';
-import { useAtom } from 'jotai';
-import { photosAtom } from '~/atoms';
-import PhotoActions from '~/components/photos/photo-actions';
 
 export default function Page({ params }: { params: { id: string } }) {
   const t = useTranslations();
+  const photosLayout = useAtomValue(photosLayoutAtom);
   const [photos, setPhotos] = useAtom(photosAtom);
   const [album, setAlbum] = useState<Album>();
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [openLayoutSetting, setOpenLayoutSetting] = useState(false);
-  const [layout, setLayout] = useState<PhotosLayout>(DEFAULT_PHOTOS_LAYOUT);
 
   useEffect(() => {
     (async () => {
       const album = await request(`/api/v1/albums/${params.id}/photos`);
-      album && setAlbum(album.data);
+      if (album) {
+        setAlbum(album);
+      }
     })();
   }, [params.id]);
 
@@ -44,9 +45,9 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [album, setPhotos]);
 
   useEffect(() => {
-    const groups = groupPhotosByDate(photos, layout.groupBy);
+    const groups = groupPhotosByDate(photos, photosLayout.timeline);
     setPhotoGroups(groups);
-  }, [photos, layout.groupBy]);
+  }, [photos, photosLayout.timeline]);
 
   if (!album) {
     return <div>Loading...</div>;
@@ -99,13 +100,12 @@ export default function Page({ params }: { params: { id: string } }) {
               </button>
             </div>
           )}
-          <Photos data={photoGroups} layout={layout} />
+          <Photos data={photoGroups} />
         </div>
       </div>
 
-      <PhotosLayoutSetting
+      <PhotosLayout
         open={openLayoutSetting}
-        onChange={setLayout}
         onClose={() => setOpenLayoutSetting(false)}
       />
 

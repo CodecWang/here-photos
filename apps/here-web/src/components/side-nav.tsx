@@ -88,7 +88,7 @@ export default function SideNav() {
                 <Link
                   className={clsx(
                     'rounded-full text-sm leading-6',
-                    pathname.startsWith(item.href ?? '') && 'active',
+                    pathname.startsWith(item.href ?? '') && 'active'
                   )}
                   href={item.href ?? ''}
                 >
@@ -96,7 +96,7 @@ export default function SideNav() {
                   <span className="pl-2">{item.title}</span>
                 </Link>
               </li>
-            ),
+            )
           )}
         </ul>
       </ul>

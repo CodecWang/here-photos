@@ -51,13 +51,14 @@
     "size": "大小",
     "spacing": "间距",
     "cornerRadius": "圆角",
-    "group": "分组",
-    "noGrouping": "不分组",
-    "groupByDay": "按天分组",
-    "groupByMonth": "按月分组",
-    "groupByYear": "按年份分组",
+    "timeline": "时间线",
+    "noTimeline": "全部",
+    "TimelineByDay": "天",
+    "TimelineByMonth": "月",
+    "TimelineByYear": "年",
     "resetToDefault": "恢复默认",
-    "addToAlbum": "添加到相册"
+    "addToAlbum": "添加到相册",
+    "numSelected": "已选择 {count}"
   },
   "albums": {
     "createAlbum": "创建相册",

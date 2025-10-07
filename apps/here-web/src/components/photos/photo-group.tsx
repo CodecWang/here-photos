@@ -1,85 +1,130 @@
+import { useAtom, useAtomValue } from 'jotai';
 import justifiedLayout from 'justified-layout';
-import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
+import { useCallback, useMemo } from 'react';
 
-import { GalleryLayout } from '~/config/enums';
+import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { cn } from '~/lib/utils';
+import { GalleryArrange, PhotoUIType } from '~/schemas';
 
-import Photo from './photo';
+import { Checkbox } from '../ui/checkbox';
+import { Label } from '../ui/label';
+
+import PhotoUI from './photo';
 
 interface PhotosGroupProps {
   title?: string;
-  photos: Photo[];
-  layout: PhotosLayout;
+  photos: PhotoUIType[];
   viewportWidth: number;
 }
+
+type JustifiedLayoutItem = number | { width: number; height: number };
 
 export default function PhotoGroup({
   title,
   photos,
-  layout,
   viewportWidth,
 }: PhotosGroupProps) {
-  const arrange = useMemo(() => {
-    if (layout.layout !== GalleryLayout.Justified) return;
+  const t = useTranslations();
+  const photosLayout = useAtomValue(photosLayoutAtom);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
+  const isJustified = photosLayout.arrange === GalleryArrange.Justified;
 
-    return justifiedLayout(
-      photos.map((photo) => photo.Thumbnail[0]),
-      {
-        containerWidth: viewportWidth,
-        containerPadding: 0,
-        boxSpacing: {
-          horizontal: layout.spacing ?? 0,
-          vertical: layout.spacing ?? 0,
-        },
-        targetRowHeight: layout.size,
-      }
-    );
-  }, [photos, layout.spacing, layout.layout, layout.size, viewportWidth]);
+  const isGroupSelected = useMemo(
+    () => photos.every((photo) => selectedPhotoIds.has(photo.photoId)),
+    [photos, selectedPhotoIds]
+  );
+
+  const arrange = useMemo(() => {
+    if (!isJustified || photos.length === 0) return null;
+
+    const thumbnails = photos.map((p) => p.Thumbnail[0]);
+    return justifiedLayout(thumbnails as JustifiedLayoutItem[], {
+      containerPadding: 0,
+      containerWidth: viewportWidth,
+      boxSpacing: {
+        vertical: photosLayout.spacing ?? 0,
+        horizontal: photosLayout.spacing ?? 0,
+      },
+      targetRowHeight: photosLayout.size,
+    });
+  }, [
+    photos,
+    isJustified,
+    viewportWidth,
+    photosLayout.size,
+    photosLayout.spacing,
+  ]);
+
+  const onGroupSelectChange = useCallback(
+    (selected: boolean) => {
+      setSelectedPhotoIds((prev) => {
+        const next = new Set(prev);
+        photos.forEach((photo) => {
+          if (selected) {
+            next.add(photo.photoId);
+          } else {
+            next.delete(photo.photoId);
+          }
+        });
+        return next;
+      });
+    },
+    [photos, setSelectedPhotoIds]
+  );
+
+  /** Memoize style objects */
+  const gridStyle = useMemo(
+    () => ({
+      gap: photosLayout.spacing,
+      gridTemplateColumns: `repeat(auto-fill, minmax(min(14rem, 100%), 1fr))`,
+    }),
+    [photosLayout.spacing]
+  );
 
   return (
-    <div>
+    <section>
       {title && (
-        <div className="group flex h-12 items-center px-4 text-sm font-medium sm:px-0">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-sm mr-2 rounded-full sm:hidden sm:group-hover:block"
+        <header className="flex group items-center gap-x-3 h-12 px-4 text-sm font-medium">
+          <Checkbox
+            checked={isGroupSelected}
+            onCheckedChange={onGroupSelectChange}
+            className={cn(
+              'rounded-full',
+              !isGroupSelected && 'sm:hidden sm:group-hover:block'
+            )}
           />
-          <span>{title}</span>
-        </div>
+          <Label>
+            {title}
+            {isGroupSelected && (
+              <span className="text-secondary ml-2">
+                {t('photos.numSelected', { count: photos.length })}
+              </span>
+            )}
+          </Label>
+        </header>
       )}
 
-      {layout.layout === GalleryLayout.Justified ? (
+      {isJustified && arrange ? (
         <div
           className="relative overflow-hidden"
-          style={{ height: arrange?.containerHeight }}
+          style={{ height: arrange.containerHeight }}
         >
-          {arrange?.boxes.map(({ width, height, top, left }, index) => (
-            <Photo
-              key={photos[index].id}
-              photo={photos[index]}
-              layout={layout.layout}
-              roundedCorner={layout.roundedCorner}
+          {arrange.boxes.map(({ width, height, top, left }, i) => (
+            <PhotoUI
+              key={photos[i].photoId}
+              photo={photos[i]}
               position={{ width, height, top, left }}
             />
           ))}
         </div>
       ) : (
-        <div
-          className="grid"
-          style={{
-            gap: layout.spacing,
-            gridTemplateColumns: `repeat(auto-fill, minmax(min(14rem, 100%), 1fr))`,
-          }}
-        >
+        <div className="grid" style={gridStyle}>
           {photos.map((photo) => (
-            <Photo
-              photo={photo}
-              key={photo.id}
-              layout={layout.layout}
-              roundedCorner={layout.roundedCorner}
-            />
+            <PhotoUI key={photo.photoId} photo={photo} />
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 }

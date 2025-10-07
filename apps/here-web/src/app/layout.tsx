@@ -1,6 +1,9 @@
 import { ThemeProvider } from 'next-themes';
 
 import './global.css';
+
+import { TooltipProvider } from '~/components/ui/tooltip';
+
 import { LanguageProvider } from './language-provider';
 
 import type { PropsWithChildren } from 'react';
@@ -15,8 +18,15 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LanguageProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

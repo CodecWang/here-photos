@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
 import { GalleryLayout, GroupBy } from '~/config/enums';
 import CloseIcon from '~/icons/close-icon';
 import Dashboard from '~/icons/dashboard';

@@ -1,12 +1,14 @@
 import { useAtomValue } from 'jotai';
-import { photosAtom } from '~/atoms';
-import IconButton from '../ui/icon-button';
 import { useTranslations } from 'next-intl';
-import ShareIcon from '~/icons/share-icon';
-import DeleteIcon from '~/icons/delete-icon';
-import DeletePhotosModal from './delete-photos-modal';
+
+import { selectedPhotoIdsAtom } from '~/atoms';
 import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
+import ShareIcon from '~/icons/share-icon';
+
+import { IconButton } from '../icon-button';
+
 import AddToAlbumModal from './add-to-album-modal';
+import DeletePhotosModal from './delete-photos-modal';
 
 export default function PhotoActions({
   onDelete,
@@ -16,45 +18,38 @@ export default function PhotoActions({
   onAddToAlbum?: () => void;
 }) {
   const t = useTranslations();
-  const photos = useAtomValue(photosAtom);
-  const hasSelectedPhotos = photos.some((photo) => photo.selected);
+  const selectedPhotoIds = useAtomValue(selectedPhotoIdsAtom);
 
-  const selectedPhotoIds = photos
-    .filter((photo) => photo.selected)
-    .map((photo) => photo.id);
-
-  if (!hasSelectedPhotos) return null;
+  if (selectedPhotoIds.size === 0) return null;
 
   return (
     <>
-      <div className="whitespace-nowrap ar-action-wrap ml-2">
+      <div className="whitespace-nowrap ml-2 flex items-center space-x-1 bg-background border rounded-full p-1">
         <IconButton
-          tooltip={t('action.share')}
+          aria-label={t('action.share')}
           disabled={true}
+          tooltipContent={t('action.share')}
           // onClick={() => {}}
-          icon={<ShareIcon className="size-5" />}
+          icon={<ShareIcon />}
         />
         <IconButton
-          tooltip={t('photos.addToAlbum')}
+          icon={<CreateNewFolderIcon />}
+          aria-label={t('photos.addToAlbum')}
+          tooltipContent={t('photos.addToAlbum')}
           onClick={() => {
             const dialog = document.getElementById('add-to-album-modal');
             dialog?.showModal();
           }}
-          icon={<CreateNewFolderIcon className="size-5" />}
         />
-        <IconButton
-          tooltip={t('action.delete')}
-          onClick={() => {
-            const dialog = document.getElementById('delete-photos-modal');
-            dialog?.showModal();
-          }}
-          icon={<DeleteIcon className="size-5" />}
+        <DeletePhotosModal
+          photoIds={Array.from(selectedPhotoIds)}
+          onConfirm={onDelete}
         />
       </div>
-
-      <DeletePhotosModal photoIds={selectedPhotoIds} onConfirm={onDelete} />
-
-      <AddToAlbumModal photoIds={selectedPhotoIds} onConfirm={onAddToAlbum} />
+      <AddToAlbumModal
+        photoIds={Array.from(selectedPhotoIds)}
+        onConfirm={onAddToAlbum}
+      />
     </>
   );
 }

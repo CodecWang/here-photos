@@ -1,136 +1,127 @@
-import clsx from 'clsx';
-import { useSetAtom } from 'jotai';
-import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
-import Image, { ImageLoaderProps } from 'next/image';
-import { useMemo } from 'react';
-
 import { thumbHashToDataURL } from '@here-photos/thumb-hash';
-import { photosAtom } from '~/atoms';
-import { GalleryLayout } from '~/config/enums';
+import { useAtom, useAtomValue } from 'jotai';
+import Image from 'next/image';
+import { useCallback, useMemo } from 'react';
 
-import { usePhotos } from './context';
+import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { ROUNDED_CORNERS } from '~/config/constants';
+import { cn } from '~/lib/utils';
+import { GalleryArrange, PhotoUIType } from '~/schemas';
+
+import { Checkbox } from '../ui/checkbox';
+
+import type { Photo } from '@here-photos/db';
+import type { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 
 interface PhotoProps {
-  photo: Photo;
-  layout: GalleryLayout;
-  roundedCorner?: number;
-  position?: {
-    width: number;
-    height: number;
-    top: number;
-    left: number;
-  };
+  photo: PhotoUIType;
+  position?: { width: number; height: number; top: number; left: number };
 }
 
-export default function Photo({
-  photo,
-  layout,
-  position,
-  roundedCorner = 0,
-}: PhotoProps) {
-  const { setCurrentPhoto } = usePhotos();
-  const setPhotos = useSetAtom(photosAtom);
+export default function Photo({ photo, position }: PhotoProps) {
+  const { arrange, roundedCorner } = useAtomValue(photosLayoutAtom);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
+
+  const isSelected = selectedPhotoIds.has(photo.photoId);
+  const roundedCornerValue = ROUNDED_CORNERS[roundedCorner / 10];
 
   const blurDataURL = useMemo(() => {
+    if (!photo.blurHash) return undefined;
     return thumbHashToDataURL(Buffer.from(photo.blurHash, 'base64'));
   }, [photo.blurHash]);
 
-  const setPhoto = () => {
-    setCurrentPhoto(photo);
-  };
+  // TODO(arthur): handle different scale thumbnail sizes
+  const imageLoader = useCallback(
+    ({ width }: { width: number }) =>
+      `/api/v1/photos/${photo.photoId}/thumbnails?type=md${
+        width ? `&w=${width}` : ''
+      }`,
+    [photo.photoId]
+  );
 
-  const roundedCorners = [
-    '0px',
-    '4px',
-    '8px',
-    '16px',
-    '24px',
-    '32px',
-    '48px',
-    '999px',
-  ];
-  const roundedCornerValue = roundedCorners[roundedCorner / 10];
-
-  const imageProps = {
-    loader: ({ src }: ImageLoaderProps) => src,
-    src: `/api/v1/photos/${photo.id}/thumbnail?variant=2`,
+  const commonImageProps = {
+    loader: imageLoader,
+    src: `/api/v1/photos/${photo.photoId}/thumbnails?type=md`,
+    alt: photo.photoId,
     fill: true,
-    // sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
     placeholder: 'blur' as PlaceholderValue,
     blurDataURL,
   };
 
-  if (layout === GalleryLayout.Justified && position) {
+  const onPhotoSelectedChange = useCallback(
+    (selected: boolean) => {
+      setSelectedPhotoIds((prev) => {
+        const next = new Set(prev);
+        if (selected) {
+          next.add(photo.photoId);
+        } else {
+          next.delete(photo.photoId);
+        }
+        return next;
+      });
+    },
+    [photo.photoId, setSelectedPhotoIds]
+  );
+
+  const onPhotoClick = useCallback(() => {
+    // setCurrentPhoto(photo);
+  }, [photo]);
+
+  if (arrange === GalleryArrange.Justified && position) {
     const { width, height, top, left } = position;
     return (
       <div
-        className="absolute cursor-pointer overflow-hidden group bg-base-300"
+        className="absolute cursor-pointer overflow-hidden group"
         style={{ top, left, width, height }}
-        onClick={setPhoto}
+        onClick={onPhotoClick}
       >
         <Image
-          {...imageProps}
-          alt={photo.title}
+          {...commonImageProps}
+          alt={photo.photoId}
           className="cursor-pointer transition-normal duration-500 hover:shadow-2xl"
           style={{
             borderRadius: roundedCornerValue,
-            padding: photo.selected ? 20 : 0,
+            padding: isSelected ? 20 : 0,
             objectFit: 'contain',
           }}
         />
         <div
-          className={clsx(
+          className={cn(
             'absolute top-0 left-0 right-0 p-2',
-            photo.selected
+            isSelected
               ? 'flex'
-              : 'bg-gradient-to-b from-black/70 to-transparent hidden group-hover:flex'
+              : 'bg-gradient-to-b from-background/40 to-transparent hidden group-hover:flex'
           )}
         >
-          <input
-            type="checkbox"
-            checked={photo.selected}
-            className="checkbox rounded-full ml-auto"
-            onClick={(e) => e.stopPropagation()}
-            onChange={(e) => {
-              if (e.target.checked) {
-                setPhotos((prev) =>
-                  prev.map((p) =>
-                    p.id === photo.id ? { ...p, selected: true } : p
-                  )
-                );
-              } else {
-                console.log('deselected');
-                setPhotos((prev) =>
-                  prev.map((p) =>
-                    p.id === photo.id ? { ...p, selected: false } : p
-                  )
-                );
-              }
-            }}
+          <Checkbox
+            checked={isSelected}
+            className="rounded-full ml-auto"
+            onCheckedChange={onPhotoSelectedChange}
           />
         </div>
       </div>
     );
   }
 
-  if (layout === GalleryLayout.Grid || layout === GalleryLayout.Grid1x1) {
+  if (arrange === GalleryArrange.Grid || arrange === GalleryArrange.Grid1x1) {
     const className =
-      layout === GalleryLayout.Grid
+      arrange === GalleryArrange.Grid
         ? 'object-scale-down transition-all duration-500'
         : 'object-cover transition-all duration-500';
 
     return (
       <div
         className="group relative aspect-square cursor-pointer hover:shadow-lg"
-        onClick={setPhoto}
+        onClick={onPhotoClick}
       >
         <Image
-          {...imageProps}
+          {...commonImageProps}
           className={className}
-          alt={photo.title}
+          alt={photo.photoId}
           style={{
             borderRadius:
-              layout === GalleryLayout.Grid ? 0 : roundedCornerValue,
+              arrange === GalleryArrange.Grid ? 0 : roundedCornerValue,
           }}
         />
       </div>

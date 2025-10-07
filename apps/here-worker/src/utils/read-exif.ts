@@ -1,7 +1,10 @@
-import { Exif } from '@here-photos/db';
 import exifReader from 'exif-reader';
 
-export async function readExif(exif?: Buffer): Promise<Exif> {
+import type { Prisma } from '@here-photos/db';
+
+export async function readExif(
+  exif?: Buffer
+): Promise<Prisma.ExifCreateWithoutPhotoInput> {
   const exifData = exif ? exifReader(exif) : null;
 
   // TODO(arthur): add most used exif fields and handle gps info

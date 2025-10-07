@@ -51,13 +51,14 @@
     "size": "Size",
     "spacing": "Spacing",
     "cornerRadius": "Corner radius",
-    "group": "Group",
-    "noGrouping": "No grouping",
-    "groupByDay": "Group by day",
-    "groupByMonth": "Group by month",
-    "groupByYear": "Group by year",
+    "timeline": "Timeline",
+    "noTimeline": "All",
+    "TimelineByDay": "Day",
+    "TimelineByMonth": "Month",
+    "TimelineByYear": "Year",
     "resetToDefault": "Reset to default",
-    "addToAlbum": "Add to album"
+    "addToAlbum": "Add to album",
+    "numSelected": "{count} selected"
   },
   "albums": {
     "createAlbum": "Create Album",

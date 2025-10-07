@@ -1,15 +1,10 @@
-import { GalleryLayout, GroupBy } from './enums';
-
-export const DEFAULT_PHOTOS_LAYOUT: PhotosLayout = {
-  groupBy: GroupBy.None,
-  layout: GalleryLayout.Justified,
-  spacing: 2,
-  size: 220,
-  roundedCorner: 0,
-};
-
-export const CACHE_KEY = {
-  navMode: 'nav-mode',
-  groupAlbumsBy: 'group-albums-by',
-  albums: 'albums',
-};
+export const ROUNDED_CORNERS = [
+  '0px',
+  '4px',
+  '8px',
+  '16px',
+  '24px',
+  '32px',
+  '48px',
+  '999px',
+];

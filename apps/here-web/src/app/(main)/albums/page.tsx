@@ -4,16 +4,17 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import PageHeader from '~/components/page-header';
-import { CACHE_KEY } from '~/config/constants';
 import { GroupAlbumsBy } from '~/config/enums';
 import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
 
-import Album from './components/album';
+import AlbumUI from './components/album';
 import AlbumGroup from './components/album-group';
 import CreateAlbumModal from './components/create-album-modal';
 import { GroupAlbumsDropdown } from './components/group-albums-dropdown';
 import { groupAlbumsByYear } from './utils';
+
+import type { Album } from '@here-photos/db';
 
 export default function Page() {
   const t = useTranslations();
@@ -24,12 +25,11 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      const albums = await request('/api/v1/albums');
-      albums && setAlbums(albums.data);
+      const albums = await request<Album[]>('/api/v1/albums');
+      if (albums) {
+        setAlbums(albums);
+      }
     })();
-
-    const cachedGroupBy = localStorage.getItem(CACHE_KEY.groupAlbumsBy);
-    cachedGroupBy && setGroupBy(cachedGroupBy as GroupAlbumsBy);
   }, []);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Page() {
 
   const handleGroupByChange = (groupBy: GroupAlbumsBy) => {
     setGroupBy(groupBy);
-    localStorage.setItem(CACHE_KEY.groupAlbumsBy, groupBy);
+    // localStorage.setItem(CACHE_KEY.groupAlbumsBy, groupBy);
   };
 
   return (
@@ -93,7 +93,7 @@ export default function Page() {
               <div className="flex gap-4 w-max">
                 {pinnedAlbums.map((album) => (
                   <div key={album.id} className="flex-none w-32">
-                    <Album
+                    <AlbumUI
                       album={album}
                       showPhotosCount={false}
                       showPinButton={false}

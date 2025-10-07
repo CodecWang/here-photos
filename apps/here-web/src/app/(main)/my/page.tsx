@@ -20,7 +20,9 @@ export default function Page() {
   useEffect(() => {
     (async () => {
       const settings = await request('/api/v1/settings');
-      settings && setSettings(settings.data);
+      if (settings) {
+        setSettings(settings);
+      }
     })();
   }, []);
 

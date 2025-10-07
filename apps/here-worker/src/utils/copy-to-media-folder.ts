@@ -5,7 +5,7 @@ import { DEFAULT_MEDIA_DIR } from '../constants';
 
 export async function copyToMediaFolder(file: File) {
   // @ts-ignore
-  const targetPath = path.join(DEFAULT_MEDIA_DIR, file.newFilename);
+  const targetPath = path.join(DEFAULT_MEDIA_DIR, file.originalFilename);
   // @ts-ignore
   await fs.copyFile(file.filepath, targetPath, fs.constants.COPYFILE_EXCL);
   return targetPath;

@@ -1,0 +1,6 @@
+{
+  "mode": "minimal",
+  "variants": {
+    "result": { "enabled": true }
+  }
+}

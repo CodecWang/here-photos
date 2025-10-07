@@ -1,4 +1,5 @@
 import { Prisma, QueueTask } from '@prisma/client';
+
 import { prisma } from '../prisma/prisma-instance';
 
 export const QueueTaskDAO = {

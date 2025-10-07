@@ -1,51 +1,42 @@
 import clsx from 'clsx';
+import { useAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { DEFAULT_PHOTOS_LAYOUT } from '~/config/constants';
-import { GalleryLayout, GroupBy } from '~/config/enums';
+import { photosLayoutAtom } from '~/atoms';
 import CloseIcon from '~/icons/close-icon';
 import Dashboard from '~/icons/dashboard';
 import GridView from '~/icons/grid-view';
+import {
+  GalleryArrange,
+  PhotosLayoutSchema,
+  PhotosLayoutType,
+  TimelineGroup,
+} from '~/schemas';
 
+import { IconButton } from '../icon-button';
 import RangeWithButtons from '../range-with-buttons';
+import { Button } from '../ui/button';
 
-interface PhotosLayoutSettingProps {
+interface PhotosLayoutProps {
   open: boolean;
   onClose: () => void;
-  onChange: (newSettings: PhotosLayout) => void;
 }
 
-function getCachedLayout() {
-  const value = localStorage.getItem('photos-layout');
-  try {
-    const cachedLayout = JSON.parse(value || '{}');
-    return { ...DEFAULT_PHOTOS_LAYOUT, ...cachedLayout };
-  } catch (error) {
-    return DEFAULT_PHOTOS_LAYOUT;
-  }
-}
-
-export default function PhotosLayoutSetting({
-  open,
-  onClose,
-  onChange,
-}: PhotosLayoutSettingProps) {
+export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
   const t = useTranslations();
+  const [photosLayout, setPhotosLayout] = useAtom(photosLayoutAtom);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const [layout, setLayout] = useState<PhotosLayout>(getCachedLayout());
 
-  useEffect(() => {
-    onChange(layout);
-  }, [layout, onChange]);
-
-  const handleLayoutChange = useCallback((newView: Partial<PhotosLayout>) => {
-    setLayout((prev) => {
-      const newLayout = { ...prev, ...newView };
-      localStorage.setItem('photos-layout', JSON.stringify(newLayout));
-      return newLayout;
-    });
-  }, []);
+  const handleLayoutChange = useCallback(
+    (newView: Partial<PhotosLayoutType>) => {
+      setPhotosLayout((prev) => {
+        const newLayout = { ...prev, ...newView };
+        return newLayout;
+      });
+    },
+    []
+  );
 
   useEffect(() => {
     if (!sidebarRef.current) return;
@@ -65,55 +56,59 @@ export default function PhotosLayoutSetting({
   }, [open]);
 
   const localeMapping = {
-    [GalleryLayout.Grid]: t('photos.grid'),
-    [GalleryLayout.Grid1x1]: t('photos.grid1x1'),
-    [GalleryLayout.Justified]: t('photos.justified'),
-    [GalleryLayout.Masonry]: t('photos.masonry'),
-    [GroupBy.None]: t('photos.noGrouping'),
-    [GroupBy.Day]: t('photos.groupByDay'),
-    [GroupBy.Month]: t('photos.groupByMonth'),
-    [GroupBy.Year]: t('photos.groupByYear'),
+    [GalleryArrange.Grid]: t('photos.grid'),
+    [GalleryArrange.Grid1x1]: t('photos.grid1x1'),
+    [GalleryArrange.Justified]: t('photos.justified'),
+    [GalleryArrange.Masonry]: t('photos.masonry'),
+    [TimelineGroup.None]: t('photos.noTimeline'),
+    [TimelineGroup.Day]: t('photos.TimelineByDay'),
+    [TimelineGroup.Month]: t('photos.TimelineByMonth'),
+    [TimelineGroup.Year]: t('photos.TimelineByYear'),
   };
 
   return (
     <aside
       ref={sidebarRef}
-      className="bg-base-100 sm:border-l-base-content/10 absolute inset-y-0 right-0 z-10 hidden w-full overflow-y-auto p-4 transition-all duration-500 sm:w-80 sm:border-l"
+      className="bg-background sm:border-l-base-content/10 absolute inset-y-0 right-0 z-10 hidden w-full overflow-y-auto p-4 transition-all duration-500 sm:w-80 sm:border-l"
     >
-      <div className="mb-4 flex items-center space-x-1 sm:hidden">
-        <button className="btn btn-ghost btn-circle" onClick={onClose}>
-          <CloseIcon className="size-5" />
-        </button>
-        <span className="text-lg">{t('photos.layoutTip')}</span>
+      <div className="pb-4 flex items-center space-x-1">
+        <h3 className="text-lg flex-1">{t('photos.layoutTip')}</h3>
+        <IconButton
+          icon={<CloseIcon />}
+          className="ml-auto"
+          aria-label={t('action.close')}
+          tooltipContent={t('action.close')}
+          onClick={onClose}
+        />
       </div>
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="m-auto mt-2 flex flex-wrap space-y-2 space-x-2">
-            {Object.values(GalleryLayout).map((layoutType) => (
+            {Object.values(GalleryArrange).map((arrange) => (
               <button
-                key={layoutType}
+                key={arrange}
                 className={clsx(
                   'btn flex h-14 w-32 flex-row',
-                  layout.layout === layoutType && 'btn-primary',
+                  photosLayout.arrange === arrange && 'btn-primary'
                 )}
                 name="options"
-                disabled={layoutType === GalleryLayout.Masonry}
-                onClick={() => handleLayoutChange({ layout: layoutType })}
-                aria-label={localeMapping[layoutType]}
+                disabled={arrange === GalleryArrange.Masonry}
+                onClick={() => handleLayoutChange({ arrange })}
+                aria-label={localeMapping[arrange]}
               >
-                {layoutType === GalleryLayout.Grid && (
+                {arrange === GalleryArrange.Grid && (
                   <GridView className="size-5" />
                 )}
-                {layoutType === GalleryLayout.Justified && (
+                {arrange === GalleryArrange.Justified && (
                   <Dashboard className="size-5 rotate-90" />
                 )}
-                {layoutType === GalleryLayout.Grid1x1 && (
+                {arrange === GalleryArrange.Grid1x1 && (
                   <GridView className="size-5" />
                 )}
-                {layoutType === GalleryLayout.Masonry && (
+                {arrange === GalleryArrange.Masonry && (
                   <Dashboard className="size-5" />
                 )}
-                {localeMapping[layoutType]}
+                {localeMapping[arrange]}
               </button>
             ))}
           </div>
@@ -124,7 +119,7 @@ export default function PhotosLayoutSetting({
             min={100}
             max={600}
             step={100}
-            value={layout.size}
+            value={photosLayout.size}
             onChange={(value) => handleLayoutChange({ size: value })}
           />
         </div>
@@ -133,7 +128,7 @@ export default function PhotosLayoutSetting({
           <RangeWithButtons
             min={0}
             max={24}
-            value={layout.spacing}
+            value={photosLayout.spacing}
             onChange={(value) => handleLayoutChange({ spacing: value })}
           />
         </div>
@@ -143,9 +138,9 @@ export default function PhotosLayoutSetting({
             <input
               type="range"
               min={0}
-              disabled={layout.layout === GalleryLayout.Grid}
+              disabled={photosLayout.arrange === GalleryArrange.Grid}
               max={70}
-              value={layout.roundedCorner}
+              value={photosLayout.roundedCorner}
               className="range"
               step={10}
               onChange={(value) =>
@@ -177,17 +172,19 @@ export default function PhotosLayoutSetting({
           </div>
         </div>
         <div className="space-y-2">
-          <span className="block">{t('photos.group')}</span>
+          <span className="block">{t('photos.timeline')}</span>
           <select
             className="select select-bordered w-full max-w-xs"
-            value={layout.groupBy}
-            onChange={(e) => handleLayoutChange({ groupBy: e.target.value })}
+            value={photosLayout.timeline}
+            onChange={(e) =>
+              handleLayoutChange({ timeline: e.target.value as TimelineGroup })
+            }
           >
-            {Object.values(GroupBy).map((value) => (
+            {Object.values(TimelineGroup).map((value) => (
               <option
                 key={value}
                 value={value}
-                disabled={layout.groupBy === value}
+                disabled={photosLayout.timeline === value}
               >
                 {localeMapping[value]}
               </option>
@@ -197,12 +194,9 @@ export default function PhotosLayoutSetting({
       </div>
 
       <div className="divider"></div>
-      <button
-        className="btn"
-        onClick={() => handleLayoutChange(DEFAULT_PHOTOS_LAYOUT)}
-      >
+      <Button onClick={() => handleLayoutChange(PhotosLayoutSchema.parse({}))}>
         {t('photos.resetToDefault')}
-      </button>
+      </Button>
     </aside>
   );
 }

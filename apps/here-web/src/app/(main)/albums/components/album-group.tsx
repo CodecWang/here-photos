@@ -1,11 +1,10 @@
 import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import { CACHE_KEY } from '~/config/constants';
 import ChevronRightIcon from '~/icons/chevron-right-icon';
 
 import Album from './album';
-import { useTranslations } from 'next-intl';
 
 interface AlbumGroupProps {
   title: string;
@@ -17,16 +16,16 @@ interface AlbumGroupProps {
 const getIsCollapsed = (title: string) => {
   if (!title) return false;
 
-  if (typeof window !== 'undefined') {
-    const albums = localStorage.getItem(CACHE_KEY.albums);
-    if (!albums) return false;
+  // if (typeof window !== 'undefined') {
+  //   const albums = localStorage.getItem(CACHE_KEY.albums);
+  //   if (!albums) return false;
 
-    try {
-      return JSON.parse(albums)[title].isCollapsed ?? false;
-    } catch (error) {
-      return false;
-    }
-  }
+  //   try {
+  //     return JSON.parse(albums)[title].isCollapsed ?? false;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // }
   return false;
 };
 
@@ -35,21 +34,21 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
   const t = useTranslations();
 
   const toggleCollapse = () => {
-    setIsCollapsed(() => {
-      const newState = !isCollapsed;
-      try {
-        const albums = localStorage.getItem(CACHE_KEY.albums) ?? '{}';
-        const parsedAlbums = JSON.parse(albums);
-        parsedAlbums[title] = {
-          ...parsedAlbums[title],
-          isCollapsed: newState,
-        };
-        localStorage.setItem(CACHE_KEY.albums, JSON.stringify(parsedAlbums));
-      } catch (error) {
-        // Do nothing
-      }
-      return newState;
-    });
+    // setIsCollapsed(() => {
+    //   const newState = !isCollapsed;
+    //   try {
+    //     const albums = localStorage.getItem(CACHE_KEY.albums) ?? '{}';
+    //     const parsedAlbums = JSON.parse(albums);
+    //     parsedAlbums[title] = {
+    //       ...parsedAlbums[title],
+    //       isCollapsed: newState,
+    //     };
+    //     localStorage.setItem(CACHE_KEY.albums, JSON.stringify(parsedAlbums));
+    //   } catch (error) {
+    //     // Do nothing
+    //   }
+    //   return newState;
+    // });
   };
 
   return (

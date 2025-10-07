@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 
-import { Exif, PhotoDAO, Thumbnail } from '@here-photos/db';
+import { PhotoDAO } from '@here-photos/db';
 import { nanoid } from 'nanoid';
 import sharp from 'sharp';
 
@@ -9,6 +9,8 @@ import { generateThumbHash } from '../utils/generate-thumb-hash';
 import { generateThumbnails } from '../utils/generate-thumbnails';
 import { readExif } from '../utils/read-exif';
 import { syncFilePath } from '../utils/sync-file-path';
+
+import type { Prisma } from '@here-photos/db';
 
 export async function handleScan(filePath: string, scanDirs: string[]) {
   const stat = await fs.stat(filePath);
@@ -32,8 +34,8 @@ export async function handleScan(filePath: string, scanDirs: string[]) {
     return;
   }
 
-  let thumbnails: Thumbnail[] | undefined;
-  let exifData: Exif | undefined;
+  let thumbnails: Prisma.ThumbnailCreateManyPhotoInput[] | undefined;
+  let exifData: Prisma.ExifCreateWithoutPhotoInput | undefined;
 
   const fileSharp = sharp(fileBuffer);
   const { width, height, exif } = await fileSharp.metadata();
@@ -56,17 +58,16 @@ export async function handleScan(filePath: string, scanDirs: string[]) {
     const blurHash = await generateThumbHash(fileSharp);
     const birthTime = exifData?.shotTime ?? stat.birthtime;
 
-    const data = {
+    await PhotoDAO.create({
       hash,
       photoId,
       blurHash,
       birthTime,
       modifiedTime: stat.mtime,
       PhotoFile: { createMany: { data: [{ filePath }] } },
-      Exif: exifData && { create: exifData },
-      Thumbnail: thumbnails && { createMany: { data: thumbnails } },
-    };
-    await PhotoDAO.create(data);
+      Exif: { create: exifData },
+      Thumbnail: { createMany: thumbnails && { data: thumbnails } },
+    });
   } else {
     const data = {
       Exif: exifData && {
