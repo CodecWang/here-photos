@@ -4,7 +4,9 @@ import { useState } from 'react';
 
 import ChevronRightIcon from '~/icons/chevron-right-icon';
 
-import Album from './album';
+import AlbumUI from './album';
+
+import type { Album } from '@here-photos/db';
 
 interface AlbumGroupProps {
   title: string;
@@ -84,7 +86,7 @@ export default function AlbumGroup({ title, count, albums }: AlbumGroupProps) {
           }}
         >
           {albums.map((album) => (
-            <Album key={album.id} album={album} />
+            <AlbumUI key={album.albumId} album={album} />
           ))}
         </div>
       )}

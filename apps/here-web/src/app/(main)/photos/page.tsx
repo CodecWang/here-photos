@@ -1,17 +1,20 @@
 'use client';
 
 import clsx from 'clsx';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { photosAtom, photosLayoutAtom } from '~/atoms';
+import { photosAtom, photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import EmptyUI from '~/components/empty-ui';
 import { IconButton } from '~/components/icon-button';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
 import PhotoActions from '~/components/photos/photo-actions';
 import PhotosFilter from '~/components/photos/photos-filter';
 import PhotosLayout from '~/components/photos/photos-layout-setting';
+import { Button } from '~/components/ui/button';
+import { Spinner } from '~/components/ui/spinner';
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group';
 import Upload from '~/components/upload';
 import FilterAltIcon from '~/icons/filter-alt-icon';
@@ -27,7 +30,9 @@ export default function Page() {
   const locale = useLocale();
   const [photos, setPhotos] = useAtom(photosAtom);
   const photosLayout = useAtomValue(photosLayoutAtom);
+  const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
 
+  const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState<string>();
   const [isOpenLayout, setIsOpenLayout] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -36,10 +41,13 @@ export default function Page() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const fetchPhotos = useCallback(async () => {
+    setLoading(true);
     const rawPhotos = await request<PhotoUIType[]>('/api/v1/photos');
-    if (rawPhotos && rawPhotos.length > 0) {
+    if (rawPhotos) {
       setPhotos(rawPhotos);
+      setSelectedPhotoIds(new Set());
     }
+    setLoading(false);
   }, [setPhotos]);
 
   useEffect(() => {
@@ -87,31 +95,32 @@ export default function Page() {
         ref={scrollRef}
       >
         <PageHeader title={t('nav.photos')} scrollContainer={scrollRef}>
-          <ToggleGroup
-            type="single"
-            className="m-auto"
-            onValueChange={setKeyword}
-            value={keyword}
-          >
-            <ToggleGroupItem value="旅行" className="rounded-full">
-              旅行
-            </ToggleGroupItem>
-            <ToggleGroupItem value="摄影" className="rounded-full">
-              摄影
-            </ToggleGroupItem>
-            <ToggleGroupItem value="宠物" className="rounded-full">
-              宠物
-            </ToggleGroupItem>
-            <ToggleGroupItem value="家庭" className="rounded-full">
-              家庭
-            </ToggleGroupItem>
-            <ToggleGroupItem value="美食" className="rounded-full">
-              美食
-            </ToggleGroupItem>
-          </ToggleGroup>
-          {/* </div> */}
+          {photoGroups.length > 0 && (
+            <ToggleGroup
+              type="single"
+              className="m-auto ar-wrap"
+              onValueChange={setKeyword}
+              value={keyword}
+            >
+              <ToggleGroupItem value="旅行" className="rounded-full">
+                Travel
+              </ToggleGroupItem>
+              <ToggleGroupItem value="摄影" className="rounded-full">
+                Photography
+              </ToggleGroupItem>
+              <ToggleGroupItem value="宠物" className="rounded-full">
+                Pets
+              </ToggleGroupItem>
+              <ToggleGroupItem value="家庭" className="rounded-full">
+                Family
+              </ToggleGroupItem>
+              <ToggleGroupItem value="美食" className="rounded-full">
+                Food
+              </ToggleGroupItem>
+            </ToggleGroup>
+          )}
 
-          <div className="whitespace-nowrap flex items-center space-x-1 bg-background border rounded-full p-1">
+          <div className="whitespace-nowrap flex items-center space-x-1 ar-wrap">
             <Upload />
 
             <IconButton
@@ -132,14 +141,23 @@ export default function Page() {
             />
           </div>
 
-          <PhotoActions
-            onDelete={() => fetchPhotos()}
-            onAddToAlbum={() => fetchPhotos()}
-          />
+          <PhotoActions onDelete={() => fetchPhotos()} />
         </PageHeader>
 
         <div className="pt-2">
-          <Photos data={photoGroups} />
+          {loading ? <Spinner /> : <Photos data={photoGroups} />}
+          {!loading && photoGroups.length === 0 && (
+            <EmptyUI
+              title="No Photos Yet"
+              description="You haven't created any photos yet. Get started by adding or uploading your first photo."
+              actions={
+                <>
+                  <Button>Scan</Button>
+                  <Button variant="outline">Upload</Button>
+                </>
+              }
+            />
+          )}
         </div>
       </div>
 

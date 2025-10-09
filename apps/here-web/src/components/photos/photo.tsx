@@ -1,6 +1,7 @@
 import { thumbHashToDataURL } from '@here-photos/thumb-hash';
 import { useAtom, useAtomValue } from 'jotai';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 
 import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
@@ -64,17 +65,19 @@ export default function Photo({ photo, position }: PhotoProps) {
     [photo.photoId, setSelectedPhotoIds]
   );
 
-  const onPhotoClick = useCallback(() => {
-    // setCurrentPhoto(photo);
-  }, [photo]);
-
   if (arrange === GalleryArrange.Justified && position) {
     const { width, height, top, left } = position;
     return (
-      <div
+      <Link
         className="absolute cursor-pointer overflow-hidden group"
         style={{ top, left, width, height }}
-        onClick={onPhotoClick}
+        href={`/photos/${photo.photoId}`}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest('.photo-checkbox')) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
       >
         <Image
           {...commonImageProps}
@@ -96,11 +99,11 @@ export default function Photo({ photo, position }: PhotoProps) {
         >
           <Checkbox
             checked={isSelected}
-            className="rounded-full ml-auto"
+            className="rounded-full ml-auto photo-checkbox"
             onCheckedChange={onPhotoSelectedChange}
           />
         </div>
-      </div>
+      </Link>
     );
   }
 
@@ -111,10 +114,7 @@ export default function Photo({ photo, position }: PhotoProps) {
         : 'object-cover transition-all duration-500';
 
     return (
-      <div
-        className="group relative aspect-square cursor-pointer hover:shadow-lg"
-        onClick={onPhotoClick}
-      >
+      <div className="group relative aspect-square cursor-pointer hover:shadow-lg">
         <Image
           {...commonImageProps}
           className={className}

@@ -1,24 +1,49 @@
+import { useSetAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
+import { selectedPhotoIdsAtom } from '~/atoms';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog';
+import { Label } from '~/components/ui/label';
+import { Spinner } from '~/components/ui/spinner';
+import { useLocaleDate } from '~/hooks/use-locale-date';
+import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
 
-export default function AddToAlbumModal({
-  photoIds,
-  onConfirm,
-}: {
-  photoIds: number[];
+import { IconButton } from '../icon-button';
+import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
+
+import type { AlbumUIType } from '~/schemas';
+
+interface AddToAlbumModalProps {
+  photoIds: string[];
   onConfirm?: () => void;
-}) {
+}
+
+export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
   const t = useTranslations();
-  const [selectedAlbum, setSelectedAlbum] = useState<number | null>(null);
-  const [albums, setAlbums] = useState<Album[]>([]);
+  const { formatDate } = useLocaleDate();
+
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
+  const [albums, setAlbums] = useState<AlbumUIType[]>([]);
+  const [selectedAlbumId, setSelectedAlbumId] = useState<string>();
 
   useEffect(() => {
     (async () => {
-      const albums = await request('/api/v1/albums');
+      const albums = await request<AlbumUIType[]>('/api/v1/albums');
       if (albums) {
         setAlbums(albums);
       }
@@ -29,8 +54,7 @@ export default function AddToAlbumModal({
     e.preventDefault();
 
     setLoading(true);
-    console.log('>>>', selectedAlbum);
-    const response = await request(`/api/v1/albums/${selectedAlbum}/photos`, {
+    const response = await request(`/api/v1/albums/${selectedAlbumId}/photos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,49 +62,68 @@ export default function AddToAlbumModal({
       body: JSON.stringify({ photoIds }),
     });
 
-    if (response.code === 0) {
-      dialogRef.current?.close();
+    if (response) {
+      setOpen(false);
       setLoading(false);
-      onConfirm?.();
+      setSelectedPhotoIds(new Set());
+
+      toast.success(
+        t('albums.addPhotosSuccess', {
+          count: photoIds.length,
+          albumName: 'response.title',
+        })
+      );
     }
   };
 
-  const closeModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dialogRef.current?.close();
-  };
-
   return (
-    <dialog id="add-to-album-modal" className="modal" ref={dialogRef}>
-      <div className="modal-box">
-        <select
-          defaultValue={selectedAlbum}
-          className="select"
-          onChange={(e) => setSelectedAlbum(Number(e.target.value))}
-        >
-          {/* TODO(arthur): multi select */}
-          {albums.map((album) => (
-            <option key={album.id} value={album.id}>
-              {album.title}
-            </option>
-          ))}
-        </select>
-
-        <div className="modal-action">
-          <form method="dialog space-x-2">
-            <button className="btn" onClick={addToAlbum} disabled={loading}>
-              {loading ? (
-                <span className="loading loading-spinner loading-sm"></span>
-              ) : (
-                t('action.confirm')
-              )}
-            </button>
-            <button className="btn" onClick={closeModal}>
-              {t('action.close')}
-            </button>
-          </form>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <IconButton
+          aria-label={t('photos.addToAlbum')}
+          tooltipContent={t('photos.addToAlbum')}
+          icon={<CreateNewFolderIcon />}
+        />
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{t('photos.addToAlbum')}</DialogTitle>
+          <DialogDescription>TODO(athur)</DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4">
+          <div className="grid gap-3">
+            {albums.map((album) => (
+              <div className="flex items-start gap-3" key={album.albumId}>
+                <Checkbox
+                  id={`album-${album.albumId}`}
+                  onCheckedChange={(checked) =>
+                    setSelectedAlbumId(checked ? album.albumId : undefined)
+                  }
+                />
+                <div className="grid gap-2">
+                  <Label htmlFor={`album-${album.albumId}`}>
+                    {album.title}
+                  </Label>
+                  <p className="text-muted-foreground text-sm">
+                    {t('albums.countAndCreatedAt', {
+                      count: album._count?.AlbumPhoto || 0,
+                      createdAt: formatDate(album.createdAt),
+                    })}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </dialog>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">{t('action.close')}</Button>
+          </DialogClose>
+          <Button disabled={loading || !selectedAlbumId} onClick={addToAlbum}>
+            {loading && <Spinner />} {t('action.confirm')}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

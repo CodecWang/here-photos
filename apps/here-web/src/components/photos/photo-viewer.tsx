@@ -1,54 +1,49 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
 
 import CloseIcon from '~/icons/close-icon';
 import DeleteIcon from '~/icons/delete-icon';
 
-import IconButton from '../ui/icon-button';
+import { IconButton } from '../icon-button';
 
-// import { usePhotos } from './context';
+interface PhotoViewerProps {
+  photoId: string;
+}
 
-import type { Photo } from '@here-photos/db';
-
-export default function PhotoViewer() {
+export default function PhotoViewer(props: PhotoViewerProps) {
   const t = useTranslations();
-  const currentPhoto = null;
-  // const { currentPhoto } = usePhotos();
-  const [close, setClose] = useState(false);
+  const { photoId } = props;
 
-  useEffect(() => {
-    setClose(false);
-  }, [currentPhoto]);
+  const router = useRouter();
 
   const deletePhoto = async () => {
-    if (!currentPhoto) return;
+    if (!photoId) return;
 
     await fetch('/api/v1/photos', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ids: [(currentPhoto as Photo).id] }),
+      body: JSON.stringify({ photoIds: [photoId] }),
     });
-
-    setClose(true);
   };
 
-  if (!currentPhoto || close) return null;
+  if (!photoId) return null;
 
   return (
-    <div className="bg-base-100 fixed left-0 top-0 z-30 h-full w-full">
-      <button
-        className="btn btn-circle btn-ghost absolute left-2 top-2"
-        onClick={() => setClose(true)}
-      >
-        <CloseIcon className="size-5" />
-      </button>
+    <div className="bg-background fixed left-0 top-0 z-30 h-full w-full">
+      <IconButton
+        icon={<CloseIcon />}
+        className="absolute left-2 top-2"
+        aria-label={t('action.close')}
+        tooltipContent={t('action.close')}
+        onClick={() => router.back()}
+      />
       <div className="flex h-full flex-col items-center justify-center">
         <img
-          src={`/api/v1/photos/${
-            (currentPhoto as Photo).photoId
-          }/thumbnails?type=md`}
+          src={`/api/v1/photos/${photoId}/thumbnails?type=md`}
           alt=""
           className="max-h-full max-w-full"
         />

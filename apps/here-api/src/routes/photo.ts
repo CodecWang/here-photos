@@ -55,7 +55,7 @@ router.post('/scan', async (ctx) => {
   // const photoDirs = ['/Users/arthur/Pictures/sample-photos'];
   const photoDirs = [
     '/Users/arthur/Pictures/sample-photos/test',
-    '/Users/arthur/Pictures/sample-photos/test2',
+    // '/Users/arthur/Pictures/sample-photos/test2',
   ];
 
   const task = await QueueTaskDAO.create({ taskId: nanoid(8), type: 'scan' });

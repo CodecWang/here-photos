@@ -17,7 +17,7 @@ export const AlbumDAO = {
   create: async (data: Prisma.AlbumCreateInput) => {
     return await prisma.album.create({ data });
   },
-  update: async (id: string, data: Prisma.AlbumUpdateInput) => {
+  update: async (id: string, data: Prisma.AlbumUncheckedUpdateInput) => {
     return await prisma.album.update({ where: { albumId: id }, data });
   },
   deleteManyByAlbumIds: async (ids: string[]) => {

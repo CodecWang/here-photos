@@ -5,9 +5,12 @@ import { useTranslations } from 'next-intl';
 import IconButton from '~/components/ui/icon-button';
 import KeepIcon from '~/icons/keep-icon';
 import KeepOffIcon from '~/icons/keep-off-icon';
+import { AlbumUIType } from '~/schemas';
+
+import type { Album } from '@here-photos/db';
 
 interface AlbumProps {
-  album: Album;
+  album: AlbumUIType;
   showPhotosCount?: boolean;
   showPinButton?: boolean;
 }
@@ -19,12 +22,12 @@ export default function Album({
 }: AlbumProps) {
   const t = useTranslations();
   return (
-    <Link href={`/albums/${album.id}`}>
+    <Link href={`/albums/${album.albumId}`}>
       <div className="rounded-3xl relative overflow-hidden shadow hover:shadow-2xl group aspect-square">
-        {album.cover && (
+        {album.coverId && (
           <Image
             loader={({ src }: ImageLoaderProps) => src}
-            src={`/api/v1/photos/${album.cover.id}/thumbnails?type=md`}
+            src={`/api/v1/photos/${album.coverId}/thumbnails?type=md`}
             fill={true}
             style={{ objectFit: 'cover' }}
             alt={album.title}
@@ -35,7 +38,9 @@ export default function Album({
           <h3 className="truncate font-bold text-white">{album.title}</h3>
           {showPhotosCount && (
             <span className="text-white/80 text-sm block sm:hidden sm:group-hover:block">
-              {album.photoCount ? `${album.photoCount} photos` : 'Empty'}
+              {album._count?.AlbumPhoto
+                ? t('albums.photosCount', { count: album._count.AlbumPhoto })
+                : t('albums.noPhotos')}
             </span>
           )}
         </div>

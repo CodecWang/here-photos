@@ -70,6 +70,10 @@
     "smartAlbum": "Smart Album",
     "albumName": "Album name",
     "deleteAlbum": "Delete album?",
+    "countAndCreatedAt": "{count, plural, one {# photo} other {# photos}} · Created at {createdAt}",
+    "addPhotosSuccess": "Successfully added! ({count, plural, one {# photo} other {# photos}})",
+    "noPhotos": "No photos",
+    "photosCount": "{count, plural, one {# photo} other {# photos}}",
     "albumsCount": "{count, plural, one {# album} other {# albums}}"
   }
 }

@@ -1,4 +1,4 @@
-import { PhotoResultSchema } from '@here-photos/db';
+import { PhotoResultSchema, AlbumResultSchema } from '@here-photos/db';
 import z from 'zod';
 
 export enum TimelineGroup {
@@ -19,6 +19,14 @@ export const PhotoUISchema = PhotoResultSchema.extend({
   selected: z.boolean().optional(),
 });
 
+export const AlbumUISchema = AlbumResultSchema.extend({
+  _count: z
+    .object({
+      AlbumPhoto: z.number().default(0),
+    })
+    .optional(),
+});
+
 export const PhotosLayoutSchema = z.object({
   folder: z.enum(['none', 'months', 'years']).default('none'),
   spacing: z.number().min(0).max(24).default(2),
@@ -29,4 +37,5 @@ export const PhotosLayoutSchema = z.object({
 });
 
 export type PhotoUIType = z.infer<typeof PhotoUISchema>;
+export type AlbumUIType = z.infer<typeof AlbumUISchema>;
 export type PhotosLayoutType = z.infer<typeof PhotosLayoutSchema>;

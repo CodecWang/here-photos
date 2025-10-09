@@ -1,101 +1,103 @@
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
+import { Button } from '~/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
+import { Spinner } from '~/components/ui/spinner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
+import { useLocaleDate } from '~/hooks/use-locale-date';
+import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
+
+import type { AlbumUIType } from '~/schemas';
 
 export default function CreateAlbumModal() {
   const t = useTranslations();
   const router = useRouter();
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const { formatDate } = useLocaleDate();
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
+  const [open, setOpen] = useState(false);
+  const [albumName, setAlbumName] = useState(formatDate(Date.now()));
+  const [loading, setLoading] = useState(false);
 
-    const handleClose = () => {
-      console.log('close -- need to reset value');
-      // dialogRef.current?.reset();
-    };
-
-    dialog.addEventListener('close', handleClose);
-    return () => {
-      dialog.removeEventListener('close', handleClose);
-    };
-  }, []);
-
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    const response = await request(`/api/v1/albums`, {
+  const onCreateAlbum = async () => {
+    setLoading(true);
+    const response = await request<AlbumUIType>(`/api/v1/albums`, {
       method: 'POST',
-      body: JSON.stringify({
-        title: formData.get('albumName'),
-      }),
+      body: JSON.stringify({ title: albumName }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    router.push(`/albums/${response.data.id}`);
-    dialogRef.current?.close();
+    if (response && response.albumId) {
+      router.push(`/albums/${response.albumId}`);
+      setLoading(false);
+    }
   };
 
-  const Album = () => (
-    <label className="form-control w-full max-w-xs">
-      <div className="label">
-        <span className="label-text">{t('albums.albumName')}</span>
-      </div>
-      <input
-        type="text"
-        name="albumName"
-        placeholder="Type here"
-        required
-        className="input input-bordered peer w-full max-w-xs"
-      />
-      <p className="invisible text-xs text-gray-500 transition-all peer-invalid:visible">
-        Album name is required
-      </p>
-    </label>
-  );
-
   return (
-    <dialog
-      ref={dialogRef}
-      id="create-album-modal"
-      className="modal modal-bottom sm:modal-middle"
-    >
-      <div className="modal-box flex flex-col">
-        <form onSubmit={handleFormSubmit}>
-          <div className="join self-center">
-            <input
-              className="btn join-item"
-              type="radio"
-              name="options"
-              aria-label={t('albums.album')}
-              checked={true}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              className="rounded-full bg-transparent"
+              onClick={() => setOpen(true)}
+            >
+              <CreateNewFolderIcon />
+              <span className="hidden md:inline">
+                {t('albums.createAlbum')}
+              </span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t('albums.createAlbum')}</TooltipContent>
+        </Tooltip>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{t('albums.createAlbum')}</DialogTitle>
+          <DialogDescription>TODO(athur)</DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4">
+          <div className="grid gap-3">
+            <Label htmlFor="name-1">{t('albums.albumName')}</Label>
+            <Input
+              id="name-1"
+              name="name"
+              value={albumName}
+              onChange={(e) => setAlbumName(e.target.value)}
             />
           </div>
-          <div className="py-4">
-            <Album />
-          </div>
-          <div className="modal-action">
-            <button
-              className="btn"
-              onClick={(e) => {
-                e.preventDefault();
-                dialogRef.current?.close();
-              }}
-            >
-              {t('action.close')}
-            </button>
-            <button className="btn btn-primary" type="submit">
-              {t('action.confirm')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </dialog>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">{t('action.close')}</Button>
+          </DialogClose>
+          <Button
+            disabled={loading || !albumName.trim()}
+            onClick={onCreateAlbum}
+          >
+            {loading && <Spinner />} {t('action.confirm')}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

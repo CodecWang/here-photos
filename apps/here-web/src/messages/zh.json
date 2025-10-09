@@ -70,6 +70,10 @@
     "smartAlbum": "智能相册",
     "albumName": "相册名称",
     "deleteAlbum": "删除相册？",
+    "countAndCreatedAt": "{count} 张照片 · 创建于 {createdAt}",
+    "addPhotosSuccess": "添加成功！（{count} 张照片）",
+    "noPhotos": "没有照片",
+    "photosCount": "{count} 张照片",
     "albumsCount": "{count} 个相册"
   }
 }

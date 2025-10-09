@@ -26,7 +26,7 @@ export default function MainLayout({ children }: PropsWithChildren) {
     <main className="absolute h-full w-full overflow-hidden">
       {children}
       <NavBar />
-      <Toaster position="top-center" />
+      <Toaster />
     </main>
   );
 
