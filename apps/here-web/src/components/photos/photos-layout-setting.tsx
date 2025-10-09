@@ -83,12 +83,12 @@ export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
       </div>
       <div className="space-y-4">
         <div className="space-y-2">
-          <div className="m-auto mt-2 flex flex-wrap space-y-2 space-x-2">
+          <div className="m-auto mt-2 flex flex-wrap space-x-4">
             {Object.values(GalleryArrange).map((arrange) => (
               <button
                 key={arrange}
                 className={clsx(
-                  'btn flex h-14 w-32 flex-row',
+                  'btn flex flex-row',
                   photosLayout.arrange === arrange && 'btn-primary'
                 )}
                 name="options"

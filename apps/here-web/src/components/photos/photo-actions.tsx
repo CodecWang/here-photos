@@ -2,7 +2,6 @@ import { useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
 
 import { selectedPhotoIdsAtom } from '~/atoms';
-import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import ShareIcon from '~/icons/share-icon';
 
 import { IconButton } from '../icon-button';
@@ -24,32 +23,22 @@ export default function PhotoActions({
 
   return (
     <>
-      <div className="whitespace-nowrap ml-2 flex items-center space-x-1 bg-background border rounded-full p-1">
+      <div className="whitespace-nowrap ml-2 flex items-center space-x-1 ar-wrap">
         <IconButton
           aria-label={t('action.share')}
           disabled={true}
           tooltipContent={t('action.share')}
-          // onClick={() => {}}
           icon={<ShareIcon />}
         />
-        <IconButton
-          icon={<CreateNewFolderIcon />}
-          aria-label={t('photos.addToAlbum')}
-          tooltipContent={t('photos.addToAlbum')}
-          onClick={() => {
-            const dialog = document.getElementById('add-to-album-modal');
-            dialog?.showModal();
-          }}
+        <AddToAlbumModal
+          photoIds={Array.from(selectedPhotoIds)}
+          onConfirm={onAddToAlbum}
         />
         <DeletePhotosModal
           photoIds={Array.from(selectedPhotoIds)}
           onConfirm={onDelete}
         />
       </div>
-      <AddToAlbumModal
-        photoIds={Array.from(selectedPhotoIds)}
-        onConfirm={onAddToAlbum}
-      />
     </>
   );
 }

@@ -3,9 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import EmptyUI from '~/components/empty-ui';
 import PageHeader from '~/components/page-header';
+import { Button } from '~/components/ui/button';
 import { GroupAlbumsBy } from '~/config/enums';
-import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
+import { AlbumUIType } from '~/schemas';
 import { request } from '~/utils/request';
 
 import AlbumUI from './components/album';
@@ -18,14 +20,14 @@ import type { Album } from '@here-photos/db';
 
 export default function Page() {
   const t = useTranslations();
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [pinnedAlbums, setPinnedAlbums] = useState<Album[]>([]);
+  const [albums, setAlbums] = useState<AlbumUIType[]>([]);
+  const [pinnedAlbums, setPinnedAlbums] = useState<AlbumUIType[]>([]);
   const [albumGroups, setAlbumGroups] = useState<AlbumGroup[]>([]);
   const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.None);
 
   useEffect(() => {
     (async () => {
-      const albums = await request<Album[]>('/api/v1/albums');
+      const albums = await request<AlbumUIType[]>('/api/v1/albums');
       if (albums) {
         setAlbums(albums);
       }
@@ -59,28 +61,16 @@ export default function Page() {
   };
 
   return (
-    <div className="absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500">
+    <div
+      className="absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500 "
+      id="test-page"
+    >
       <PageHeader title={t('nav.albums')}>
-        <div
-          className="tooltip tooltip-bottom"
-          data-tip={t('albums.createAlbum')}
-        >
-          <button
-            className="btn btn-ghost"
-            onClick={() => {
-              (
-                document.getElementById(
-                  'create-album-modal'
-                ) as HTMLDialogElement
-              )?.showModal();
-            }}
-          >
-            <CreateNewFolderIcon className="size-6 md:size-5" />
-            <span className="hidden md:inline">{t('albums.createAlbum')}</span>
-          </button>
+        <div className="ar-wrap" data-tip={t('albums.createAlbum')}>
+          <CreateAlbumModal />
         </div>
 
-        <GroupAlbumsDropdown groupBy={groupBy} onChange={handleGroupByChange} />
+        {/* <GroupAlbumsDropdown groupBy={groupBy} onChange={handleGroupByChange} /> */}
       </PageHeader>
 
       <div className="space-y-6 p-4">
@@ -105,6 +95,18 @@ export default function Page() {
           </>
         )}
 
+        {albums.length === 0 && (
+          <EmptyUI
+            title="No Albums Yet"
+            description="You haven't created any albums yet. Get started by creating your first album."
+            actions={
+              <>
+                <Button>{t('albums.createAlbum')}</Button>
+              </>
+            }
+          />
+        )}
+
         {albumGroups.map((group) => (
           <AlbumGroup
             key={group.title}
@@ -114,8 +116,6 @@ export default function Page() {
           />
         ))}
       </div>
-
-      <CreateAlbumModal />
     </div>
   );
 }

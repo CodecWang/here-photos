@@ -1,11 +1,10 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { photosLayoutAtom } from '~/atoms';
+import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
 import { GalleryArrange } from '~/schemas';
 
 import PhotoGroup from './photo-group';
-import PhotoViewer from './photo-viewer';
 
 interface PhotosProps {
   data: PhotoGroupType[];
@@ -13,6 +12,8 @@ interface PhotosProps {
 
 export default function Photos({ data }: PhotosProps) {
   const photosLayout = useAtomValue(photosLayoutAtom);
+  const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
+
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = useState(0);
   const isJustified = photosLayout.arrange === GalleryArrange.Justified;
@@ -41,6 +42,12 @@ export default function Photos({ data }: PhotosProps) {
     };
   }, [isJustified, handleResize]);
 
+  useEffect(() => {
+    return () => {
+      setSelectedPhotoIds(new Set());
+    };
+  }, []);
+
   if (isJustified && !viewportWidth) {
     return <div ref={viewportRef} />;
   }
@@ -55,8 +62,6 @@ export default function Photos({ data }: PhotosProps) {
           viewportWidth={viewportWidth}
         />
       ))}
-
-      <PhotoViewer />
     </div>
   );
 }

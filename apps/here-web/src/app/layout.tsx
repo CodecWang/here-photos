@@ -17,7 +17,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
   // TODO(arthur): use dynamic lang, such as from cookie or headers(server side)
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="h-[100vh]">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

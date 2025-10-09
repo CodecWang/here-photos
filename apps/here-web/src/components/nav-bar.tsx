@@ -21,7 +21,7 @@ export default function NavBar() {
 
   return (
     <div className="absolute bottom-0 flex w-full flex-col items-center">
-      <NavigationMenu className="border mb-4 rounded-full shadow-2xl bg-background p-1">
+      <NavigationMenu className="mb-4 shadow-2xl ar-wrap">
         <NavigationMenuList>
           <NavigationMenuItem defaultChecked={true} className="flex">
             <NavigationMenuLink

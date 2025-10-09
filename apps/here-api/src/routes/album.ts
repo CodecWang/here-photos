@@ -54,6 +54,7 @@ router.post(
   async (ctx) => {
     const { albumId } = ctx.params;
     const { photoIds } = ctx.request.body;
+    AlbumDAO.update(albumId, { coverId: photoIds[0] });
     ctx.body = await AlbumDAO.addPhotos(albumId, photoIds);
   }
 );

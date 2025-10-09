@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.ar-wrap {
+  @apply backdrop-blur-md bg-background/60 border-white/20 border rounded-full p-1;
+}
+
 /* .btn {
   @apply rounded-full font-normal;
 }

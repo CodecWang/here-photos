@@ -12,9 +12,14 @@ export const LanguageProvider = ({
 }>) => {
   const locale = useAtomValue(localeAtom);
   const messages = require(`../messages/${locale}.json`);
+  const timeZone = 'Asia/Chongqing';
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider
+      locale={locale}
+      messages={messages}
+      timeZone={timeZone}
+    >
       {children}
     </NextIntlClientProvider>
   );
