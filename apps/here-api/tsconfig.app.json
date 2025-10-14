@@ -10,12 +10,14 @@
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "paths": {
       "@here-photos/db": ["../../libs/db/src/index.ts"],
+      "@here-photos/dto": ["../../libs/dto/src/index.ts"],
       "@here-photos/queue": ["../../libs/queue/src/index.ts"]
     }
   },
   "include": [
     "src/**/*.ts",
     "../../libs/db/src/**/*.ts",
+    "../../libs/dto/src/**/*.ts",
     "../../libs/queue/src/**/*.ts"
   ],
   "exclude": [
@@ -25,6 +27,7 @@
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     "../../libs/db/src/**/*.spec.ts",
+    "../../libs/dto/src/**/*.spec.ts",
     "../../libs/queue/src/**/*.spec.ts",
     "eslint.config.js",
     "eslint.config.cjs",
@@ -36,6 +39,9 @@
     },
     {
       "path": "../../libs/db/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/dto/tsconfig.lib.json"
     }
   ]
 }

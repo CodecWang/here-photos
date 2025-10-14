@@ -10,12 +10,12 @@ type SchemaMap = {
   files?: ZodType<unknown>;
 };
 
-export const validate = <T extends SchemaMap>({
+export const validateReq = <T extends SchemaMap>({
   body,
   query,
   params,
   files,
-}: T) => {
+}: T): ((ctx: Context, next: Next) => Promise<void>) => {
   return async (ctx: Context, next: Next) => {
     if (body) {
       ctx.request.body = await body.parse(ctx.request.body);
@@ -38,5 +38,25 @@ export const validate = <T extends SchemaMap>({
     }
 
     await next();
+  };
+};
+
+export const validateRsp = <T>(
+  schema: ZodType<T>
+): ((ctx: Context, next: Next) => Promise<void>) => {
+  return async (ctx: Context, next: Next) => {
+    await next();
+
+    if (ctx.body === undefined) {
+      return;
+    }
+
+    // TODO(arthur): whether still send ctx.body data back if validation fails? (to help debugging?)
+    try {
+      ctx.body = schema.parse(ctx.body);
+    } catch (error) {
+      console.error(ctx.body);
+      throw new Error(`Response validation failed: ${error}`);
+    }
   };
 };

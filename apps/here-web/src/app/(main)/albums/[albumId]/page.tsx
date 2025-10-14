@@ -1,12 +1,16 @@
 'use client';
 
+import { PhotoDTO, type AlbumDTO } from '@here-photos/dto';
 import clsx from 'clsx';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { photosLayoutAtom } from '~/atoms';
+import { groupPhotosByDate } from '../../photos/utils';
+import DeleteAlbumModal from '../components/delete-album-modal';
+
+import { photosAtom, photosLayoutAtom } from '~/atoms';
 import EmptyUI from '~/components/empty-ui';
 import { IconButton } from '~/components/icon-button';
 import PageHeader from '~/components/page-header';
@@ -14,22 +18,9 @@ import Photos from '~/components/photos';
 import PhotoActions from '~/components/photos/photo-actions';
 import PhotosLayout from '~/components/photos/photos-layout-setting';
 import { Button } from '~/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '~/components/ui/empty';
 import AddPhotoAlternateIcon from '~/icons/add-photo-alternate-icon';
 import TuneIcon from '~/icons/tune-icon';
 import { request } from '~/utils/request';
-
-import { groupPhotosByDate } from '../../photos/utils';
-import DeleteAlbumModal from '../components/delete-album-modal';
-
-import type { AlbumUIType, PhotoUIType } from '~/schemas';
 
 interface PageProps extends React.PropsWithChildren {
   params: Promise<{ albumId: string }>;
@@ -40,30 +31,27 @@ export default function Page({ params }: PageProps) {
   const photosLayout = useAtomValue(photosLayoutAtom);
 
   const { albumId } = React.use(params);
-  const [album, setAlbum] = useState<AlbumUIType>();
-  const [photos, setPhotos] = useState<PhotoUIType[]>([]);
+  const [album, setAlbum] = useState<AlbumDTO>();
+  // const [photos, setPhotos] = useState<PhotoUIType[]>([]);
+
+  const [photos, setPhotos] = useAtom(photosAtom);
   const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
   const [isOpenLayout, setIsOpenLayout] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const album = await request<AlbumUIType>(`/api/v1/albums/${albumId}`);
+      const album = await request<AlbumDTO>(`/api/v1/albums/${albumId}`);
       if (album) {
         setAlbum(album);
+        const photos = await request<PhotoDTO[]>(
+          `/api/v1/albums/${albumId}/photos`
+        );
+        if (photos) {
+          setPhotos(photos);
+        }
       }
     })();
   }, [albumId]);
-
-  useEffect(() => {
-    if (!album || !album.AlbumPhoto.length) return;
-
-    console.log(
-      '>>> regrouping photos',
-      album.AlbumPhoto.map((ap) => ap.Photo)
-    );
-
-    setPhotos(album.AlbumPhoto.map((ap) => ap.Photo));
-  }, [album, setPhotos]);
 
   useEffect(() => {
     const groups = groupPhotosByDate(photos, photosLayout.timeline);

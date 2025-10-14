@@ -1,27 +1,32 @@
+// import { z } from 'zod';
+
 import z from 'zod';
 
-export const albumIdSchema = z.object({
-  albumId: z.string().length(8),
+const nanoidSchema = z.string().length(8);
+export const BatchPayloadSchema = z.object({ count: z.number().nonnegative() });
+
+const titleSchema = z.string().min(1).max(64);
+
+export const AlbumCreateBodySchema = z.object({
+  title: titleSchema,
 });
 
-export const createAlbumSchema = z.object({
-  title: z.string().min(1).max(64),
+export const AlbumReadParamsSchema = z.object({
+  albumId: nanoidSchema,
 });
 
-export const deleteAlbumsSchema = z.object({
-  albumIds: z.array(z.string().length(8)).min(1),
+export const AlbumUpdateParamsSchema = z.object({
+  albumId: nanoidSchema,
 });
 
-export const updateAlbumSchema = z.object({
-  title: z.string().min(1).max(64).optional(),
+export const AlbumUpdateBodySchema = z.object({
+  title: titleSchema.optional(),
 });
 
-export const addPhotosSchema = z.object({
-  photoIds: z.array(z.string().min(8).max(8)).min(1),
+export const AlbumsDeleteBodySchema = z.object({
+  albumIds: z.array(nanoidSchema).min(1),
 });
 
-export type AlbumIdInput = z.infer<typeof albumIdSchema>;
-
-export type CreateAlbumInput = z.infer<typeof createAlbumSchema>;
-export type DeleteAlbumsInput = z.infer<typeof deleteAlbumsSchema>;
-export type UpdateAlbumInput = z.infer<typeof updateAlbumSchema>;
+export const AlbumAddPhotosBodySchema = z.object({
+  photoIds: z.array(nanoidSchema).min(1),
+});

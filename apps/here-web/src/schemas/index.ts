@@ -20,6 +20,11 @@ export const PhotoUISchema = PhotoResultSchema.extend({
 });
 
 export const AlbumUISchema = AlbumResultSchema.extend({
+  albumId: z.string(),
+  title: z.string(),
+  coverId: z.string().nullable(),
+  pinned: z.boolean().nullable(),
+  photos: z.array(PhotoUISchema),
   _count: z
     .object({
       AlbumPhoto: z.number().default(0),

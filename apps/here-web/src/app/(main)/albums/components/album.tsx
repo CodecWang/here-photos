@@ -2,15 +2,15 @@ import Image, { ImageLoaderProps } from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import type { Album } from '@here-photos/db';
+import type { AlbumWithPhotosCountDTO } from '@here-photos/dto';
+
 import IconButton from '~/components/ui/icon-button';
 import KeepIcon from '~/icons/keep-icon';
 import KeepOffIcon from '~/icons/keep-off-icon';
-import { AlbumUIType } from '~/schemas';
-
-import type { Album } from '@here-photos/db';
 
 interface AlbumProps {
-  album: AlbumUIType;
+  album: AlbumWithPhotosCountDTO;
   showPhotosCount?: boolean;
   showPinButton?: boolean;
 }
@@ -38,8 +38,8 @@ export default function Album({
           <h3 className="truncate font-bold text-white">{album.title}</h3>
           {showPhotosCount && (
             <span className="text-white/80 text-sm block sm:hidden sm:group-hover:block">
-              {album._count?.AlbumPhoto
-                ? t('albums.photosCount', { count: album._count.AlbumPhoto })
+              {album.photosCount
+                ? t('albums.photosCount', { count: album.photosCount })
                 : t('albums.noPhotos')}
             </span>
           )}

@@ -37,7 +37,10 @@
     "search": "Search",
     "pin": "Pin",
     "unpin": "Unpin",
-    "share": "Share"
+    "share": "Share",
+    "next": "Next",
+    "previous": "Previous",
+    "clearSelection": "Clear selection"
   },
   "photos": {
     "upload": "Upload",

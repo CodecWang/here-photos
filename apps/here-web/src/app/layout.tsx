@@ -2,11 +2,11 @@ import { ThemeProvider } from 'next-themes';
 
 import './global.css';
 
-import { TooltipProvider } from '~/components/ui/tooltip';
-
 import { LanguageProvider } from './language-provider';
 
 import type { PropsWithChildren } from 'react';
+
+import { TooltipProvider } from '~/components/ui/tooltip';
 
 export const metadata = {
   title: 'Here Photos',

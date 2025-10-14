@@ -3,14 +3,15 @@ import justifiedLayout from 'justified-layout';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 
-import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
-import { cn } from '~/lib/utils';
-import { GalleryArrange, PhotoUIType } from '~/schemas';
-
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
 
 import PhotoUI from './photo';
+
+import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { useLocaleDate } from '~/hooks/use-locale-date';
+import { cn } from '~/lib/utils';
+import { GalleryArrange, PhotoUIType } from '~/schemas';
 
 interface PhotosGroupProps {
   title?: string;
@@ -26,6 +27,7 @@ export default function PhotoGroup({
   viewportWidth,
 }: PhotosGroupProps) {
   const t = useTranslations();
+  const { formatDate } = useLocaleDate();
   const photosLayout = useAtomValue(photosLayoutAtom);
   const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
   const isJustified = photosLayout.arrange === GalleryArrange.Justified;
@@ -38,7 +40,7 @@ export default function PhotoGroup({
   const arrange = useMemo(() => {
     if (!isJustified || photos.length === 0) return null;
 
-    const thumbnails = photos.map((p) => p.Thumbnail[0]);
+    const thumbnails: JustifiedLayoutItem[] = photos.map((p) => p.ratio ?? 1);
     return justifiedLayout(thumbnails as JustifiedLayoutItem[], {
       containerPadding: 0,
       containerWidth: viewportWidth,
@@ -95,7 +97,7 @@ export default function PhotoGroup({
             )}
           />
           <Label>
-            {title}
+            {formatDate(title)}
             {isGroupSelected && (
               <span className="text-secondary ml-2">
                 {t('photos.numSelected', { count: photos.length })}

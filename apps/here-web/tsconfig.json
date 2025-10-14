@@ -19,6 +19,7 @@
     "paths": {
       "~/*": ["./src/*"],
       "@here-photos/db": ["../../libs/db/src/index.ts"],
+      "@here-photos/dto": ["../../libs/dto/src/index.ts"],
       "@here-photos/thumb-hash": ["../../libs/thumb-hash/src/index.ts"]
     },
     "types": ["jest", "node"],
@@ -51,6 +52,9 @@
   "references": [
     {
       "path": "../../libs/db"
+    },
+    {
+      "path": "../../libs/dto"
     },
     {
       "path": "../../libs/thumb-hash"

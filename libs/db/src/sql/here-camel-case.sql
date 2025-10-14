@@ -2,6 +2,8 @@ CREATE DATABASE here DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_gener
 
 USE here;
 
+SET GLOBAL time_zone = '+00:00'; -- Ensure the time zone is set to UTC
+
 CREATE TABLE QueueTask (
   id INT AUTO_INCREMENT PRIMARY KEY,
   taskId CHAR(8) NOT NULL UNIQUE,
@@ -28,6 +30,7 @@ CREATE TABLE Photo (
   id INT AUTO_INCREMENT PRIMARY KEY,
   photoId CHAR(8) NOT NULL UNIQUE,
   `hash` CHAR(32) NOT NULL UNIQUE,
+  ratio FLOAT NOT NULL, -- width / height
   blurHash VARCHAR(32) NULL,
   birthTime DATETIME DEFAULT NULL,
   modifiedTime DATETIME NOT NULL,

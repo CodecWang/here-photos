@@ -37,7 +37,10 @@
     "search": "搜索",
     "pin": "置顶",
     "unpin": "取消置顶",
-    "share": "分享"
+    "share": "分享",
+    "next": "下一张",
+    "previous": "上一张",
+    "clearSelection": "清除选择"
   },
   "photos": {
     "upload": "上传",

@@ -8,3 +8,5 @@ export const ROUNDED_CORNERS = [
   '48px',
   '999px',
 ];
+
+export const REQUEST_DEBOUNCE_MS = 200;

@@ -1,56 +1,103 @@
 import { AlbumDAO } from '@here-photos/db';
+import {
+  AlbumDTOSchema,
+  AlbumWithPhotosCountDTOSchema,
+  PhotosDTOSchema,
+} from '@here-photos/dto';
 import Router from '@koa/router';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 
 import {
-  addPhotosSchema,
-  albumIdSchema,
-  CreateAlbumInput,
-  createAlbumSchema,
-  DeleteAlbumsInput,
-  deleteAlbumsSchema,
-  UpdateAlbumInput,
-  updateAlbumSchema,
+  AlbumsDeleteBodySchema,
+  AlbumReadParamsSchema,
+  AlbumCreateBodySchema,
+  BatchPayloadSchema,
+  AlbumUpdateParamsSchema,
+  AlbumUpdateBodySchema,
+  AlbumAddPhotosBodySchema,
 } from '../schemas/album';
-import { validate } from '../utils/validate';
+import { validateReq, validateRsp } from '../utils/validate';
 
 const router = new Router({ prefix: '/api/v1/albums' });
 
-router.get('/', async (ctx) => {
-  ctx.body = await AlbumDAO.findMany();
-});
+router.get(
+  '/',
+  validateRsp(z.array(AlbumWithPhotosCountDTOSchema)),
+  async (ctx) => {
+    const albums = await AlbumDAO.getAlbums({
+      orderBy: { createdAt: 'desc' },
+    });
+    ctx.body = albums.map(({ _count, ...album }) => ({
+      ...album,
+      photosCount: _count.AlbumPhoto,
+    }));
+  }
+);
 
-router.post('/', validate({ body: createAlbumSchema }), async (ctx) => {
-  const { title } = ctx.request.body as CreateAlbumInput;
-  ctx.body = await AlbumDAO.create({ title, albumId: nanoid(8) });
-});
+router.post(
+  '/',
+  validateReq({ body: AlbumCreateBodySchema }),
+  validateRsp(AlbumDTOSchema),
+  async (ctx) => {
+    const { title } = ctx.request.body;
+    ctx.body = await AlbumDAO.create({ title, albumId: nanoid(8) });
+  }
+);
 
-router.delete('/', validate({ body: deleteAlbumsSchema }), async (ctx) => {
-  const { albumIds } = ctx.request.body as DeleteAlbumsInput;
-  ctx.body = await AlbumDAO.deleteManyByAlbumIds(albumIds);
-});
+router.delete(
+  '/',
+  validateReq({ body: AlbumsDeleteBodySchema }),
+  validateRsp(BatchPayloadSchema),
+  async (ctx) => {
+    const { albumIds } = ctx.request.body;
+    ctx.body = await AlbumDAO.deleteAlbums(albumIds);
+  }
+);
+
+router.get(
+  '/:albumId',
+  validateReq({ params: AlbumReadParamsSchema }),
+  validateRsp(AlbumDTOSchema),
+  async (ctx) => {
+    const { albumId } = ctx.params;
+    const album = await AlbumDAO.read(albumId);
+    if (!album) {
+      // TODO(arthur): unify this kind of error handling
+      throw new Error('Album not found');
+    }
+    ctx.body = album;
+  }
+);
 
 router.put(
   '/:albumId',
-  validate({ params: albumIdSchema, body: updateAlbumSchema }),
+  validateReq({ params: AlbumUpdateParamsSchema, body: AlbumUpdateBodySchema }),
+  validateRsp(AlbumDTOSchema),
   async (ctx) => {
     const { albumId } = ctx.params;
-    const { title } = ctx.request.body as UpdateAlbumInput;
+    const { title } = ctx.request.body;
     ctx.body = await AlbumDAO.update(albumId, { title });
   }
 );
 
-router.get('/:albumId', validate({ params: albumIdSchema }), async (ctx) => {
-  const { albumId } = ctx.params;
-  ctx.body = await AlbumDAO.findPhotosByAlbumId(albumId);
-});
+router.get(
+  '/:albumId/photos',
+  validateReq({ params: AlbumReadParamsSchema }),
+  validateRsp(PhotosDTOSchema),
+  async (ctx) => {
+    const { albumId } = ctx.params;
+    ctx.body = await AlbumDAO.getPhotos(albumId);
+  }
+);
 
 router.post(
   '/:albumId/photos',
-  validate({
-    params: albumIdSchema,
-    body: addPhotosSchema,
+  validateReq({
+    params: AlbumReadParamsSchema,
+    body: AlbumAddPhotosBodySchema,
   }),
+  validateRsp(BatchPayloadSchema),
   async (ctx) => {
     const { albumId } = ctx.params;
     const { photoIds } = ctx.request.body;
