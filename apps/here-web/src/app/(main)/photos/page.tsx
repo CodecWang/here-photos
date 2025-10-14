@@ -1,8 +1,9 @@
 'use client';
 
+import { PhotoGroupDTO, PhotoReadQueryDTO } from '@here-photos/dto';
 import clsx from 'clsx';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { photosAtom, photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
@@ -17,85 +18,70 @@ import { Button } from '~/components/ui/button';
 import { Spinner } from '~/components/ui/spinner';
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group';
 import Upload from '~/components/upload';
+import { REQUEST_DEBOUNCE_MS } from '~/config/constants';
 import FilterAltIcon from '~/icons/filter-alt-icon';
 import TuneIcon from '~/icons/tune-icon';
 import { request } from '~/utils/request';
 
-import { groupPhotosByDate } from './utils';
-
-import type { PhotoUIType } from '~/schemas';
+type PanelType = 'layout' | 'filter' | null;
 
 export default function Page() {
   const t = useTranslations();
-  const locale = useLocale();
-  const [photos, setPhotos] = useAtom(photosAtom);
+  const setPhotos = useSetAtom(photosAtom);
   const photosLayout = useAtomValue(photosLayoutAtom);
-  const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
 
   const [loading, setLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [keyword, setKeyword] = useState<string>();
-  const [isOpenLayout, setIsOpenLayout] = useState(false);
-  const [isOpenFilter, setIsOpenFilter] = useState(false);
-  const [photoGroups, setPhotoGroups] = useState<PhotoGroup[]>([]);
+  const [openPanel, setOpenPanel] = useState<PanelType>(null);
+  const [photoGroups, setPhotoGroups] = useState<PhotoGroupDTO[]>([]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const fetchPhotos = useCallback(async () => {
-    setLoading(true);
-    const rawPhotos = await request<PhotoUIType[]>('/api/v1/photos');
-    if (rawPhotos) {
-      setPhotos(rawPhotos);
+  const fetchPhotos = useCallback(
+    async (query?: PhotoReadQueryDTO) => {
+      if (loading) return;
+
+      console.log('>>> re-grouping photos', photosLayout);
+      setLoading(true);
+      const params = new URLSearchParams(query);
+      const groups = await request<PhotoGroupDTO[]>(`/api/v1/photos?${params}`);
+      setPhotoGroups(groups ?? []);
+      setPhotos(groups?.flatMap((g) => g.photos) ?? []);
       setSelectedPhotoIds(new Set());
-    }
-    setLoading(false);
-  }, [setPhotos]);
+      setLoading(false);
+      setHasLoaded(true);
+    },
+    [loading]
+  );
 
   useEffect(() => {
-    fetchPhotos();
-  }, [fetchPhotos]);
+    const timer = setTimeout(() => {
+      fetchPhotos({
+        timeline: photosLayout.timeline,
+        orderBy: 'birthTime',
+        order: 'desc',
+      });
+    }, REQUEST_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [photosLayout.timeline]);
 
-  useEffect(() => {
-    if (!photos.length) return;
-
-    console.log('>>> photosLayout', photosLayout);
-
-    const filteredPhotos = photos.filter((photo) => {
-      if (!keyword) return true;
-      return photo.tags?.includes(keyword);
-    });
-
-    const groups = groupPhotosByDate(
-      filteredPhotos,
-      photosLayout.timeline,
-      locale
-    );
-    console.log('>>> regrouped photos', groups);
-    setPhotoGroups(groups);
-  }, [photos, photosLayout.timeline, keyword, locale]);
-
-  const onOpenLayoutSetting = () => {
-    setIsOpenFilter(false);
-    setIsOpenLayout((prev) => !prev);
+  const togglePanel = (panel: PanelType) => {
+    setOpenPanel((prev) => (prev === panel ? null : panel));
   };
-
-  const onOpenFilter = () => {
-    setIsOpenLayout(false);
-    setIsOpenFilter((prev) => !prev);
-  };
-
-  // TODO(arthur): Add empty state
 
   return (
     <>
       <div
         className={clsx(
           'absolute inset-0 overflow-x-hidden overflow-y-auto transition-all duration-500',
-          (isOpenLayout || isOpenFilter) && 'sm:right-80'
+          openPanel !== null && 'sm:right-80'
         )}
         ref={scrollRef}
       >
         <PageHeader title={t('nav.photos')} scrollContainer={scrollRef}>
-          {photoGroups.length > 0 && (
+          {photoGroups.length > 0 && selectedPhotoIds.size === 0 && (
             <ToggleGroup
               type="single"
               className="m-auto ar-wrap"
@@ -120,33 +106,41 @@ export default function Page() {
             </ToggleGroup>
           )}
 
-          <div className="whitespace-nowrap flex items-center space-x-1 ar-wrap">
-            <Upload />
+          {selectedPhotoIds.size === 0 && (
+            <div className="whitespace-nowrap flex items-center space-x-1 ar-wrap">
+              <Upload disabled={loading} />
 
-            <IconButton
-              active={isOpenLayout}
-              icon={<TuneIcon />}
-              aria-label={t('photos.layoutTip')}
-              disabled={!photoGroups.length}
-              tooltipContent={t('photos.layoutTip')}
-              onClick={onOpenLayoutSetting}
-            />
-            <IconButton
-              active={isOpenFilter}
-              icon={<FilterAltIcon />}
-              aria-label={t('photos.filterTip')}
-              disabled={!photoGroups.length}
-              tooltipContent={t('photos.filterTip')}
-              onClick={onOpenFilter}
-            />
-          </div>
+              <IconButton
+                active={openPanel === 'layout'}
+                icon={<TuneIcon />}
+                aria-label={t('photos.layoutTip')}
+                disabled={!photoGroups.length}
+                tooltipContent={t('photos.layoutTip')}
+                onClick={() => togglePanel('layout')}
+              />
+              <IconButton
+                active={openPanel === 'filter'}
+                icon={<FilterAltIcon />}
+                aria-label={t('photos.filterTip')}
+                disabled={!photoGroups.length}
+                tooltipContent={t('photos.filterTip')}
+                onClick={() => togglePanel('filter')}
+              />
+            </div>
+          )}
 
-          <PhotoActions onDelete={() => fetchPhotos()} />
+          {selectedPhotoIds.size > 0 && (
+            <PhotoActions onDelete={() => fetchPhotos()} />
+          )}
         </PageHeader>
 
         <div className="pt-2">
-          {loading ? <Spinner /> : <Photos data={photoGroups} />}
-          {!loading && photoGroups.length === 0 && (
+          {!hasLoaded && <Spinner />}
+          {hasLoaded && loading && <Spinner />}
+          {hasLoaded && !loading && photoGroups.length > 0 && (
+            <Photos data={photoGroups} />
+          )}
+          {hasLoaded && !loading && photoGroups.length === 0 && (
             <EmptyUI
               title="No Photos Yet"
               description="You haven't created any photos yet. Get started by adding or uploading your first photo."
@@ -162,16 +156,16 @@ export default function Page() {
       </div>
 
       <PhotosLayout
-        open={isOpenLayout}
-        onClose={() => setIsOpenLayout(false)}
+        open={openPanel === 'layout'}
+        onClose={() => setOpenPanel(null)}
       />
 
       <PhotosFilter
-        open={isOpenFilter}
+        open={openPanel === 'filter'}
         onChange={() => {
           // do nothing
         }}
-        onClose={() => setIsOpenFilter(false)}
+        onClose={() => setOpenPanel(null)}
       />
     </>
   );

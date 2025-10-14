@@ -1,7 +1,9 @@
+import { PhotoDTO } from '@here-photos/dto';
+
 import { PhotoUIType, TimelineGroup } from '~/schemas';
 
 export function groupPhotosByDate(
-  photos: PhotoUIType[],
+  photos: PhotoDTO[],
   timeline: TimelineGroup,
   locale = 'en-US'
 ) {

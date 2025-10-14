@@ -2,6 +2,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import type { AlbumUIType } from '~/schemas';
+
 import { Button } from '~/components/ui/button';
 import {
   Dialog,
@@ -24,8 +26,6 @@ import {
 import { useLocaleDate } from '~/hooks/use-locale-date';
 import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
-
-import type { AlbumUIType } from '~/schemas';
 
 export default function CreateAlbumModal() {
   const t = useTranslations();

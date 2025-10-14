@@ -1,4 +1,5 @@
 import { Job, Queue, Worker } from 'bullmq';
+
 import { connection } from './redis-connection';
 
 const scanQueue = new Queue('scan', { connection });

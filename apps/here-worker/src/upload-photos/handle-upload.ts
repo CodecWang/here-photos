@@ -61,6 +61,7 @@ export async function handleUpload(file: {
 
     const data = {
       photoId,
+      ratio: width / height,
       hash: file.hash,
       blurHash,
       birthTime,

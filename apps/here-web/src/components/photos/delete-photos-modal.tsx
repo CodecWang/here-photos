@@ -1,9 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import DeleteIcon from '~/icons/delete-icon';
-import { request } from '~/utils/request';
-
 import { IconButton } from '../icon-button';
 import {
   AlertDialog,
@@ -18,12 +15,15 @@ import {
 } from '../ui/alert-dialog';
 import { Spinner } from '../ui/spinner';
 
+import DeleteIcon from '~/icons/delete-icon';
+import { request } from '~/utils/request';
+
 export default function DeletePhotosModal({
   photoIds,
   onConfirm,
 }: {
   photoIds: string[];
-  onConfirm?: () => void;
+  onConfirm?: (photoIds: string[]) => void;
 }) {
   const t = useTranslations();
   const [open, setOpen] = useState(false);
@@ -46,7 +46,7 @@ export default function DeletePhotosModal({
     if (response && response.count) {
       setLoading(false);
       setOpen(false);
-      onConfirm?.();
+      onConfirm?.(photoIds);
     }
   };
 

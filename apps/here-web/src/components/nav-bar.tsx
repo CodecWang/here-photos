@@ -2,10 +2,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import PhotoIcon from '~/icons/photo-icon';
-import SearchIcon from '~/icons/search-icon';
-import { cn } from '~/lib/utils';
-
 import { IconButton } from './icon-button';
 import {
   NavigationMenu,
@@ -15,6 +11,10 @@ import {
   navigationMenuTriggerStyle,
 } from './ui/navigation-menu';
 
+// import PhotoIcon from '~/icons/photo-icon';
+import SearchIcon from '~/icons/search-icon';
+import { cn } from '~/lib/utils';
+
 export default function NavBar() {
   const t = useTranslations();
   const pathname = usePathname();
@@ -23,7 +23,7 @@ export default function NavBar() {
     <div className="absolute bottom-0 flex w-full flex-col items-center">
       <NavigationMenu className="mb-4 shadow-2xl ar-wrap">
         <NavigationMenuList>
-          <NavigationMenuItem defaultChecked={true} className="flex">
+          <NavigationMenuItem defaultChecked={true} className="flex space-x-1">
             <NavigationMenuLink
               asChild
               active
@@ -34,7 +34,7 @@ export default function NavBar() {
               )}
             >
               <Link href="/photos">
-                <PhotoIcon className="hidden lg:block size-4" />
+                {/* <PhotoIcon className="hidden lg:block size-4" /> */}
                 {t('nav.photos')}
               </Link>
             </NavigationMenuLink>

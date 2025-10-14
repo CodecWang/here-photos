@@ -4,15 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 
-import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
-import { ROUNDED_CORNERS } from '~/config/constants';
-import { cn } from '~/lib/utils';
-import { GalleryArrange, PhotoUIType } from '~/schemas';
-
 import { Checkbox } from '../ui/checkbox';
 
 import type { Photo } from '@here-photos/db';
 import type { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
+
+import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { ROUNDED_CORNERS } from '~/config/constants';
+import { cn } from '~/lib/utils';
+import { GalleryArrange, PhotoUIType } from '~/schemas';
 
 interface PhotoProps {
   photo: PhotoUIType;

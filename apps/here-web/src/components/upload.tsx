@@ -1,12 +1,12 @@
 import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 
-import UploadIcon from '~/icons/upload-icon';
-
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
-export default function Upload() {
+import UploadIcon from '~/icons/upload-icon';
+
+export default function Upload({ disabled }: { disabled?: boolean }) {
   const t = useTranslations();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -38,6 +38,7 @@ export default function Upload() {
             variant="ghost"
             className="rounded-full bg-transparent"
             onClick={() => fileInputRef.current?.click()}
+            disabled={disabled}
           >
             <UploadIcon />
             <span className="hidden md:inline">{t('photos.upload')}</span>

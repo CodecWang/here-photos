@@ -1,10 +1,10 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
-import { GalleryArrange } from '~/schemas';
-
 import PhotoGroup from './photo-group';
+
+import { photosAtom, photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { GalleryArrange } from '~/schemas';
 
 interface PhotosProps {
   data: PhotoGroupType[];

@@ -60,6 +60,7 @@ export async function handleScan(filePath: string, scanDirs: string[]) {
 
     await PhotoDAO.create({
       hash,
+      ratio: width / height,
       photoId,
       blurHash,
       birthTime,

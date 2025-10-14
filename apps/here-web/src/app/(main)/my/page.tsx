@@ -3,11 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import PageHeader from '~/components/page-header';
-import { request } from '~/utils/request';
-
 import Apperence from './components/apperence';
 import ScanDirectories from './components/scan-directories';
+
+import PageHeader from '~/components/page-header';
+import { request } from '~/utils/request';
 
 interface Settings {
   photoDirs: string[];

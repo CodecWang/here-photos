@@ -1,9 +1,13 @@
-import { useSetAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { selectedPhotoIdsAtom } from '~/atoms';
+import { IconButton } from '../icon-button';
+import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
+
+import type { AlbumUIType } from '~/schemas';
+
 import {
   Dialog,
   DialogClose,
@@ -20,12 +24,6 @@ import { useLocaleDate } from '~/hooks/use-locale-date';
 import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
 
-import { IconButton } from '../icon-button';
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-
-import type { AlbumUIType } from '~/schemas';
-
 interface AddToAlbumModalProps {
   photoIds: string[];
   onConfirm?: () => void;
@@ -37,7 +35,6 @@ export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
   const [albums, setAlbums] = useState<AlbumUIType[]>([]);
   const [selectedAlbumId, setSelectedAlbumId] = useState<string>();
 
@@ -65,7 +62,6 @@ export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
     if (response) {
       setOpen(false);
       setLoading(false);
-      setSelectedPhotoIds(new Set());
 
       toast.success(
         t('albums.addPhotosSuccess', {

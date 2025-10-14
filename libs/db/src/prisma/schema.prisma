@@ -3,8 +3,8 @@ generator client {
 }
 
 generator zod {
-	provider = "prisma-zod-generator"
-  config = "./zod-generator.config.json"
+  provider = "prisma-zod-generator"
+  config   = "./zod-generator.config.json"
 }
 
 datasource db {
@@ -56,6 +56,7 @@ model Photo {
   id           Int          @id @default(autoincrement())
   photoId      String       @unique(map: "photoId") @db.Char(8)
   hash         String       @unique(map: "hash") @db.Char(32)
+  ratio        Float        @db.Float
   blurHash     String?      @db.VarChar(32)
   birthTime    DateTime?    @db.DateTime(0)
   modifiedTime DateTime     @db.DateTime(0)

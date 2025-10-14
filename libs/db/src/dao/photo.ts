@@ -1,4 +1,5 @@
 import { prisma } from '../prisma/prisma-instance';
+import { photoSelect } from '../select-fields';
 
 import type { Prisma } from '@prisma/client';
 
@@ -29,17 +30,27 @@ export const PhotoDAO = {
     });
   },
   // TODO(arthur): redesign ado interface, like simplify: findMany(args) -> prisma.findMany(args)
-  findMany: async (
-    where?: Prisma.PhotoWhereInput,
-    include?: Prisma.PhotoInclude,
-    orderBy?: Prisma.PhotoOrderByWithRelationInput
-  ) => {
-    return await prisma.photo.findMany({
-      where,
-      include: include || { Exif: true, Thumbnail: true, PhotoFile: true },
-      orderBy: orderBy || { birthTime: 'desc' },
+  // findMany: async (
+  //   where?: Prisma.PhotoWhereInput,
+  //   include?: Prisma.PhotoInclude,
+  //   orderBy?: Prisma.PhotoOrderByWithRelationInput
+  // ) => {
+  //   return await prisma.photo.findMany({
+  //     where,
+  //     include: include || { Exif: true, Thumbnail: true, PhotoFile: true },
+  //     orderBy: orderBy || { birthTime: 'desc' },
+  //   });
+  // },
+
+  getPhotos<T extends Prisma.PhotoFindManyArgs = Prisma.PhotoFindManyArgs>(
+    args?: Omit<T, 'select'>
+  ): Promise<Prisma.PhotoGetPayload<{ select: typeof photoSelect }>[]> {
+    return prisma.photo.findMany({
+      select: photoSelect,
+      ...(args ?? {}),
     });
   },
+
   create: async (data: Prisma.PhotoCreateInput) => {
     return await prisma.photo.create({ data });
   },

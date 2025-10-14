@@ -3,31 +3,32 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import EmptyUI from '~/components/empty-ui';
-import PageHeader from '~/components/page-header';
-import { Button } from '~/components/ui/button';
-import { GroupAlbumsBy } from '~/config/enums';
-import { AlbumUIType } from '~/schemas';
-import { request } from '~/utils/request';
-
-import AlbumUI from './components/album';
+import Album from './components/album';
 import AlbumGroup from './components/album-group';
 import CreateAlbumModal from './components/create-album-modal';
 import { GroupAlbumsDropdown } from './components/group-albums-dropdown';
 import { groupAlbumsByYear } from './utils';
 
-import type { Album } from '@here-photos/db';
+import type { AlbumDTO, AlbumWithPhotosCountDTO } from '@here-photos/dto';
+
+import EmptyUI from '~/components/empty-ui';
+import PageHeader from '~/components/page-header';
+import { Button } from '~/components/ui/button';
+import { GroupAlbumsBy } from '~/config/enums';
+import { request } from '~/utils/request';
 
 export default function Page() {
   const t = useTranslations();
-  const [albums, setAlbums] = useState<AlbumUIType[]>([]);
-  const [pinnedAlbums, setPinnedAlbums] = useState<AlbumUIType[]>([]);
+  const [albums, setAlbums] = useState<AlbumWithPhotosCountDTO[]>([]);
+  const [pinnedAlbums, setPinnedAlbums] = useState<AlbumWithPhotosCountDTO[]>(
+    []
+  );
   const [albumGroups, setAlbumGroups] = useState<AlbumGroup[]>([]);
   const [groupBy, setGroupBy] = useState<GroupAlbumsBy>(GroupAlbumsBy.None);
 
   useEffect(() => {
     (async () => {
-      const albums = await request<AlbumUIType[]>('/api/v1/albums');
+      const albums = await request<AlbumWithPhotosCountDTO[]>('/api/v1/albums');
       if (albums) {
         setAlbums(albums);
       }
@@ -82,8 +83,8 @@ export default function Page() {
             <div className="overflow-x-auto">
               <div className="flex gap-4 w-max">
                 {pinnedAlbums.map((album) => (
-                  <div key={album.id} className="flex-none w-32">
-                    <AlbumUI
+                  <div key={album.albumId} className="flex-none w-32">
+                    <Album
                       album={album}
                       showPhotosCount={false}
                       showPinButton={false}
