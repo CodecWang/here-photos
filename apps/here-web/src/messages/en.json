@@ -43,6 +43,7 @@
     "clearSelection": "Clear selection"
   },
   "photos": {
+    "allPhotos": "All Photos",
     "upload": "Upload",
     "uploadTip": "Upload photos",
     "layoutTip": "Layout settings",

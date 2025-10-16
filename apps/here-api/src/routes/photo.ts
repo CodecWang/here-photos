@@ -4,13 +4,11 @@ import path from 'path';
 import { PhotoDAO, QueueTaskDAO, ThumbnailDAO } from '@here-photos/db';
 import {
   PhotoGroupDTOSchema,
-  PhotoDTO,
   PhotoReadQueryDTOSchema,
   PhotoReadQueryDTO,
 } from '@here-photos/dto';
 import { addScanTask, addUploadTask } from '@here-photos/queue';
 import Router from '@koa/router';
-import { DateTime } from 'luxon';
 import { nanoid } from 'nanoid';
 import z from 'zod';
 
@@ -23,7 +21,7 @@ import {
   UploadPhotosInput,
   thumbnailTypeSchema,
 } from '../schemas/photo';
-import { utc2cst } from '../utils/utc-convert';
+import { PhotoService } from '../services/photo';
 import { validateReq, validateRsp } from '../utils/validate';
 
 const router = new Router({ prefix: '/api/v1/photos' });
@@ -35,41 +33,12 @@ router.get(
   async (ctx) => {
     const { timeline, orderBy, order } = ctx.request.query as PhotoReadQueryDTO;
     const photos = await PhotoDAO.getPhotos({ orderBy: { [orderBy]: order } });
-    const formatMap = {
-      none: '',
-      year: 'yyyy',
-      month: 'yyyy-MM',
-      day: 'yyyy-MM-dd',
-    } as const;
-    const format = formatMap[timeline as keyof typeof formatMap] ?? 'yyyy-MM';
-    const groupMap = new Map<string, PhotoDTO[]>();
 
-    for (const photo of photos) {
-      const localTime = utc2cst(photo.birthTime);
-      if (!localTime) continue;
-
-      const key = localTime.toFormat(format);
-      const group = groupMap.get(key);
-      const data = {
-        ...photo,
-        birthTime: localTime.toISO(),
-      };
-
-      if (group) group.push(data);
-      else groupMap.set(key, [data]);
-    }
-
-    const groups = [...groupMap.entries()]
-      .sort(([a], [b]) => {
-        const dtA = DateTime.fromFormat(a, format);
-        const dtB = DateTime.fromFormat(b, format);
-        return order === 'desc'
-          ? dtB.toMillis() - dtA.toMillis()
-          : dtA.toMillis() - dtB.toMillis();
-      })
-      .map(([title, photos]) => ({ title, photos }));
-
-    ctx.body = groups;
+    // @ts-ignore
+    ctx.body = await PhotoService.sortAndGroupPhotos(photos, {
+      timeline,
+      order,
+    });
   }
 );
 

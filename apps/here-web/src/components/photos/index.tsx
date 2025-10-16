@@ -1,16 +1,20 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import PhotoGroup from './photo-group';
-
-import { photosAtom, photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
 import { GalleryArrange } from '~/schemas';
 
+import EmptyUI from '../empty-ui';
+
+import PhotoGroup from './photo-group';
+
 interface PhotosProps {
+  albumId?: string;
   data: PhotoGroupType[];
+  emptyActions?: React.ReactNode;
 }
 
-export default function Photos({ data }: PhotosProps) {
+export default function Photos({ albumId, data, emptyActions }: PhotosProps) {
   const photosLayout = useAtomValue(photosLayoutAtom);
   const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
 
@@ -52,11 +56,24 @@ export default function Photos({ data }: PhotosProps) {
     return <div ref={viewportRef} />;
   }
 
+  if (!data || data.length === 0) {
+    return (
+      <div ref={viewportRef}>
+        <EmptyUI
+          title="No Photos Yet"
+          description="You haven't created any photos yet. Get started by adding or uploading your first photo."
+          actions={emptyActions}
+        />
+      </div>
+    );
+  }
+
   return (
     <div ref={viewportRef}>
       {data.map(({ title, photos }) => (
         <PhotoGroup
           key={title}
+          albumId={albumId}
           title={title}
           photos={photos}
           viewportWidth={viewportWidth}

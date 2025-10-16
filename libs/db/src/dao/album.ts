@@ -1,11 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { prisma } from '../prisma/prisma-instance';
-import {
-  albumSelect,
-  albumSelectWithPhotosCount,
-  photoSelect,
-} from '../select-fields';
+import { albumSelect, albumSelectWithPhotosCount } from '../select-fields';
 
 export const AlbumDAO = {
   read: async (photoId: string) => {
@@ -49,14 +45,6 @@ export const AlbumDAO = {
   deleteAlbums: async (albumIds: string[]): Promise<Prisma.BatchPayload> => {
     return await prisma.album.deleteMany({
       where: { albumId: { in: albumIds } },
-    });
-  },
-
-  getPhotos: async (albumId: string) => {
-    return await prisma.photo.findMany({
-      where: { AlbumPhoto: { some: { albumId } } },
-      orderBy: { createdAt: 'desc' },
-      select: photoSelect,
     });
   },
 

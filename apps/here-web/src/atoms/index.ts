@@ -1,9 +1,9 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
-import type { PhotoDTO } from '@here-photos/dto';
+import { PhotosLayoutSchema, PhotosLayoutType } from '~/schemas';
 
-import { PhotosLayoutSchema, PhotosLayoutType, PhotoUIType } from '~/schemas';
+import type { PhotoDTO } from '@here-photos/dto';
 
 export const selectedPhotoIdsAtom = atom<Set<string>>(new Set<string>());
 

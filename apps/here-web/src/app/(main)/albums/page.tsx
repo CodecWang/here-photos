@@ -3,19 +3,19 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import EmptyUI from '~/components/empty-ui';
+import PageHeader from '~/components/page-header';
+import { Button } from '~/components/ui/button';
+import { GroupAlbumsBy } from '~/config/enums';
+import { request } from '~/utils/request';
+
 import Album from './components/album';
 import AlbumGroup from './components/album-group';
 import CreateAlbumModal from './components/create-album-modal';
 import { GroupAlbumsDropdown } from './components/group-albums-dropdown';
 import { groupAlbumsByYear } from './utils';
 
-import type { AlbumDTO, AlbumWithPhotosCountDTO } from '@here-photos/dto';
-
-import EmptyUI from '~/components/empty-ui';
-import PageHeader from '~/components/page-header';
-import { Button } from '~/components/ui/button';
-import { GroupAlbumsBy } from '~/config/enums';
-import { request } from '~/utils/request';
+import type { AlbumWithPhotosCountDTO } from '@here-photos/dto';
 
 export default function Page() {
   const t = useTranslations();

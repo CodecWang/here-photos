@@ -1,8 +1,10 @@
-import { AlbumDAO } from '@here-photos/db';
+import { AlbumDAO, PhotoDAO } from '@here-photos/db';
 import {
   AlbumDTOSchema,
   AlbumWithPhotosCountDTOSchema,
-  PhotosDTOSchema,
+  PhotoGroupDTOSchema,
+  PhotoReadQueryDTO,
+  PhotoReadQueryDTOSchema,
 } from '@here-photos/dto';
 import Router from '@koa/router';
 import { nanoid } from 'nanoid';
@@ -17,6 +19,7 @@ import {
   AlbumUpdateBodySchema,
   AlbumAddPhotosBodySchema,
 } from '../schemas/album';
+import { PhotoService } from '../services/photo';
 import { validateReq, validateRsp } from '../utils/validate';
 
 const router = new Router({ prefix: '/api/v1/albums' });
@@ -83,11 +86,22 @@ router.put(
 
 router.get(
   '/:albumId/photos',
-  validateReq({ params: AlbumReadParamsSchema }),
-  validateRsp(PhotosDTOSchema),
+  validateReq({
+    params: AlbumReadParamsSchema,
+    query: PhotoReadQueryDTOSchema,
+  }),
+  validateRsp(z.array(PhotoGroupDTOSchema)),
   async (ctx) => {
     const { albumId } = ctx.params;
-    ctx.body = await AlbumDAO.getPhotos(albumId);
+    const { timeline, orderBy, order } = ctx.request.query as PhotoReadQueryDTO;
+    const photos = await PhotoDAO.getPhotosByAlbumId(albumId, {
+      orderBy: { [orderBy]: order },
+    });
+    // @ts-ignore
+    ctx.body = await PhotoService.sortAndGroupPhotos(photos, {
+      timeline,
+      order,
+    });
   }
 );
 

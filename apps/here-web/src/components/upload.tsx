@@ -1,12 +1,18 @@
 import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 
-import { Button } from './ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-
 import UploadIcon from '~/icons/upload-icon';
 
-export default function Upload({ disabled }: { disabled?: boolean }) {
+import { Button, ButtonProps } from './ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+
+type UploadProps = Pick<ButtonProps, 'className' | 'variant' | 'disabled'>;
+
+export default function Upload({
+  disabled,
+  className,
+  variant = 'ghost',
+}: UploadProps) {
   const t = useTranslations();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,8 +41,8 @@ export default function Upload({ disabled }: { disabled?: boolean }) {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant="ghost"
-            className="rounded-full bg-transparent"
+            variant={variant}
+            className={className}
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled}
           >
