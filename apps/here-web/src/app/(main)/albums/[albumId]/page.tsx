@@ -1,5 +1,6 @@
 'use client';
 
+import { PhotoDTO, type AlbumDTO } from '@here-photos/dto';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';

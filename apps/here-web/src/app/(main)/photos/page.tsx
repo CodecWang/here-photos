@@ -1,5 +1,6 @@
 'use client';
 
+import { PhotoGroupDTO, PhotoReadQueryDTO } from '@here-photos/dto';
 import clsx from 'clsx';
 import { useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
