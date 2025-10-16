@@ -43,6 +43,7 @@
     "clearSelection": "清除选择"
   },
   "photos": {
+    "allPhotos": "所有照片",
     "upload": "上传",
     "uploadTip": "上传照片",
     "layoutTip": "布局设置",

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { photosLayoutAtom } from '~/atoms';
+import ArrowBackIcon from '~/icons/arrow-back-icon';
 import CloseIcon from '~/icons/close-icon';
 import Dashboard from '~/icons/dashboard';
 import GridView from '~/icons/grid-view';
@@ -11,12 +12,24 @@ import {
   GalleryArrange,
   PhotosLayoutSchema,
   PhotosLayoutType,
+  SortOrder,
   TimelineGroup,
 } from '~/schemas';
 
 import { IconButton } from '../icon-button';
 import RangeWithButtons from '../range-with-buttons';
 import { Button } from '../ui/button';
+import { Label } from '../ui/label';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Slider } from '../ui/slider';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 interface PhotosLayoutProps {
   open: boolean;
@@ -28,15 +41,12 @@ export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
   const [photosLayout, setPhotosLayout] = useAtom(photosLayoutAtom);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const handleLayoutChange = useCallback(
-    (newView: Partial<PhotosLayoutType>) => {
-      setPhotosLayout((prev) => {
-        const newLayout = { ...prev, ...newView };
-        return newLayout;
-      });
-    },
-    []
-  );
+  const onLayoutChange = useCallback((newView: Partial<PhotosLayoutType>) => {
+    setPhotosLayout((prev) => {
+      const newLayout = { ...prev, ...newView };
+      return newLayout;
+    });
+  }, []);
 
   useEffect(() => {
     if (!sidebarRef.current) return;
@@ -93,7 +103,7 @@ export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
                 )}
                 name="options"
                 disabled={arrange === GalleryArrange.Masonry}
-                onClick={() => handleLayoutChange({ arrange })}
+                onClick={() => onLayoutChange({ arrange })}
                 aria-label={localeMapping[arrange]}
               >
                 {arrange === GalleryArrange.Grid && (
@@ -120,7 +130,7 @@ export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
             max={600}
             step={100}
             value={photosLayout.size}
-            onChange={(value) => handleLayoutChange({ size: value })}
+            onChange={(value) => onLayoutChange({ size: value })}
           />
         </div>
         <div className="space-y-2">
@@ -129,25 +139,18 @@ export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
             min={0}
             max={24}
             value={photosLayout.spacing}
-            onChange={(value) => handleLayoutChange({ spacing: value })}
+            onChange={(v) => onLayoutChange({ spacing: v })}
           />
         </div>
         <div className="space-y-2">
           <span className="block">{t('photos.cornerRadius')}</span>
           <div className="w-full max-w-xs">
-            <input
-              type="range"
-              min={0}
-              disabled={photosLayout.arrange === GalleryArrange.Grid}
+            <Slider
+              value={[photosLayout.roundedCorner]}
               max={70}
-              value={photosLayout.roundedCorner}
-              className="range"
+              min={0}
               step={10}
-              onChange={(value) =>
-                handleLayoutChange({
-                  roundedCorner: Number(value.target.value),
-                })
-              }
+              onValueChange={(v) => onLayoutChange({ roundedCorner: v[0] })}
             />
             <div className="mt-2 flex justify-between px-2.5 text-xs">
               <span>|</span>
@@ -171,30 +174,81 @@ export default function PhotosLayout({ open, onClose }: PhotosLayoutProps) {
             </div>
           </div>
         </div>
-        <div className="space-y-2">
-          <span className="block">{t('photos.timeline')}</span>
-          <select
-            className="select select-bordered w-full max-w-xs"
+      </div>
+
+      <div className="space-y-2">
+        <span className="block">排序和分组</span>
+        <div className="flex space-x-2 items-center">
+          <RadioGroup
+            value={photosLayout.sortOrder}
+            className="flex"
+            onValueChange={(v) => {
+              onLayoutChange({
+                sortOrder: v as PhotosLayoutType['sortOrder'],
+              });
+              console.log(v);
+            }}
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value={SortOrder.Asc} id="option-one" />
+              <Label htmlFor="option-one">拍摄时间</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value={SortOrder.Desc} id="option-two" />
+              <Label htmlFor="option-two">添加时间</Label>
+            </div>
+          </RadioGroup>
+
+          <ToggleGroup
+            variant="outline"
+            type="single"
+            value={photosLayout.sortOrder}
+            onValueChange={(v) => {
+              onLayoutChange({
+                sortOrder: v as PhotosLayoutType['sortOrder'],
+              });
+              console.log(v);
+            }}
+          >
+            <ToggleGroupItem value={SortOrder.Desc}>
+              <ArrowBackIcon className="-rotate-90" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value={SortOrder.Asc}>
+              <ArrowBackIcon className="rotate-90" />
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+        <div className="flex items-center">
+          <span>{t('photos.timeline')}</span>
+          <Select
             value={photosLayout.timeline}
-            onChange={(e) =>
-              handleLayoutChange({ timeline: e.target.value as TimelineGroup })
+            onValueChange={(e) =>
+              onLayoutChange({ timeline: e as TimelineGroup })
             }
           >
-            {Object.values(TimelineGroup).map((value) => (
-              <option
-                key={value}
-                value={value}
-                disabled={photosLayout.timeline === value}
-              >
-                {localeMapping[value]}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-[90px]">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={TimelineGroup.None}>
+                {t('photos.noTimeline')}
+              </SelectItem>
+              <SelectItem value={TimelineGroup.Year}>
+                {t('photos.TimelineByYear')}
+              </SelectItem>
+              <SelectItem value={TimelineGroup.Month}>
+                {t('photos.TimelineByMonth')}
+              </SelectItem>
+              <SelectItem value={TimelineGroup.Day}>
+                {t('photos.TimelineByDay')}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
       <div className="divider"></div>
-      <Button onClick={() => handleLayoutChange(PhotosLayoutSchema.parse({}))}>
+      <Button onClick={() => onLayoutChange(PhotosLayoutSchema.parse({}))}>
         {t('photos.resetToDefault')}
       </Button>
     </aside>

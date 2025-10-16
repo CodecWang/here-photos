@@ -3,6 +3,8 @@ import { useRef } from 'react';
 import AddIcon from '~/icons/add-icon';
 import RemoveIcon from '~/icons/remove-icon';
 
+import { Slider } from './ui/slider';
+
 interface RangeWithButtonsProps {
   min: number;
   max: number;
@@ -47,15 +49,16 @@ export default function RangeWithButtons({
       >
         <RemoveIcon className="size-4" />
       </button>
-      <input
-        ref={ref}
-        type="range"
-        min={min}
+
+      <Slider
+        value={[value]}
         max={max}
+        min={min}
         step={step}
-        value={value}
-        className="range range-sm"
-        onChange={(e) => onChange(Number(e.target.value))}
+        onValueChange={(e) => {
+          console.log('>>>>', e);
+          onChange(e[0] as number);
+        }}
       />
       <button
         className="btn btn-sm btn-ghost btn-square"

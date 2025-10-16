@@ -15,11 +15,12 @@ import { cn } from '~/lib/utils';
 import { GalleryArrange, PhotoUIType } from '~/schemas';
 
 interface PhotoProps {
+  albumId?: string;
   photo: PhotoUIType;
   position?: { width: number; height: number; top: number; left: number };
 }
 
-export default function Photo({ photo, position }: PhotoProps) {
+export default function Photo({ albumId, photo, position }: PhotoProps) {
   const { arrange, roundedCorner } = useAtomValue(photosLayoutAtom);
   const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
 
@@ -71,11 +72,21 @@ export default function Photo({ photo, position }: PhotoProps) {
       <Link
         className="absolute cursor-pointer overflow-hidden group"
         style={{ top, left, width, height }}
-        href={`/photos/${photo.photoId}`}
+        href={
+          albumId
+            ? `/albums/${albumId}/photos/${photo.photoId}`
+            : `/photos/${photo.photoId}`
+        }
         onClick={(e) => {
           if ((e.target as HTMLElement).closest('.photo-checkbox')) {
             e.preventDefault();
             e.stopPropagation();
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === ' ' || e.key === 'Spacebar') {
+            e.preventDefault();
+            onPhotoSelectedChange(!isSelected);
           }
         }}
       >

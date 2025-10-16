@@ -51,6 +51,20 @@ export const PhotoDAO = {
     });
   },
 
+  getPhotosByAlbumId<
+    T extends Prisma.PhotoFindManyArgs = Prisma.PhotoFindManyArgs
+  >(
+    albumId: string,
+    args?: Omit<T, 'select'>
+  ): Promise<Prisma.PhotoGetPayload<{ select: typeof photoSelect }>[]> {
+    return prisma.photo.findMany({
+      where: { AlbumPhoto: { some: { albumId } } },
+      // orderBy: { createdAt: 'desc' },
+      select: photoSelect,
+      ...(args ?? {}),
+    });
+  },
+
   create: async (data: Prisma.PhotoCreateInput) => {
     return await prisma.photo.create({ data });
   },

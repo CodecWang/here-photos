@@ -11,9 +11,10 @@ import PhotoUI from './photo';
 import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
 import { useLocaleDate } from '~/hooks/use-locale-date';
 import { cn } from '~/lib/utils';
-import { GalleryArrange, PhotoUIType } from '~/schemas';
+import { GalleryArrange, PhotoUIType, TimelineGroup } from '~/schemas';
 
 interface PhotosGroupProps {
+  albumId?: string;
   title?: string;
   photos: PhotoUIType[];
   viewportWidth: number;
@@ -23,6 +24,7 @@ type JustifiedLayoutItem = number | { width: number; height: number };
 
 export default function PhotoGroup({
   title,
+  albumId,
   photos,
   viewportWidth,
 }: PhotosGroupProps) {
@@ -86,7 +88,7 @@ export default function PhotoGroup({
 
   return (
     <section>
-      {title && (
+      {(title || selectedPhotoIds.size > 0) && (
         <header className="flex group items-center gap-x-3 h-12 px-4 text-sm font-medium">
           <Checkbox
             checked={isGroupSelected}
@@ -97,7 +99,9 @@ export default function PhotoGroup({
             )}
           />
           <Label>
-            {formatDate(title)}
+            {title && photosLayout.timeline !== TimelineGroup.None
+              ? formatDate(title)
+              : t('photos.allPhotos')}
             {isGroupSelected && (
               <span className="text-secondary ml-2">
                 {t('photos.numSelected', { count: photos.length })}
@@ -115,6 +119,7 @@ export default function PhotoGroup({
           {arrange.boxes.map(({ width, height, top, left }, i) => (
             <PhotoUI
               key={photos[i].photoId}
+              albumId={albumId}
               photo={photos[i]}
               position={{ width, height, top, left }}
             />

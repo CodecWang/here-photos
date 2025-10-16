@@ -8,6 +8,16 @@ export enum TimelineGroup {
   Year = 'year',
 }
 
+export enum OrderBy {
+  ShotTime = 'birthTime',
+  AppendTime = 'createdAt',
+}
+
+export enum SortOrder {
+  Asc = 'asc',
+  Desc = 'desc',
+}
+
 export enum GalleryArrange {
   Grid = 'grid',
   Grid1x1 = 'grid11',
@@ -39,6 +49,8 @@ export const PhotosLayoutSchema = z.object({
   roundedCorner: z.number().min(0).max(70).default(0),
   timeline: z.enum(TimelineGroup).default(TimelineGroup.None),
   arrange: z.enum(GalleryArrange).default(GalleryArrange.Justified),
+  orderBy: z.enum(OrderBy).default(OrderBy.ShotTime),
+  sortOrder: z.enum(SortOrder).default(SortOrder.Desc),
 });
 
 export type PhotoUIType = z.infer<typeof PhotoUISchema>;
