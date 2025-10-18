@@ -1,12 +1,7 @@
+import { AlbumDTO, AlbumGroupDTO } from '@here-photos/dto';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
-import { IconButton } from '../icon-button';
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-
-import type { AlbumUIType } from '~/schemas';
 
 import {
   Dialog,
@@ -24,6 +19,10 @@ import { useLocaleDate } from '~/hooks/use-locale-date';
 import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
 import { request } from '~/utils/request';
 
+import { IconButton } from '../icon-button';
+import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
+
 interface AddToAlbumModalProps {
   photoIds: string[];
   onConfirm?: () => void;
@@ -35,14 +34,14 @@ export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [albums, setAlbums] = useState<AlbumUIType[]>([]);
+  const [albums, setAlbums] = useState<AlbumDTO[]>([]);
   const [selectedAlbumId, setSelectedAlbumId] = useState<string>();
 
   useEffect(() => {
     (async () => {
-      const albums = await request<AlbumUIType[]>('/api/v1/albums');
-      if (albums) {
-        setAlbums(albums);
+      const albumGroups = await request<AlbumGroupDTO[]>('/api/v1/albums');
+      if (albumGroups) {
+        setAlbums(albumGroups.flatMap((group) => group.albums) ?? []);
       }
     })();
   }, []);
@@ -81,7 +80,7 @@ export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
           icon={<CreateNewFolderIcon />}
         />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] rounded-3xl sm:rounded-3xl">
         <DialogHeader>
           <DialogTitle>{t('photos.addToAlbum')}</DialogTitle>
           <DialogDescription>TODO(athur)</DialogDescription>
@@ -102,7 +101,7 @@ export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
                   </Label>
                   <p className="text-muted-foreground text-sm">
                     {t('albums.countAndCreatedAt', {
-                      count: album._count?.AlbumPhoto || 0,
+                      count: album.photosCount || 0,
                       createdAt: formatDate(album.createdAt),
                     })}
                   </p>
@@ -113,9 +112,15 @@ export default function AddToAlbumModal({ photoIds }: AddToAlbumModalProps) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{t('action.close')}</Button>
+            <Button variant="outline" className="rounded-full">
+              {t('action.close')}
+            </Button>
           </DialogClose>
-          <Button disabled={loading || !selectedAlbumId} onClick={addToAlbum}>
+          <Button
+            disabled={loading || !selectedAlbumId}
+            onClick={addToAlbum}
+            className="rounded-full"
+          >
             {loading && <Spinner />} {t('action.confirm')}
           </Button>
         </DialogFooter>

@@ -1,27 +1,33 @@
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
+
+import { photosAtom, selectedPhotoIdsAtom } from '~/atoms';
+import InkSelectionIcon from '~/icons/ink-selection-icon';
+import RemoveSelectionIcon from '~/icons/remove-selection-icon';
+import ShareIcon from '~/icons/share-icon';
 
 import { IconButton } from '../icon-button';
 
 import AddToAlbumModal from './add-to-album-modal';
 import DeletePhotosModal from './delete-photos-modal';
 
-import { selectedPhotoIdsAtom } from '~/atoms';
-import RemoveSelectionIcon from '~/icons/remove-selection-icon';
-import ShareIcon from '~/icons/share-icon';
-
-export default function PhotoActions({
-  onDelete,
-  onAddToAlbum,
-}: {
+export default function PhotoActions(props: {
+  albumId?: string;
   onDelete?: (photoIds: string[]) => void;
   onAddToAlbum?: () => void;
 }) {
+  console.log('>>>> ', props);
+  const { albumId, onDelete, onAddToAlbum } = props;
   const t = useTranslations();
+  const photos = useAtomValue(photosAtom);
   const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
 
   const onClearSelection = () => {
     setSelectedPhotoIds(new Set());
+  };
+
+  const onSelectAll = () => {
+    setSelectedPhotoIds(new Set(photos.map((p) => p.photoId)));
   };
 
   if (selectedPhotoIds.size === 0) return null;
@@ -29,6 +35,12 @@ export default function PhotoActions({
   return (
     <>
       <div className="whitespace-nowrap ml-2 flex items-center space-x-1 ar-wrap">
+        <IconButton
+          aria-label={t('action.selectAll')}
+          tooltipContent={t('action.selectAll')}
+          icon={<InkSelectionIcon />}
+          onClick={onSelectAll}
+        />
         <IconButton
           aria-label={t('action.clearSelection')}
           tooltipContent={t('action.clearSelection')}

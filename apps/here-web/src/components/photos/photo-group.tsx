@@ -3,15 +3,15 @@ import justifiedLayout from 'justified-layout';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 
-import { Checkbox } from '../ui/checkbox';
-import { Label } from '../ui/label';
-
-import PhotoUI from './photo';
-
 import { photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
 import { useLocaleDate } from '~/hooks/use-locale-date';
 import { cn } from '~/lib/utils';
 import { GalleryArrange, PhotoUIType, TimelineGroup } from '~/schemas';
+
+import { Checkbox } from '../ui/checkbox';
+import { Label } from '../ui/label';
+
+import PhotoUI from './photo';
 
 interface PhotosGroupProps {
   albumId?: string;
@@ -88,7 +88,7 @@ export default function PhotoGroup({
 
   return (
     <section>
-      {(title || selectedPhotoIds.size > 0) && (
+      {title && (
         <header className="flex group items-center gap-x-3 h-12 px-4 text-sm font-medium">
           <Checkbox
             checked={isGroupSelected}
@@ -99,9 +99,7 @@ export default function PhotoGroup({
             )}
           />
           <Label>
-            {title && photosLayout.timeline !== TimelineGroup.None
-              ? formatDate(title)
-              : t('photos.allPhotos')}
+            {formatDate(title)}
             {isGroupSelected && (
               <span className="text-secondary ml-2">
                 {t('photos.numSelected', { count: photos.length })}

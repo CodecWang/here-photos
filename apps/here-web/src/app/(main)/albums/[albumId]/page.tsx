@@ -1,19 +1,42 @@
 'use client';
 
-import { PhotoDTO, type AlbumDTO } from '@here-photos/dto';
 import clsx from 'clsx';
+import { useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 
+import { selectedPhotoIdsAtom } from '~/atoms';
 import { IconButton } from '~/components/icon-button';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
 import PhotoActions from '~/components/photos/photo-actions';
 import PhotosLayout from '~/components/photos/photos-layout';
+import { Button } from '~/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 import { usePhotoGroups } from '~/hooks/use-photo-groups';
 import AddPhotoAlternateIcon from '~/icons/add-photo-alternate-icon';
+import MoreVertIcon from '~/icons/more-vert-icon';
+import ShareIcon from '~/icons/share-icon';
 import TuneIcon from '~/icons/tune-icon';
+import { AlbumsGroupBy } from '~/schemas';
 import { request } from '~/utils/request';
 
 import DeleteAlbumModal from '../components/delete-album-modal';
@@ -26,10 +49,14 @@ interface PageProps extends React.PropsWithChildren {
 
 export default function Page({ params }: PageProps) {
   const t = useTranslations();
+  const selectedPhotoIds = useAtomValue(selectedPhotoIdsAtom);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { albumId } = React.use(params);
   const [album, setAlbum] = useState<AlbumDTO>();
-  const { photoGroups, loading } = usePhotoGroups({ albumId });
+  const { photoGroups } = usePhotoGroups({ albumId });
+  const [subAlbum, setSubAlbum] = useState<string>('All');
   const [isOpenLayout, setIsOpenLayout] = useState(false);
 
   useEffect(() => {
@@ -50,38 +77,82 @@ export default function Page({ params }: PageProps) {
           'absolute inset-0 overflow-y-auto overflow-x-hidden transition-all duration-500',
           isOpenLayout && 'sm:right-80'
         )}
+        ref={scrollRef}
       >
-        <PageHeader title={album?.title ?? ''} backTarget="/albums">
-          <div className="ar-wrap flex items-center">
-            <button className="btn btn-ghost">
-              <AddPhotoAlternateIcon className="size-5" />
-              {t('albums.addPhotos')}
-            </button>
+        <PageHeader
+          scrollContainer={scrollRef}
+          title={album?.title ?? ''}
+          backTarget="/albums"
+          // titleActions={
+          //   <div className="backdrop-blur-md bg-background/60 rounded-full">
+          //     <Select value={subAlbum} onValueChange={setSubAlbum}>
+          //       <SelectTrigger className="rounded-full space-x-1 border-white/20">
+          //         <SelectValue />
+          //       </SelectTrigger>
+          //       <SelectContent>
+          //         <SelectItem value={'All'} className="flex">
+          //           所有照片
+          //         </SelectItem>
+          //         <SelectItem value={'渔山岛'}>渔山岛 day1</SelectItem>
+          //         <SelectItem value={'鼓浪屿'}>厦门鼓浪屿 day2</SelectItem>
+          //         <SelectItem value={'神仙居'}>台州神仙居 day3</SelectItem>
+          //         <SelectItem value={'百丈漈'}>温州百丈漈 day4</SelectItem>
+          //         <SelectItem value={'天平山'}>苏州天平山 day5</SelectItem>
+          //       </SelectContent>
+          //     </Select>
+          //   </div>
+          // }
+        >
+          {selectedPhotoIds.size === 0 && (
+            <div className="ar-wrap flex items-center">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="rounded-full bg-transparent"
+                    // onClick={() => setOpen(true)}
+                  >
+                    <AddPhotoAlternateIcon />
+                    <span className="hidden md:inline">
+                      {t('albums.addPhotos')}
+                    </span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent> {t('albums.addPhotos')}</TooltipContent>
+              </Tooltip>
+              <IconButton
+                aria-label={t('action.share')}
+                disabled={photoGroups.length === 0}
+                tooltipContent={t('action.share')}
+                icon={<ShareIcon />}
+              />
+              <IconButton
+                active={isOpenLayout}
+                icon={<TuneIcon />}
+                aria-label={t('photos.layoutTip')}
+                disabled={photoGroups.length === 0}
+                tooltipContent={t('photos.layoutTip')}
+                onClick={() => setIsOpenLayout((prev) => !prev)}
+              />
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <IconButton
+                    icon={<MoreVertIcon />}
+                    aria-label={t('action.more')}
+                    tooltipContent={t('action.more')}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>fs</DropdownMenuItem>
+                  <DropdownMenuItem>{t('action.rename')}</DropdownMenuItem>
+                  <DropdownMenuItem>{t('action.share')}</DropdownMenuItem>
+                  <DropdownMenuItem>{t('action.delete')}</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
 
-            <IconButton
-              active={isOpenLayout}
-              icon={<TuneIcon />}
-              aria-label={t('photos.layoutTip')}
-              disabled={!photoGroups.length}
-              tooltipContent={t('photos.layoutTip')}
-              onClick={() => setIsOpenLayout((prev) => !prev)}
-            />
-
-            <button
-              className="btn btn-ghost"
-              onClick={() =>
-                (
-                  document.getElementById(
-                    'delete-album-modal'
-                  ) as HTMLDialogElement
-                )?.showModal()
-              }
-            >
-              {t('action.delete')}
-            </button>
-          </div>
-
-          <PhotoActions />
+          {selectedPhotoIds.size > 0 && <PhotoActions />}
         </PageHeader>
         <div className="pt-2">
           <Photos data={photoGroups} albumId={albumId} />
@@ -93,7 +164,7 @@ export default function Page({ params }: PageProps) {
         onClose={() => setIsOpenLayout(false)}
       />
 
-      <DeleteAlbumModal album={album} />
+      {/* <DeleteAlbumModal album={album} /> */}
     </>
   );
 }

@@ -25,7 +25,8 @@
     "people": "人物",
     "places": "地点",
     "favorites": "收藏",
-    "trash": "回收站"
+    "trash": "回收站",
+    "back": "后退"
   },
   "action": {
     "add": "添加",
@@ -40,6 +41,9 @@
     "share": "分享",
     "next": "下一张",
     "previous": "上一张",
+    "rename": "重命名",
+    "more": "更多选项",
+    "selectAll": "选择全部照片",
     "clearSelection": "清除选择"
   },
   "photos": {

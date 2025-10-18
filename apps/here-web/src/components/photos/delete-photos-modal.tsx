@@ -1,6 +1,9 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import DeleteIcon from '~/icons/delete-icon';
+import { request } from '~/utils/request';
+
 import { IconButton } from '../icon-button';
 import {
   AlertDialog,
@@ -14,9 +17,6 @@ import {
   AlertDialogTrigger,
 } from '../ui/alert-dialog';
 import { Spinner } from '../ui/spinner';
-
-import DeleteIcon from '~/icons/delete-icon';
-import { request } from '~/utils/request';
 
 export default function DeletePhotosModal({
   photoIds,
@@ -59,7 +59,7 @@ export default function DeletePhotosModal({
           tooltipContent={t('action.delete')}
         />
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-3xl sm:rounded-3xl">
         <AlertDialogHeader>
           <AlertDialogTitle>{t('action.delete')}</AlertDialogTitle>
           <AlertDialogDescription>
@@ -67,8 +67,14 @@ export default function DeletePhotosModal({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t('action.close')}</AlertDialogCancel>
-          <AlertDialogAction onClick={deletePhotos} disabled={loading}>
+          <AlertDialogCancel className="rounded-full">
+            {t('action.close')}
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="rounded-full"
+            onClick={deletePhotos}
+            disabled={loading}
+          >
             {loading && <Spinner />} {t('action.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>

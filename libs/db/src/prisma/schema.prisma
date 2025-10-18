@@ -17,22 +17,22 @@ model Album {
   albumId    String       @unique(map: "albumId") @db.Char(8)
   title      String       @db.Char(64)
   coverId    String?      @db.Char(8)
-  pinned     Boolean?     @default(false)
-  createdAt  DateTime?    @default(now()) @db.DateTime(0)
-  updatedAt  DateTime?    @default(now()) @db.DateTime(0)
-  Photo      Photo?       @relation(fields: [coverId], references: [photoId], onDelete: Cascade, map: "Album_ibfk_1")
+  pinned     Boolean      @default(false)
+  createdAt  DateTime     @default(now()) @db.DateTime(0)
+  updatedAt  DateTime     @default(now()) @db.DateTime(0)
+  Photo      Photo?       @relation(fields: [coverId], references: [photoId], map: "Album_ibfk_1")
   AlbumPhoto AlbumPhoto[]
 
   @@index([coverId], map: "coverId")
 }
 
 model AlbumPhoto {
-  albumId   String    @db.Char(8)
-  photoId   String    @db.Char(8)
-  createdAt DateTime? @default(now()) @db.DateTime(0)
-  updatedAt DateTime? @default(now()) @db.DateTime(0)
-  Album     Album     @relation(fields: [albumId], references: [albumId], onDelete: Cascade, map: "AlbumPhoto_ibfk_1")
-  Photo     Photo     @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "AlbumPhoto_ibfk_2")
+  albumId   String   @db.Char(8)
+  photoId   String   @db.Char(8)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  updatedAt DateTime @default(now()) @db.DateTime(0)
+  Album     Album    @relation(fields: [albumId], references: [albumId], onDelete: Cascade, map: "AlbumPhoto_ibfk_1")
+  Photo     Photo    @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "AlbumPhoto_ibfk_2")
 
   @@id([albumId, photoId])
   @@index([photoId], map: "photoId")
@@ -47,8 +47,8 @@ model Exif {
   iso          Int?      @db.SmallInt
   gpsLatitude  Float?    @db.Float
   gpsLongitude Float?    @db.Float
-  createdAt    DateTime? @default(now()) @db.DateTime(0)
-  updatedAt    DateTime? @default(now()) @db.DateTime(0)
+  createdAt    DateTime  @default(now()) @db.DateTime(0)
+  updatedAt    DateTime  @default(now()) @db.DateTime(0)
   Photo        Photo     @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "Exif_ibfk_1")
 }
 
@@ -57,11 +57,11 @@ model Photo {
   photoId      String       @unique(map: "photoId") @db.Char(8)
   hash         String       @unique(map: "hash") @db.Char(32)
   ratio        Float        @db.Float
-  blurHash     String?      @db.VarChar(32)
-  birthTime    DateTime?    @db.DateTime(0)
+  blurHash     String       @db.VarChar(32)
+  birthTime    DateTime     @db.DateTime(0)
   modifiedTime DateTime     @db.DateTime(0)
-  createdAt    DateTime?    @default(now()) @db.DateTime(0)
-  updatedAt    DateTime?    @default(now()) @db.DateTime(0)
+  createdAt    DateTime     @default(now()) @db.DateTime(0)
+  updatedAt    DateTime     @default(now()) @db.DateTime(0)
   Album        Album[]
   AlbumPhoto   AlbumPhoto[]
   Exif         Exif?
@@ -70,50 +70,50 @@ model Photo {
 }
 
 model Setting {
-  id        Int       @id @default(autoincrement())
-  key       String    @unique(map: "key") @db.Char(32)
-  value     String?   @db.Text
-  createdAt DateTime? @default(now()) @db.DateTime(0)
-  updatedAt DateTime? @default(now()) @db.DateTime(0)
+  id        Int      @id @default(autoincrement())
+  key       String   @unique(map: "key") @db.Char(32)
+  value     String?  @db.Text
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  updatedAt DateTime @default(now()) @db.DateTime(0)
 }
 
 model Thumbnail {
-  id        Int       @id @default(autoincrement())
-  photoId   String    @db.Char(8)
-  filePath  String    @db.VarChar(255)
-  type      String    @db.Char(2)
+  id        Int      @id @default(autoincrement())
+  photoId   String   @db.Char(8)
+  filePath  String   @db.VarChar(255)
+  type      String   @db.Char(2)
   size      Int
-  width     Int       @db.SmallInt
-  height    Int       @db.SmallInt
-  format    String    @db.VarChar(50)
-  createdAt DateTime? @default(now()) @db.DateTime(0)
-  updatedAt DateTime? @default(now()) @db.DateTime(0)
-  Photo     Photo     @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "Thumbnail_ibfk_1")
+  width     Int      @db.SmallInt
+  height    Int      @db.SmallInt
+  format    String   @db.VarChar(50)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  updatedAt DateTime @default(now()) @db.DateTime(0)
+  Photo     Photo    @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "Thumbnail_ibfk_1")
 
   @@index([photoId], map: "photoId")
 }
 
 model PhotoFile {
-  id        Int       @id @default(autoincrement())
-  photoId   String    @db.Char(8)
-  filePath  String    @unique(map: "filePath") @db.VarChar(255)
-  createdAt DateTime? @default(now()) @db.DateTime(0)
-  updatedAt DateTime? @default(now()) @db.DateTime(0)
-  Photo     Photo     @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "PhotoFile_ibfk_1")
+  id        Int      @id @default(autoincrement())
+  photoId   String   @db.Char(8)
+  filePath  String   @unique(map: "filePath") @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  updatedAt DateTime @default(now()) @db.DateTime(0)
+  Photo     Photo    @relation(fields: [photoId], references: [photoId], onDelete: Cascade, map: "PhotoFile_ibfk_1")
 
   @@index([photoId], map: "photoId")
 }
 
 model QueueTask {
-  id        Int       @id @default(autoincrement())
-  taskId    String    @unique(map: "taskId") @db.Char(8)
-  type      String    @db.Char(32)
-  status    String    @default("pending") @db.Char(12)
-  total     Int       @default(0)
-  processed Int       @default(0)
-  success   Int       @default(0)
-  failed    Int       @default(0)
-  skipped   Int       @default(0)
-  createdAt DateTime? @default(now()) @db.DateTime(0)
-  updatedAt DateTime? @default(now()) @db.DateTime(0)
+  id        Int      @id @default(autoincrement())
+  taskId    String   @unique(map: "taskId") @db.Char(8)
+  type      String   @db.Char(32)
+  status    String   @default("pending") @db.Char(12)
+  total     Int      @default(0)
+  processed Int      @default(0)
+  success   Int      @default(0)
+  failed    Int      @default(0)
+  skipped   Int      @default(0)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  updatedAt DateTime @default(now()) @db.DateTime(0)
 }

@@ -9,6 +9,7 @@ export const albumSelect = {
 
 export const albumSelectWithPhotosCount = {
   ...albumSelect,
+  createdAt: true,
   _count: {
     select: { AlbumPhoto: true },
   },

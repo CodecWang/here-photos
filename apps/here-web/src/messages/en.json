@@ -25,7 +25,8 @@
     "people": "People",
     "places": "Places",
     "favorites": "Favorites",
-    "trash": "Trash"
+    "trash": "Trash",
+    "back": "Back"
   },
   "action": {
     "add": "Add",
@@ -40,6 +41,9 @@
     "share": "Share",
     "next": "Next",
     "previous": "Previous",
+    "rename": "Rename",
+    "more": "More options",
+    "selectAll": "Select all",
     "clearSelection": "Clear selection"
   },
   "photos": {
@@ -67,7 +71,7 @@
   "albums": {
     "createAlbum": "Create Album",
     "addPhotos": "Add photos",
-    "noGrouping": "No Grouping",
+    "noGrouping": "No grouping",
     "groupByYear": "Group by year",
     "groupByOwner": "Group by owner",
     "album": "Album",

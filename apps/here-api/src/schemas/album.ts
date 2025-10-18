@@ -21,6 +21,7 @@ export const AlbumUpdateParamsSchema = z.object({
 
 export const AlbumUpdateBodySchema = z.object({
   title: titleSchema.optional(),
+  pinned: z.boolean().optional(),
 });
 
 export const AlbumsDeleteBodySchema = z.object({

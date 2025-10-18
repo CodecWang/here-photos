@@ -1,8 +1,7 @@
+import { AlbumDTO } from '@here-photos/dto';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-
-import type { AlbumUIType } from '~/schemas';
 
 import { Button } from '~/components/ui/button';
 import {
@@ -38,7 +37,7 @@ export default function CreateAlbumModal() {
 
   const onCreateAlbum = async () => {
     setLoading(true);
-    const response = await request<AlbumUIType>(`/api/v1/albums`, {
+    const response = await request<AlbumDTO>(`/api/v1/albums`, {
       method: 'POST',
       body: JSON.stringify({ title: albumName }),
       headers: {

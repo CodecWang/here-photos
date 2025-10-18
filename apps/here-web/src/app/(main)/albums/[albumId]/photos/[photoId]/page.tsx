@@ -1,11 +1,12 @@
-import PhotoViewer from '~/components/photos/photo-viewer';
+// import PhotoViewer from '~/components/photos/photo-viewer';
 
 export default async function Page({
   params,
 }: {
   params: { photoId: string };
 }) {
-  const { photoId } = await params;
+  console.log(params);
+  // const { photoId } = await params;
   // return (
   //   <>
   //     <span>fsaklfjlk</span>
