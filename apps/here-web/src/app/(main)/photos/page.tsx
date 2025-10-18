@@ -52,7 +52,7 @@ export default function Page() {
           {photoGroups.length > 0 && selectedPhotoIds.size === 0 && (
             <ToggleGroup
               type="single"
-              className="m-auto ar-wrap"
+              className="m-auto ar-wrap hidden sm:flex"
               onValueChange={setKeyword}
               value={keyword}
             >
@@ -80,12 +80,11 @@ export default function Page() {
                 disabled={loading}
                 className="rounded-full bg-transparent"
               />
-
               <IconButton
                 active={openPanel === 'layout'}
                 icon={<TuneIcon />}
                 aria-label={t('photos.layoutTip')}
-                disabled={!photoGroups.length}
+                disabled={photoGroups.length === 0}
                 tooltipContent={t('photos.layoutTip')}
                 onClick={() => togglePanel('layout')}
               />
@@ -93,7 +92,7 @@ export default function Page() {
                 active={openPanel === 'filter'}
                 icon={<FilterAltIcon />}
                 aria-label={t('photos.filterTip')}
-                disabled={!photoGroups.length}
+                disabled={photoGroups.length === 0}
                 tooltipContent={t('photos.filterTip')}
                 onClick={() => togglePanel('filter')}
               />

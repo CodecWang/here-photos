@@ -1,18 +1,36 @@
+import { AlbumDTO } from '@here-photos/dto';
+import { useSetAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
+import { albumActionsAtom } from '~/atoms';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '~/components/ui/alert-dialog';
+import { Spinner } from '~/components/ui/spinner';
 import { request } from '~/utils/request';
 
 interface DeleteAlbumModalProps {
-  album: Album;
+  album: AlbumDTO;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
-  const router = useRouter();
+export default function DeleteAlbumModal({
+  album,
+  open,
+  setOpen,
+}: DeleteAlbumModalProps) {
   const t = useTranslations();
+  const setActions = useSetAtom(albumActionsAtom);
   const [loading, setLoading] = useState(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const deleteAlbum = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -23,50 +41,38 @@ export default function DeleteAlbumModal({ album }: DeleteAlbumModalProps) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ids: [album.id] }),
+      body: JSON.stringify({ albumIds: [album.albumId] }),
     });
 
     console.log('>>> response:', response);
-
-    if (response.code === 0) {
-      dialogRef.current?.close();
-      router.replace('/albums');
-      setLoading(false);
+    // TODO(arthur): hanle response check
+    if (response && response.count) {
+      setActions({ type: 'delete', payload: { albumId: album.albumId } });
     }
+    setOpen(false);
+    setLoading(false);
     // redirect to albums page
     // window.location.href = '/albums';
     // response && router.replace('/albums/');
   };
 
-  const closeModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dialogRef.current?.close();
-  };
-
   return (
-    <dialog id="delete-album-modal" className="modal" ref={dialogRef}>
-      <div className="modal-box">
-        <h3 className="text-lg font-bold">{t('albums.deleteAlbum')}</h3>
-        <p className="py-4">
-          Deleting an album is permanent. Photos and videos that were in a
-          deleted album remain in Here Photos.
-        </p>
-        <div className="modal-action">
-          <form method="dialog space-x-2">
-            <button className="btn" onClick={deleteAlbum}>
-              {loading ? (
-                <span className="loading loading-spinner loading-sm"></span>
-              ) : (
-                t('action.confirm')
-              )}
-            </button>
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn" onClick={closeModal}>
-              {t('action.close')}
-            </button>
-          </form>
-        </div>
-      </div>
-    </dialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t('albums.deleteAlbum')}</AlertDialogTitle>
+          <AlertDialogDescription>
+            Deleting an album is permanent. Photos and videos that were in a
+            deleted album remain in Here Photos.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>{t('action.close')}</AlertDialogCancel>
+          <AlertDialogAction onClick={deleteAlbum} disabled={loading}>
+            {loading && <Spinner />} {t('action.confirm')}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

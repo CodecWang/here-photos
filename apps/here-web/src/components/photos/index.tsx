@@ -8,9 +8,6 @@ import EmptyUI from '../empty-ui';
 
 import PhotoGroup from './photo-group';
 
-import { photosAtom, photosLayoutAtom, selectedPhotoIdsAtom } from '~/atoms';
-import { GalleryArrange } from '~/schemas';
-
 interface PhotosProps {
   albumId?: string;
   data: PhotoGroupType[];

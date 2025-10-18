@@ -1,21 +1,27 @@
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef, useState } from 'react';
 
 import ArrowBackIcon from '~/icons/arrow-back-icon';
 
+import { IconButton } from './icon-button';
+
 interface PageHeaderProps {
   title: string;
-  children?: React.ReactNode;
   backTarget?: string;
+  children?: React.ReactNode;
+  titleActions?: React.ReactNode;
   scrollContainer?: React.RefObject<HTMLElement>;
 }
 
 export default function PageHeader({
   title,
   children,
+  titleActions,
   backTarget,
   scrollContainer,
 }: PageHeaderProps) {
+  const t = useTranslations();
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -52,15 +58,20 @@ export default function PageHeader({
       }`}
     >
       {/* <header className="ar-glass border-base-content/10 bg-base-100 bg-opacity-70 sticky top-0 z-10 flex h-14 w-full items-center px-4 py-2"> */}
-      {backTarget && (
-        <button
-          className="btn btn-ghost btn-circle mr-1 -ml-2"
-          onClick={() => router.push(backTarget)}
-        >
-          <ArrowBackIcon className="size-5" />
-        </button>
-      )}
-      <span className="whitespace-nowrap sm:text-xl">{title}</span>
+
+      <div className="space-x-2 flex items-center">
+        {backTarget && (
+          <IconButton
+            // active={true}
+            icon={<ArrowBackIcon />}
+            aria-label={t('nav.back')}
+            tooltipContent={t('nav.back')}
+            onClick={() => router.push(backTarget)}
+          />
+        )}
+        <span className="whitespace-nowrap sm:text-xl">{title}</span>
+        {titleActions}
+      </div>
 
       <div className="ml-3 flex w-[calc(100%-120px)] flex-1 items-center justify-end">
         {children}

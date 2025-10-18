@@ -9,6 +9,10 @@ const nextConfig = {
   // Use this to set Nx-specific options
   // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
+  // TODO(arthur): temp dev build, need to delete this later
+  // typescript: {
+  //   ignoreBuildErrors: true,
+  // },
   async rewrites() {
     return [
       {

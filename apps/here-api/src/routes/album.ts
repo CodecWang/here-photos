@@ -1,7 +1,9 @@
 import { AlbumDAO, PhotoDAO } from '@here-photos/db';
 import {
+  AlbumDTO,
   AlbumDTOSchema,
-  AlbumWithPhotosCountDTOSchema,
+  AlbumGroupDTOSchema,
+  AlbumReadQueryDTOSchema,
   PhotoGroupDTOSchema,
   PhotoReadQueryDTO,
   PhotoReadQueryDTOSchema,
@@ -20,21 +22,60 @@ import {
   AlbumAddPhotosBodySchema,
 } from '../schemas/album';
 import { PhotoService } from '../services/photo';
+import { utc2cst } from '../utils/utc-convert';
 import { validateReq, validateRsp } from '../utils/validate';
 
 const router = new Router({ prefix: '/api/v1/albums' });
 
 router.get(
   '/',
-  validateRsp(z.array(AlbumWithPhotosCountDTOSchema)),
+  validateReq({ query: AlbumReadQueryDTOSchema }),
+  validateRsp(z.array(AlbumGroupDTOSchema)),
   async (ctx) => {
-    const albums = await AlbumDAO.getAlbums({
-      orderBy: { createdAt: 'desc' },
-    });
-    ctx.body = albums.map(({ _count, ...album }) => ({
+    const { groupBy } = ctx.request.query;
+    console.log('>>> get albums', groupBy);
+    const albums = (
+      await AlbumDAO.getAlbums({
+        orderBy: { createdAt: 'desc' },
+      })
+    ).map(({ _count, ...album }) => ({
       ...album,
+      createdAt: utc2cst(album.createdAt)?.toISO() ?? '',
       photosCount: _count.AlbumPhoto,
     }));
+
+    console.log('>>> albums', albums.length);
+    if (groupBy === 'none') {
+      ctx.body = albums.length > 0 ? [{ title: '', albums }] : [];
+      return;
+    }
+
+    if (groupBy === 'year') {
+      const groupedAlbums = albums.reduce(
+        (acc: { [key: string]: AlbumDTO[] }, album) => {
+          const date = utc2cst(album.createdAt)?.toFormat('yyyy');
+          if (!date) return acc;
+
+          if (!acc[date]) acc[date] = [];
+          acc[date].push(album);
+          return acc;
+        },
+        {}
+      );
+
+      const ret = Object.entries(groupedAlbums)
+        .map(([date, albums]) => ({
+          albums,
+          title: date,
+          count: albums.length,
+        }))
+        .sort((a, b) => b.title.localeCompare(a.title));
+
+      ctx.body = ret;
+      return;
+    }
+
+    ctx.body = [];
   }
 );
 
@@ -79,8 +120,8 @@ router.put(
   validateRsp(AlbumDTOSchema),
   async (ctx) => {
     const { albumId } = ctx.params;
-    const { title } = ctx.request.body;
-    ctx.body = await AlbumDAO.update(albumId, { title });
+    const { title, pinned } = ctx.request.body;
+    ctx.body = await AlbumDAO.update(albumId, { title, pinned });
   }
 );
 

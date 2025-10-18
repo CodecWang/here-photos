@@ -19,14 +19,23 @@ export const AlbumDTOSchema = z
   })
   .strict();
 
-export const AlbumWithPhotosCountDTOSchema = AlbumDTOSchema.extend({
-  photosCount: z.number().nonnegative(),
-}).strict();
+export const AlbumGroupDTOSchema = z.object({
+  title: z.string(),
+  albums: z.array(
+    AlbumDTOSchema.extend({
+      createdAt: z.string().nullable(),
+      photosCount: z.number().nonnegative(),
+    })
+  ),
+});
+
+export const AlbumReadQueryDTOSchema = z.object({
+  groupBy: z.enum(['none', 'year', 'owner']).default('none'),
+});
 
 export type AlbumDTO = z.infer<typeof AlbumDTOSchema>;
-export type AlbumWithPhotosCountDTO = z.infer<
-  typeof AlbumWithPhotosCountDTOSchema
->;
+export type AlbumGroupDTO = z.infer<typeof AlbumGroupDTOSchema>;
+export type AlbumReadQueryDTO = z.infer<typeof AlbumReadQueryDTOSchema>;
 
 // Reference: PhotoModelSchema
 
@@ -34,15 +43,6 @@ export const PhotoReadQueryDTOSchema = z.object({
   timeline: z.enum(['none', 'year', 'month', 'day']).default('none'),
   orderBy: z.enum(['createdAt', 'birthTime']).default('birthTime'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
-  // page: z.string().regex(/^\d+$/).transform(Number).default('1'),
-  // perPage: z
-  //   .string()
-  //   .regex(/^\d+$/)
-  //   .transform(Number)
-  //   .refine((n) => n > 0 && n <= 100, {
-  //     message: 'perPage must be between 1 and 100',
-  //   })
-  //   .default('20'),
 });
 
 export const PhotoDTOSchema = z

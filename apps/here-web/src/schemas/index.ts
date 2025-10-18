@@ -1,5 +1,11 @@
-import { PhotoResultSchema, AlbumResultSchema } from '@here-photos/db';
+import { PhotoResultSchema } from '@here-photos/db';
 import z from 'zod';
+
+export enum AlbumsGroupBy {
+  None = 'none',
+  Year = 'year',
+  Owner = 'owner',
+}
 
 export enum TimelineGroup {
   None = 'none',
@@ -29,19 +35,6 @@ export const PhotoUISchema = PhotoResultSchema.extend({
   selected: z.boolean().optional(),
 });
 
-export const AlbumUISchema = AlbumResultSchema.extend({
-  albumId: z.string(),
-  title: z.string(),
-  coverId: z.string().nullable(),
-  pinned: z.boolean().nullable(),
-  photos: z.array(PhotoUISchema),
-  _count: z
-    .object({
-      AlbumPhoto: z.number().default(0),
-    })
-    .optional(),
-});
-
 export const PhotosLayoutSchema = z.object({
   folder: z.enum(['none', 'months', 'years']).default('none'),
   spacing: z.number().min(0).max(24).default(2),
@@ -53,6 +46,10 @@ export const PhotosLayoutSchema = z.object({
   sortOrder: z.enum(SortOrder).default(SortOrder.Desc),
 });
 
+export const AlbumsLayoutSchema = z.object({
+  groupBy: z.enum(AlbumsGroupBy).default(AlbumsGroupBy.Year),
+});
+
 export type PhotoUIType = z.infer<typeof PhotoUISchema>;
-export type AlbumUIType = z.infer<typeof AlbumUISchema>;
 export type PhotosLayoutType = z.infer<typeof PhotosLayoutSchema>;
+export type AlbumsLayoutType = z.infer<typeof AlbumsLayoutSchema>;

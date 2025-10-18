@@ -8,13 +8,13 @@ import { makeParams } from '~/utils/params';
 import { request } from '~/utils/request';
 
 export function usePhotoGroups({ albumId }: { albumId?: string } = {}) {
+  const setPhotos = useSetAtom(photosAtom);
   const photosLayout = useAtomValue(photosLayoutAtom);
   const setSelectedPhotoIds = useSetAtom(selectedPhotoIdsAtom);
 
-  const setPhotos = useSetAtom(photosAtom);
-
-  const [photoGroups, setPhotoGroups] = useState<PhotoGroupDTO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [photoGroups, setPhotoGroups] = useState<PhotoGroupDTO[]>([]);
+
   const fetchPhotos = useCallback(
     async (query?: PhotoReadQueryDTO) => {
       if (loading) return;
