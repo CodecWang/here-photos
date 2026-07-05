@@ -2,11 +2,11 @@
 
 import { PhotoGroupDTO, PhotoReadQueryDTO } from '@here-photos/dto';
 import clsx from 'clsx';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
-import { selectedPhotoIdsAtom } from '~/atoms';
+import { morpherActionAtom, selectedPhotoIdsAtom } from '~/atoms';
 import { IconButton } from '~/components/icon-button';
 import PageHeader from '~/components/page-header';
 import Photos from '~/components/photos';
@@ -26,7 +26,7 @@ type PanelType = 'layout' | 'filter' | null;
 export default function Page() {
   const t = useTranslations();
   const selectedPhotoIds = useAtomValue(selectedPhotoIdsAtom);
-
+  const [morpherAction, setmorpherAction] = useAtom(morpherActionAtom);
   const [hasLoaded, setHasLoaded] = useState(true);
   const [keyword, setKeyword] = useState<string>();
   const [openPanel, setOpenPanel] = useState<PanelType>(null);
@@ -50,6 +50,28 @@ export default function Page() {
       >
         <PageHeader title={t('nav.photos')} scrollContainer={scrollRef}>
           {photoGroups.length > 0 && selectedPhotoIds.size === 0 && (
+            // <ToggleGroup
+            //   type="single"
+            //   className="m-auto ar-wrap hidden sm:flex"
+            //   onValueChange={setKeyword}
+            //   value={keyword}
+            // >
+            //   <ToggleGroupItem value="旅行" className="rounded-full">
+            //     Travel
+            //   </ToggleGroupItem>
+            //   <ToggleGroupItem value="摄影" className="rounded-full">
+            //     Photography
+            //   </ToggleGroupItem>
+            //   <ToggleGroupItem value="宠物" className="rounded-full">
+            //     Pets
+            //   </ToggleGroupItem>
+            //   <ToggleGroupItem value="家庭" className="rounded-full">
+            //     Family
+            //   </ToggleGroupItem>
+            //   <ToggleGroupItem value="美食" className="rounded-full">
+            //     Food
+            //   </ToggleGroupItem>
+            // </ToggleGroup>
             <ToggleGroup
               type="single"
               className="m-auto ar-wrap hidden sm:flex"
@@ -57,19 +79,16 @@ export default function Page() {
               value={keyword}
             >
               <ToggleGroupItem value="旅行" className="rounded-full">
-                Travel
+                All
               </ToggleGroupItem>
               <ToggleGroupItem value="摄影" className="rounded-full">
-                Photography
+                Day
               </ToggleGroupItem>
               <ToggleGroupItem value="宠物" className="rounded-full">
-                Pets
+                Month
               </ToggleGroupItem>
               <ToggleGroupItem value="家庭" className="rounded-full">
-                Family
-              </ToggleGroupItem>
-              <ToggleGroupItem value="美食" className="rounded-full">
-                Food
+                Year
               </ToggleGroupItem>
             </ToggleGroup>
           )}
@@ -86,7 +105,8 @@ export default function Page() {
                 aria-label={t('photos.layoutTip')}
                 disabled={photoGroups.length === 0}
                 tooltipContent={t('photos.layoutTip')}
-                onClick={() => togglePanel('layout')}
+                // onClick={() => togglePanel('layout')}
+                onClick={() => setmorpherAction('photos-layout')}
               />
               <IconButton
                 active={openPanel === 'filter'}

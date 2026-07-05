@@ -4,6 +4,16 @@ import { useAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 
+import Album from './components/album';
+import AlbumGroup from './components/album-group';
+import CreateAlbumModal from './components/create-album-modal';
+
+import type {
+  AlbumDTO,
+  AlbumGroupDTO,
+  AlbumReadQueryDTO,
+} from '@here-photos/dto';
+
 import { albumGroupsAtom, albumsLayoutAtom } from '~/atoms';
 import EmptyUI from '~/components/empty-ui';
 import PageHeader from '~/components/page-header';
@@ -19,16 +29,6 @@ import { REQUEST_DEBOUNCE_MS } from '~/config/constants';
 import { AlbumsGroupBy } from '~/schemas';
 import { makeParams } from '~/utils/params';
 import { request } from '~/utils/request';
-
-import Album from './components/album';
-import AlbumGroup from './components/album-group';
-import CreateAlbumModal from './components/create-album-modal';
-
-import type {
-  AlbumDTO,
-  AlbumGroupDTO,
-  AlbumReadQueryDTO,
-} from '@here-photos/dto';
 
 export default function Page() {
   const t = useTranslations();
@@ -102,11 +102,7 @@ export default function Page() {
               <div className="flex gap-4 w-max">
                 {pinnedAlbums.map((album) => (
                   <div key={album.albumId} className="flex-none w-24">
-                    <Album
-                      album={album}
-                      showPhotosCount={false}
-                      showTitle={false}
-                    />
+                    <Album album={album} showCount={false} showTitle={false} />
                   </div>
                 ))}
               </div>

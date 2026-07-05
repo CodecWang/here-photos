@@ -37,10 +37,14 @@ export async function handleScan(filePath: string, scanDirs: string[]) {
   let thumbnails: Prisma.ThumbnailCreateManyPhotoInput[] | undefined;
   let exifData: Prisma.ExifCreateWithoutPhotoInput | undefined;
 
-  const fileSharp = sharp(fileBuffer);
-  const { width, height, exif } = await fileSharp.metadata();
+  const fileSharp = sharp(fileBuffer).rotate();
+  const meta = await fileSharp.metadata();
+  let { width, height } = meta;
+  // swap width and height if rotated
+  if ([5, 6, 7, 8].includes(meta.orientation ?? 1)) {
+    [width, height] = [height, width];
+  }
   const photoId = existingPhoto ? existingPhoto.photoId : nanoid(8);
-
   const needThumbnails = !existingPhoto || existingPhoto.Thumbnail.length === 0;
   const needExif = !existingPhoto || !existingPhoto.Exif;
 
@@ -51,7 +55,7 @@ export async function handleScan(filePath: string, scanDirs: string[]) {
 
   if (needExif) {
     console.log('>>> cal exif');
-    exifData = await readExif(exif);
+    exifData = await readExif(meta.exif);
   }
 
   if (!existingPhoto) {

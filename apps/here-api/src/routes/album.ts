@@ -1,25 +1,25 @@
 import { AlbumDAO, PhotoDAO } from '@here-photos/db';
 import {
   AlbumDTO,
-  AlbumDTOSchema,
-  AlbumGroupDTOSchema,
+  albumDTOSchema,
+  albumGroupDTOSchema,
   AlbumReadQueryDTOSchema,
-  PhotoGroupDTOSchema,
+  photoGroupDTOSchema,
   PhotoReadQueryDTO,
-  PhotoReadQueryDTOSchema,
+  photoReadQueryDTOSchema,
 } from '@here-photos/dto';
 import Router from '@koa/router';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 
 import {
-  AlbumsDeleteBodySchema,
-  AlbumReadParamsSchema,
-  AlbumCreateBodySchema,
+  albumsDeleteBodySchema,
+  albumReadParamsSchema,
+  albumCreateBodySchema,
   BatchPayloadSchema,
-  AlbumUpdateParamsSchema,
-  AlbumUpdateBodySchema,
-  AlbumAddPhotosBodySchema,
+  albumUpdateParamsSchema,
+  albumUpdateBodySchema,
+  albumAddPhotosBodySchema,
 } from '../schemas/album';
 import { PhotoService } from '../services/photo';
 import { utc2cst } from '../utils/utc-convert';
@@ -30,7 +30,7 @@ const router = new Router({ prefix: '/api/v1/albums' });
 router.get(
   '/',
   validateReq({ query: AlbumReadQueryDTOSchema }),
-  validateRsp(z.array(AlbumGroupDTOSchema)),
+  validateRsp(z.array(albumGroupDTOSchema)),
   async (ctx) => {
     const { groupBy } = ctx.request.query;
     console.log('>>> get albums', groupBy);
@@ -81,8 +81,8 @@ router.get(
 
 router.post(
   '/',
-  validateReq({ body: AlbumCreateBodySchema }),
-  validateRsp(AlbumDTOSchema),
+  validateReq({ body: albumCreateBodySchema }),
+  validateRsp(albumDTOSchema),
   async (ctx) => {
     const { title } = ctx.request.body;
     ctx.body = await AlbumDAO.create({ title, albumId: nanoid(8) });
@@ -91,7 +91,7 @@ router.post(
 
 router.delete(
   '/',
-  validateReq({ body: AlbumsDeleteBodySchema }),
+  validateReq({ body: albumsDeleteBodySchema }),
   validateRsp(BatchPayloadSchema),
   async (ctx) => {
     const { albumIds } = ctx.request.body;
@@ -101,8 +101,8 @@ router.delete(
 
 router.get(
   '/:albumId',
-  validateReq({ params: AlbumReadParamsSchema }),
-  validateRsp(AlbumDTOSchema),
+  validateReq({ params: albumReadParamsSchema }),
+  validateRsp(albumDTOSchema),
   async (ctx) => {
     const { albumId } = ctx.params;
     const album = await AlbumDAO.read(albumId);
@@ -116,8 +116,8 @@ router.get(
 
 router.put(
   '/:albumId',
-  validateReq({ params: AlbumUpdateParamsSchema, body: AlbumUpdateBodySchema }),
-  validateRsp(AlbumDTOSchema),
+  validateReq({ params: albumUpdateParamsSchema, body: albumUpdateBodySchema }),
+  validateRsp(albumDTOSchema),
   async (ctx) => {
     const { albumId } = ctx.params;
     const { title, pinned } = ctx.request.body;
@@ -128,10 +128,10 @@ router.put(
 router.get(
   '/:albumId/photos',
   validateReq({
-    params: AlbumReadParamsSchema,
-    query: PhotoReadQueryDTOSchema,
+    params: albumReadParamsSchema,
+    query: photoReadQueryDTOSchema,
   }),
-  validateRsp(z.array(PhotoGroupDTOSchema)),
+  validateRsp(z.array(photoGroupDTOSchema)),
   async (ctx) => {
     const { albumId } = ctx.params;
     const { timeline, orderBy, order } = ctx.request.query as PhotoReadQueryDTO;
@@ -149,8 +149,8 @@ router.get(
 router.post(
   '/:albumId/photos',
   validateReq({
-    params: AlbumReadParamsSchema,
-    body: AlbumAddPhotosBodySchema,
+    params: albumReadParamsSchema,
+    body: albumAddPhotosBodySchema,
   }),
   validateRsp(BatchPayloadSchema),
   async (ctx) => {

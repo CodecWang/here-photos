@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import { albumActionsAtom, albumGroupsAtom } from '~/atoms';
+import { albumActionsAtom } from '~/atoms';
 import { IconButton } from '~/components/icon-button';
 import {
   DropdownMenu,
@@ -20,14 +20,16 @@ import DeleteAlbumModal from './delete-album-modal';
 
 interface AlbumProps {
   album: AlbumDTO;
-  showPhotosCount?: boolean;
+  showCount?: boolean;
   showTitle?: boolean;
+  showActions?: boolean;
 }
 
 export default function Album({
   album,
-  showPhotosCount = true,
+  showCount = true,
   showTitle = true,
+  showActions = true,
 }: AlbumProps) {
   const t = useTranslations();
   const setActions = useSetAtom(albumActionsAtom);
@@ -62,10 +64,10 @@ export default function Album({
             )}
           </div>
 
-          {(showTitle || showPhotosCount) && (
+          {(showTitle || showCount) && (
             <div className="p-2" onClick={(e) => e.preventDefault()}>
               {showTitle && <h3 className="truncate">{album.title}</h3>}
-              {showPhotosCount && (
+              {showCount && (
                 <span className="text-xs text-muted-foreground block">
                   {album.photosCount
                     ? t('albums.photosCount', { count: album.photosCount })
@@ -77,33 +79,35 @@ export default function Album({
         </>
       </Link>
 
-      <DropdownMenu modal={false} open={moreOpen} onOpenChange={setMoreOpen}>
-        <DropdownMenuTrigger asChild>
-          <div
-            className={cn(
-              'absolute right-2 top-2 transition-opacity duration-200',
-              moreOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-            )}
-          >
-            <IconButton
-              active={true}
-              icon={<MoreVertIcon />}
-              aria-label={t('action.more')}
-              tooltipContent={t('action.more')}
-            />
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onClick={onTogglePin}>
-            {album.pinned ? t('action.unpin') : t('action.pin')}
-          </DropdownMenuItem>
-          <DropdownMenuItem>{t('action.rename')}</DropdownMenuItem>
-          <DropdownMenuItem>{t('action.share')}</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setDeleteOpen(true)}>
-            {t('action.delete')}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {showActions && (
+        <DropdownMenu modal={false} open={moreOpen} onOpenChange={setMoreOpen}>
+          <DropdownMenuTrigger asChild>
+            <div
+              className={cn(
+                'absolute right-2 top-2 transition-opacity duration-200',
+                moreOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              )}
+            >
+              <IconButton
+                active={true}
+                icon={<MoreVertIcon />}
+                aria-label={t('action.more')}
+                tooltipContent={t('action.more')}
+              />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={onTogglePin}>
+              {album.pinned ? t('action.unpin') : t('action.pin')}
+            </DropdownMenuItem>
+            <DropdownMenuItem>{t('action.rename')}</DropdownMenuItem>
+            <DropdownMenuItem>{t('action.share')}</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setDeleteOpen(true)}>
+              {t('action.delete')}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
       <DeleteAlbumModal
         album={album}

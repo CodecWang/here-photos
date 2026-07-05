@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { navModeAtom } from '~/atoms';
 import Header from '~/components/header';
+import Morpher from '~/components/morpher';
 import NavBar from '~/components/nav-bar';
 import SideNav from '~/components/side-nav';
 import { Toaster } from '~/components/ui/sonner';
@@ -25,7 +26,8 @@ export default function MainLayout({ children }: PropsWithChildren) {
   return (
     <main className="absolute h-full w-full overflow-hidden">
       {children}
-      <NavBar />
+      {/* <NavBar /> */}
+      <Morpher />
       <Toaster position="top-center" />
     </main>
   );

@@ -1,14 +1,14 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
+import type { AlbumGroupDTO, PhotoDTO } from '@here-photos/dto';
+
 import {
   AlbumsLayoutSchema,
   AlbumsLayoutType,
   PhotosLayoutSchema,
   PhotosLayoutType,
 } from '~/schemas';
-
-import type { AlbumGroupDTO, PhotoDTO } from '@here-photos/dto';
 
 export const selectedPhotoIdsAtom = atom<Set<string>>(new Set<string>());
 
@@ -82,3 +82,12 @@ export const albumsLayoutAtom = atomWithStorage<AlbumsLayoutType>(
   'albums-layout',
   AlbumsLayoutSchema.parse({})
 );
+
+export const morpherActionAtom = atom<
+  | 'nav-bar'
+  | 'modal'
+  | 'photos-layout'
+  | 'delete-photos'
+  | 'add-to-albums'
+  | 'add-to-albums-expanded'
+>('nav-bar');

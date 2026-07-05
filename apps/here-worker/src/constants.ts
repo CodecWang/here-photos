@@ -9,6 +9,10 @@ export const SUPPORTED_PHOTO_FORMATS = [
   '.bmp',
   '.tiff',
   '.svg',
+  '.heic',
+  '.heif',
+  '.webp',
+  '.avif',
 ];
 
 export const THUMBNAILS_DIR = path.join(

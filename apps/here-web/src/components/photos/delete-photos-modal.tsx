@@ -1,9 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import DeleteIcon from '~/icons/delete-icon';
-import { request } from '~/utils/request';
-
 import { IconButton } from '../icon-button';
 import {
   AlertDialog,
@@ -17,6 +14,9 @@ import {
   AlertDialogTrigger,
 } from '../ui/alert-dialog';
 import { Spinner } from '../ui/spinner';
+
+import DeleteIcon from '~/icons/delete-icon';
+import { request } from '~/utils/request';
 
 export default function DeletePhotosModal({
   photoIds,

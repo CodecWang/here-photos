@@ -1,10 +1,15 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import { PhotoDAO, QueueTaskDAO, ThumbnailDAO } from '@here-photos/db';
 import {
-  PhotoGroupDTOSchema,
-  PhotoReadQueryDTOSchema,
+  PhotoDAO,
+  QueueTaskDAO,
+  SettingDAO,
+  ThumbnailDAO,
+} from '@here-photos/db';
+import {
+  photoGroupDTOSchema,
+  photoReadQueryDTOSchema,
   PhotoReadQueryDTO,
 } from '@here-photos/dto';
 import { addScanTask, addUploadTask } from '@here-photos/queue';
@@ -28,8 +33,8 @@ const router = new Router({ prefix: '/api/v1/photos' });
 
 router.get(
   '/',
-  validateReq({ query: PhotoReadQueryDTOSchema }),
-  validateRsp(z.array(PhotoGroupDTOSchema)),
+  validateReq({ query: photoReadQueryDTOSchema }),
+  validateRsp(z.array(photoGroupDTOSchema)),
   async (ctx) => {
     const { timeline, orderBy, order } = ctx.request.query as PhotoReadQueryDTO;
     const photos = await PhotoDAO.getPhotos({ orderBy: { [orderBy]: order } });
@@ -71,15 +76,14 @@ router.get(
 );
 
 router.post('/scan', async (ctx) => {
-  // const photoDirs = ['/Users/arthur/Pictures/sample-photos'];
-  const photoDirs = [
-    '/Users/arthur/Pictures/sample-photos/test',
-    // '/Users/arthur/Pictures/sample-photos/test2',
-  ];
-
-  const task = await QueueTaskDAO.create({ taskId: nanoid(8), type: 'scan' });
-  const job = await addScanTask({ photoDirs, taskId: task.taskId });
-  ctx.body = { taskId: task.taskId, jobId: job.id };
+  const photoDirsRaw = await SettingDAO.getSettingByKey('photoDirs');
+  if (photoDirsRaw?.value) {
+    const photoDirs = JSON.parse(photoDirsRaw?.value);
+    const task = await QueueTaskDAO.create({ taskId: nanoid(8), type: 'scan' });
+    const job = await addScanTask({ photoDirs, taskId: task.taskId });
+    ctx.body = { taskId: task.taskId, jobId: job.id };
+  }
+  // TODO(arthur): handle expection
 });
 
 router.get(

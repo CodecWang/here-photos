@@ -17,8 +17,9 @@ export async function scanPhotoDirs(job: Job) {
 
   // TODO(arthur): get scandirs from db
   const scanDirs = [
-    '/Users/arthur/Pictures/sample-photos/test',
-    // '/Users/arthur/Pictures/sample-photos/test2',
+    // '/Users/arthur/Pictures/sample-photos/test',
+    // '/Volumes/Michael/MichaelTestPics',
+    '/Users/arthur/Pictures/sample-photos/test2',
   ];
 
   let processed = 0;

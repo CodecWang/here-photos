@@ -1,7 +1,9 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useTranslations } from 'next-intl';
 
-import { photosAtom, selectedPhotoIdsAtom } from '~/atoms';
+import { morpherActionAtom, photosAtom, selectedPhotoIdsAtom } from '~/atoms';
+import CreateNewFolderIcon from '~/icons/create-new-folder-icon';
+import DeleteIcon from '~/icons/delete-icon';
 import InkSelectionIcon from '~/icons/ink-selection-icon';
 import RemoveSelectionIcon from '~/icons/remove-selection-icon';
 import ShareIcon from '~/icons/share-icon';
@@ -20,6 +22,7 @@ export default function PhotoActions(props: {
   const { albumId, onDelete, onAddToAlbum } = props;
   const t = useTranslations();
   const photos = useAtomValue(photosAtom);
+  const setmorpherAction = useSetAtom(morpherActionAtom);
   const [selectedPhotoIds, setSelectedPhotoIds] = useAtom(selectedPhotoIdsAtom);
 
   const onClearSelection = () => {
@@ -60,14 +63,28 @@ export default function PhotoActions(props: {
           tooltipContent={t('action.share')}
           icon={<ShareIcon />}
         />
-        <AddToAlbumModal
+        {/* <AddToAlbumModal
           photoIds={Array.from(selectedPhotoIds)}
           onConfirm={onAddToAlbum}
+        /> */}
+        <IconButton
+          aria-label={t('action.delete')}
+          tooltipContent={t('action.delete')}
+          icon={<CreateNewFolderIcon />}
+          // onClick={onClearSelection}
+          onClick={() => setmorpherAction('add-to-albums')}
         />
-        <DeletePhotosModal
+        <IconButton
+          aria-label={t('action.delete')}
+          tooltipContent={t('action.delete')}
+          icon={<DeleteIcon />}
+          // onClick={onClearSelection}
+          onClick={() => setmorpherAction('delete-photos')}
+        />
+        {/* <DeletePhotosModal
           photoIds={Array.from(selectedPhotoIds)}
           onConfirm={onDelete}
-        />
+        /> */}
       </div>
     </>
   );
